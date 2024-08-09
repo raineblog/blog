@@ -58,46 +58,47 @@
 
 题目：[SP1043 GSS1 静态区间最大子段和](https://www.luogu.com.cn/problem/SP1043)。
 
-```cpp
-#define fill_over(x) ((1 << (__lg(x) + 1)) - 1)
+!!! note "代码"
+    ```cpp
+    #define fill_over(x) ((1 << (__lg(x) + 1)) - 1)
 
-constexpr int N = 1 << 16;
+    constexpr int N = 1 << 16;
 
-int n, m, a[N];
+    int n, m, a[N];
 
-int pos[N], ans[20][N << 2], sum[20][N << 2];
+    int pos[N], ans[20][N << 2], sum[20][N << 2];
 
-void build(int k, int l, int r, int dep) {
-    if (l == r) return void(pos[l] = k);
-    int mid = (l + r) >> 1;
-    // LEFT: [l, mid]
-    sum[dep][mid] = a[mid];
-    for (int i = mid - 1; i >= l; --i) sum[dep][i] = sum[dep][i + 1] + a[i];
-    for (int i = mid - 1; i >= l; --i) sum[dep][i] = max(sum[dep][i], sum[dep][i + 1]);
-    ans[dep][mid] = a[mid];
-    for (int i = mid - 1; i >= l; --i) ans[dep][i] = max(ans[dep][i + 1], 0) + a[i];
-    for (int i = mid - 1; i >= l; --i) ans[dep][i] = max(ans[dep][i], ans[dep][i + 1]);
-    // RIGHT: [mid + 1, r]
-    sum[dep][mid + 1] = a[mid + 1];
-    for (int i = mid + 2; i <= r; ++i) sum[dep][i] = sum[dep][i - 1] + a[i];
-    for (int i = mid + 2; i <= r; ++i) sum[dep][i] = max(sum[dep][i], sum[dep][i - 1]);
-    ans[dep][mid + 1] = a[mid + 1];
-    for (int i = mid + 2; i <= r; ++i) ans[dep][i] = max(ans[dep][i - 1], 0) + a[i];
-    for (int i = mid + 2; i <= r; ++i) ans[dep][i] = max(ans[dep][i], ans[dep][i - 1]);
-    // DOWN
-    build(k << 1, l, mid, dep + 1);
-    build(k << 1 | 1, mid + 1, r, dep + 1);
-}
+    void build(int k, int l, int r, int dep) {
+        if (l == r) return void(pos[l] = k);
+        int mid = (l + r) >> 1;
+        // LEFT: [l, mid]
+        sum[dep][mid] = a[mid];
+        for (int i = mid - 1; i >= l; --i) sum[dep][i] = sum[dep][i + 1] + a[i];
+        for (int i = mid - 1; i >= l; --i) sum[dep][i] = max(sum[dep][i], sum[dep][i + 1]);
+        ans[dep][mid] = a[mid];
+        for (int i = mid - 1; i >= l; --i) ans[dep][i] = max(ans[dep][i + 1], 0) + a[i];
+        for (int i = mid - 1; i >= l; --i) ans[dep][i] = max(ans[dep][i], ans[dep][i + 1]);
+        // RIGHT: [mid + 1, r]
+        sum[dep][mid + 1] = a[mid + 1];
+        for (int i = mid + 2; i <= r; ++i) sum[dep][i] = sum[dep][i - 1] + a[i];
+        for (int i = mid + 2; i <= r; ++i) sum[dep][i] = max(sum[dep][i], sum[dep][i - 1]);
+        ans[dep][mid + 1] = a[mid + 1];
+        for (int i = mid + 2; i <= r; ++i) ans[dep][i] = max(ans[dep][i - 1], 0) + a[i];
+        for (int i = mid + 2; i <= r; ++i) ans[dep][i] = max(ans[dep][i], ans[dep][i - 1]);
+        // DOWN
+        build(k << 1, l, mid, dep + 1);
+        build(k << 1 | 1, mid + 1, r, dep + 1);
+    }
 
-int query(int l, int r) {
-    if (l == r) return a[l];
-    int dep = __lg(pos[l]) - __lg(pos[l] ^ pos[r]);
-    return max({ans[dep][l], ans[dep][r], sum[dep][l] + sum[dep][r]});
-}
+    int query(int l, int r) {
+        if (l == r) return a[l];
+        int dep = __lg(pos[l]) - __lg(pos[l] ^ pos[r]);
+        return max({ans[dep][l], ans[dep][r], sum[dep][l] + sum[dep][r]});
+    }
 
-void init() {
-    cin >> n;
-    for (int i = 1; i <= n; ++i) cin >> a[i];
-    m = fill_over(n) + 1, build(1, 1, m, 1);
-}
-```
+    void init() {
+        cin >> n;
+        for (int i = 1; i <= n; ++i) cin >> a[i];
+        m = fill_over(n) + 1, build(1, 1, m, 1);
+    }
+    ```

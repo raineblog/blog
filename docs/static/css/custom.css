@@ -13,10 +13,12 @@ html {
     scroll-behavior: smooth;
 }
 
-.md-typeset .admonition,
+/*Classic admonitions*/
+/*.md-typeset .admonition,
 .md-typeset details {
-    font-size: auto;
-}
+    border-width: 0;
+    border-left-width: 4px;
+}*/
 
 /*
 OI-WIKI
@@ -29,7 +31,8 @@ OI-WIKI
 
 /* Code font size in <details> */
 details .linenos,
-details code {
+details code,
+.admonition code {
     font-size: inherit !important;
 }
 

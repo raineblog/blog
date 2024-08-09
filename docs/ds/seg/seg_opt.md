@@ -30,45 +30,46 @@
 
 我们不考虑指针式线段树，先看一个普通的数组式线段树的代码：
 
-```cpp
-ll sum[N << 2];
+??? note "点击查看代码"
+    ```cpp
+    ll sum[N << 2];
 
-void push_up(int k) {
-    sum[k] = sum[k << 1] + sum[k << 1 | 1];
-}
-
-void build(int k, int l, int r) {
-    sum[k] = 0;
-    if (l == r) {
-        sum[k] = a[l];
-        return;
+    void push_up(int k) {
+        sum[k] = sum[k << 1] + sum[k << 1 | 1];
     }
-    int mid = (l + r) >> 1;
-    build(k << 1, l, mid);
-    build(k << 1 | 1, mid + 1, r);
-    push_up(k);
-}
 
-void modify(int k, int l, int r, int x, int v) {
-    if (l == r) {
-        sum[k] += v;
-        return;
+    void build(int k, int l, int r) {
+        sum[k] = 0;
+        if (l == r) {
+            sum[k] = a[l];
+            return;
+        }
+        int mid = (l + r) >> 1;
+        build(k << 1, l, mid);
+        build(k << 1 | 1, mid + 1, r);
+        push_up(k);
     }
-    int mid = (l + r) >> 1;
-    if (x <= mid) modify(k << 1, l, mid, x, v);
-    else modify(k << 1 | 1, mid + 1, r, x, v);
-    push_up(k);
-}
 
-ll query(int k, int l, int r, int p, int q) {
-    if (l >= p && r <= q) return sum[k];
-    int mid = (l + r) >> 1;
-    ll res = 0;
-    if (p <= mid) res += query(k << 1, l, mid, p, q);
-    if (q >= mid + 1) res += query(k << 1 | 1, mid + 1, r, p, q);
-    return res;
-}
-```
+    void modify(int k, int l, int r, int x, int v) {
+        if (l == r) {
+            sum[k] += v;
+            return;
+        }
+        int mid = (l + r) >> 1;
+        if (x <= mid) modify(k << 1, l, mid, x, v);
+        else modify(k << 1 | 1, mid + 1, r, x, v);
+        push_up(k);
+    }
+
+    ll query(int k, int l, int r, int p, int q) {
+        if (l >= p && r <= q) return sum[k];
+        int mid = (l + r) >> 1;
+        ll res = 0;
+        if (p <= mid) res += query(k << 1, l, mid, p, q);
+        if (q >= mid + 1) res += query(k << 1 | 1, mid + 1, r, p, q);
+        return res;
+    }
+    ```
 
 它在 LOJ 上面跑了 571 ms（<https://loj.ac/s/2128355>）。
 
@@ -76,19 +77,20 @@ ll query(int k, int l, int r, int p, int q) {
 
 注意到单点修改只是在树上走出了一条从上到下的路径，因此可以非递归处理：
 
-```cpp
-void modify(int x, int v) {
-    int k = 1;
-    int l = 1, r = n;
-    while (l < r) {
+??? note "点击查看代码"
+    ```cpp
+    void modify(int x, int v) {
+        int k = 1;
+        int l = 1, r = n;
+        while (l < r) {
+            sum[k] += v;
+            int mid = (l + r) >> 1;
+            if (x <= mid) r = mid, k = k << 1;
+            else l = mid + 1, k = k << 1 | 1;
+        }
         sum[k] += v;
-        int mid = (l + r) >> 1;
-        if (x <= mid) r = mid, k = k << 1;
-        else l = mid + 1, k = k << 1 | 1;
     }
-    sum[k] += v;
-}
-```
+    ```
 
 这样就优化到了 493 ms（<https://loj.ac/s/2128360>）。
 
@@ -102,34 +104,35 @@ void modify(int x, int v) {
 
 根据二进制 + 线段树的结构性质，我们可以写出代码：
 
-```cpp
-int m;
+??? note "点击查看代码"
+    ```cpp
+    int m;
 
-void build() {
-    m = 1 << (__lg(n) + 1);
-    for (int i = 1; i <= n; ++i) sum[m + i] = a[i];
-    for (int i = m - 1; i; --i) push_up(i);
-}
-
-void modify(int x, int v) {
-    x += m;
-    while (x) {
-        sum[x] += v;
-        x >>= 1;
+    void build() {
+        m = 1 << (__lg(n) + 1);
+        for (int i = 1; i <= n; ++i) sum[m + i] = a[i];
+        for (int i = m - 1; i; --i) push_up(i);
     }
-}
 
-ll query(int p, int q) {
-    p += m - 1, q += m + 1;
-    ll s = 0;
-    while (p ^ q ^ 1) {
-        if (p % 2 == 0) s += sum[p ^ 1];
-        if (q % 2 == 1) s += sum[q ^ 1];
-        p >>= 1, q >>= 1;
+    void modify(int x, int v) {
+        x += m;
+        while (x) {
+            sum[x] += v;
+            x >>= 1;
+        }
     }
-    return s;
-}
-```
+
+    ll query(int p, int q) {
+        p += m - 1, q += m + 1;
+        ll s = 0;
+        while (p ^ q ^ 1) {
+            if (p % 2 == 0) s += sum[p ^ 1];
+            if (q % 2 == 1) s += sum[q ^ 1];
+            p >>= 1, q >>= 1;
+        }
+        return s;
+    }
+    ```
 
 跑到了 328 ms（<https://loj.ac/s/2128362>）。
 
@@ -139,18 +142,19 @@ ll query(int p, int q) {
 
 因此，我们使用三元运算符或者乘法来替代 `if` 的分支。
 
-```cpp
-ll query(int p, int q) {
-    p += m - 1, q += m + 1;
-    ll s = 0;
-    while (p ^ q ^ 1) {
-        s += (p % 2 == 0) * sum[p ^ 1];
-        s += (q % 2 == 1) * sum[q ^ 1];
-        p >>= 1, q >>= 1;
+??? note "点击查看代码"
+    ```cpp
+    ll query(int p, int q) {
+        p += m - 1, q += m + 1;
+        ll s = 0;
+        while (p ^ q ^ 1) {
+            s += (p % 2 == 0) * sum[p ^ 1];
+            s += (q % 2 == 1) * sum[q ^ 1];
+            p >>= 1, q >>= 1;
+        }
+        return s;
     }
-    return s;
-}
-```
+    ```
 
 这样就是 286 ms（<https://loj.ac/s/2128365>）。
 
@@ -164,55 +168,60 @@ ll query(int p, int q) {
 
 注意到减去 $\operatorname{lowbit}$ 的过程，等价于位与本身减一。
 
-```cpp
-void modify(int x, int v) {
-    for (; x <= n; x += x & -x)
-        sum[x] += v;
-}
+??? note "点击查看代码"
+    ```cpp
+    void modify(int x, int v) {
+        for (; x <= n; x += x & -x)
+            sum[x] += v;
+    }
 
-ll query(int x) {
-    ll r = 0;
-    for (; x; x &= x - 1)
-        r += sum[x];
-    return r;
-}
+    ll query(int x) {
+        ll r = 0;
+        for (; x; x &= x - 1)
+            r += sum[x];
+        return r;
+    }
 
-ll query(int p, int q) {
-    return query(q) - query(p - 1);
-}
-```
+    ll query(int p, int q) {
+        return query(q) - query(p - 1);
+    }
+    ```
 
 跑了 258 ms（<https://loj.ac/s/2128367>）。
 
 ### Version #6：线性建树
 
-方法一：尝试倒过来，把叶子结点的值直接传给父亲。
+=== "方法一"
+    尝试倒过来，把叶子结点的值直接传给父亲。
 
-```cpp
-void build() {
-    for (int i = 1; i <= n; ++i) {
-        sum[i] += a[i];
-        int j = i + (i & -i);
-        if (j <= n)
-            sum[j] += sum[i];
-    }
-}
-```
+    ??? note "点击查看代码"
+        ```cpp
+        void build() {
+            for (int i = 1; i <= n; ++i) {
+                sum[i] += a[i];
+                int j = i + (i & -i);
+                if (j <= n)
+                    sum[j] += sum[i];
+            }
+        }
+        ```
 
-这样是 241 ms（<https://loj.ac/s/2128373>），很快的。
+    这样是 241 ms（<https://loj.ac/s/2128373>），很快的。
 
-方法二：根据树状数组每个节点记录的区间，前缀和处理。
+=== "方法二"
+    根据树状数组每个节点记录的区间，前缀和处理。
 
-```cpp
-ll pre[N], sum[N];
+    ??? note "点击查看代码"
+        ```cpp
+        ll pre[N], sum[N];
 
-void build() {
-    for (int i = 1; i <= n; ++i) pre[i] = pre[i - 1] + a[i];
-    for (int i = 1; i <= n; ++i) sum[i] = pre[i] - pre[i - (i & -i)];
-}
-```
+        void build() {
+            for (int i = 1; i <= n; ++i) pre[i] = pre[i - 1] + a[i];
+            for (int i = 1; i <= n; ++i) sum[i] = pre[i] - pre[i - (i & -i)];
+        }
+        ```
 
-跑了 245 ms（<https://loj.ac/s/2128375>）。
+    跑了 245 ms（<https://loj.ac/s/2128375>）。
 
 ### Version #7：缓存优化
 
@@ -220,28 +229,29 @@ void build() {
 
 在所有关于 `sum` 的操作上都加上 `hole(x)`：
 
-```cpp
-inline constexpr int hole(int k) {
-    return k + (k >> 10);
-}
+??? note "点击查看代码"
+    ```cpp
+    inline constexpr int hole(int k) {
+        return k + (k >> 10);
+    }
 
-void build() {
-    for (int i = 1; i <= n; ++i) pre[i] = pre[i - 1] + a[i];
-    for (int i = 1; i <= n; ++i) sum[hole(i)] = pre[i] - pre[i - (i & -i)];
-}
+    void build() {
+        for (int i = 1; i <= n; ++i) pre[i] = pre[i - 1] + a[i];
+        for (int i = 1; i <= n; ++i) sum[hole(i)] = pre[i] - pre[i - (i & -i)];
+    }
 
-void modify(int x, int v) {
-    for (; x <= n; x += x & -x)
-        sum[hole(x)] += v;
-}
+    void modify(int x, int v) {
+        for (; x <= n; x += x & -x)
+            sum[hole(x)] += v;
+    }
 
-ll query(int x) {
-    ll r = 0;
-    for (; x; x &= x - 1)
-        r += sum[hole(x)];
-    return r;
-}
-```
+    ll query(int x) {
+        ll r = 0;
+        for (; x; x &= x - 1)
+            r += sum[hole(x)];
+        return r;
+    }
+    ```
 
 这样能快不少，234 ms（<https://loj.ac/s/2128379>）。
 

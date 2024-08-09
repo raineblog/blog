@@ -56,48 +56,49 @@
 
 [P4254 [JSOI2008] Blue Mary 开公司](https://www.luogu.com.cn/problem/P4254)
 
-```cpp
-struct line {
-	double k, b;
-} p[M];
+??? note "点击查看代码"
+	```cpp
+	struct line {
+		double k, b;
+	} p[M];
 
-int tot;
+	int tot;
 
-double calc(int u, int t) {
-	return p[u].b + p[u].k * t;
-}
+	double calc(int u, int t) {
+		return p[u].b + p[u].k * t;
+	}
 
-#define ls(k) ((k) << 1)
-#define rs(k) ((k) << 1 | 1)
+	#define ls(k) ((k) << 1)
+	#define rs(k) ((k) << 1 | 1)
 
-int best[N << 2];
+	int best[N << 2];
 
-void modify(int k, int l, int r, int u) {
-	int &v = best[k];
-	int mid = (l + r) >> 1;
-	if (calc(u, mid) > calc(v, mid)) swap(u, v);
-	if (calc(u, l) > calc(v, l)) modify(ls(k), l, mid, u);
-	if (calc(u, r) > calc(v, r)) modify(rs(k), mid + 1, r, u);
-}
+	void modify(int k, int l, int r, int u) {
+		int &v = best[k];
+		int mid = (l + r) >> 1;
+		if (calc(u, mid) > calc(v, mid)) swap(u, v);
+		if (calc(u, l) > calc(v, l)) modify(ls(k), l, mid, u);
+		if (calc(u, r) > calc(v, r)) modify(rs(k), mid + 1, r, u);
+	}
 
-double query(int k, int l, int r, int t) {
-	double res = calc(best[k], t);
-	if (l == r) return res;
-	int mid = (l + r) >> 1;
-	if (t <= mid) res = max(res, query(ls(k), l, mid, t));
-	else res = max(res, query(rs(k), mid + 1, r, t));
-	return res;
-}
+	double query(int k, int l, int r, int t) {
+		double res = calc(best[k], t);
+		if (l == r) return res;
+		int mid = (l + r) >> 1;
+		if (t <= mid) res = max(res, query(ls(k), l, mid, t));
+		else res = max(res, query(rs(k), mid + 1, r, t));
+		return res;
+	}
 
-void Insert(double k, double b) {
-	p[++tot] = {k, b};
-	modify(1, 1, (int)5e4, tot);
-}
+	void Insert(double k, double b) {
+		p[++tot] = {k, b};
+		modify(1, 1, (int)5e4, tot);
+	}
 
-double Query(int t) {
-	return query(1, 1, (int)5e4, t);
-}
-```
+	double Query(int t) {
+		return query(1, 1, (int)5e4, t);
+	}
+	```
 
 ## 维护线段
 
@@ -121,74 +122,76 @@ double Query(int t) {
 
 下面是和上面类似的代码，也很好写。
 
-```cpp
-struct line {
-	double k, b;
-} p[M];
+??? note "点击查看代码"
+	```cpp
+	struct line {
+		double k, b;
+	} p[M];
 
-int tot;
+	int tot;
 
-double calc(int u, int t) {
-	return p[u].b + p[u].k * t;
-}
+	double calc(int u, int t) {
+		return p[u].b + p[u].k * t;
+	}
 
-#define ls(k) ((k) << 1)
-#define rs(k) ((k) << 1 | 1)
+	#define ls(k) ((k) << 1)
+	#define rs(k) ((k) << 1 | 1)
 
-int best[N << 2];
+	int best[N << 2];
 
-void update(int k, int l, int r, int u) {
-	int &v = best[k];
-	int mid = (l + r) >> 1;
-	if (calc(u, mid) > calc(v, mid)) swap(u, v);
-	if (calc(u, l) > calc(v, l)) update(ls(k), l, mid, u);
-	if (calc(u, r) > calc(v, r)) update(rs(k), mid + 1, r, u);
-}
+	void update(int k, int l, int r, int u) {
+		int &v = best[k];
+		int mid = (l + r) >> 1;
+		if (calc(u, mid) > calc(v, mid)) swap(u, v);
+		if (calc(u, l) > calc(v, l)) update(ls(k), l, mid, u);
+		if (calc(u, r) > calc(v, r)) update(rs(k), mid + 1, r, u);
+	}
 
-void modify(int k, int l, int r, int p, int q, int u) {
-	if (l >= p && r <= q) return update(k, l, r, u);
-	int mid = (l + r) >> 1;
-	if (q <= mid) return modify(ls(k), l, mid, p, q, u);
-	if (p >= mid + 1) return modify(rs(k), mid + 1, r, p, q, u);
-	modify(ls(k), l, mid, p, q, u), modify(rs(k), mid + 1, r, p, q, u);
-}
+	void modify(int k, int l, int r, int p, int q, int u) {
+		if (l >= p && r <= q) return update(k, l, r, u);
+		int mid = (l + r) >> 1;
+		if (q <= mid) return modify(ls(k), l, mid, p, q, u);
+		if (p >= mid + 1) return modify(rs(k), mid + 1, r, p, q, u);
+		modify(ls(k), l, mid, p, q, u), modify(rs(k), mid + 1, r, p, q, u);
+	}
 
-double query(int k, int l, int r, int t) {
-	double res = calc(best[k], t);
-	if (l == r) return res;
-	int mid = (l + r) >> 1;
-	if (t <= mid) res = max(res, query(ls(k), l, mid, t));
-	else res = max(res, query(rs(k), mid + 1, r, t));
-	return res;
-}
+	double query(int k, int l, int r, int t) {
+		double res = calc(best[k], t);
+		if (l == r) return res;
+		int mid = (l + r) >> 1;
+		if (t <= mid) res = max(res, query(ls(k), l, mid, t));
+		else res = max(res, query(rs(k), mid + 1, r, t));
+		return res;
+	}
 
-void Insert(double k, double b) {
-	p[++tot] = {k, b};
-	modify(1, 1, (int)5e4, tot);
-}
+	void Insert(double k, double b) {
+		p[++tot] = {k, b};
+		modify(1, 1, (int)5e4, tot);
+	}
 
-double Query(int t) {
-	return query(1, 1, (int)5e4, t);
-}
-```
+	double Query(int t) {
+		return query(1, 1, (int)5e4, t);
+	}
+	```
 
 [P4097 【模板】李超线段树 / [HEOI2013] Segment](https://www.luogu.com.cn/problem/P4097)
 
 这个题目强制在线，且需要输出最优线段且编号最小，因此可能会被卡精度，
 
-```cpp
-constexpr double eps = 1e-8;
+??? note "精度处理"
+	```cpp
+	constexpr double eps = 1e-8;
 
-inline int Cmp(double x, double y) {
-	if (x - y > eps) return 1;
-	if (y - x > eps) return -1;
-	return 0;
-}
+	inline int Cmp(double x, double y) {
+		if (x - y > eps) return 1;
+		if (y - x > eps) return -1;
+		return 0;
+	}
 
-inline pair<double, int> Max(const pair<double, int> &a,
-							 const pair<double, int> &b) {
-	int c = Cmp(a.first, b.first);
-	if (c == 0) return a.second < b.second ? a : b;
-	return c == 1 ? a : b;
-}
-```
+	inline pair<double, int> Max(const pair<double, int> &a,
+								const pair<double, int> &b) {
+		int c = Cmp(a.first, b.first);
+		if (c == 0) return a.second < b.second ? a : b;
+		return c == 1 ? a : b;
+	}
+	```

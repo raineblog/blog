@@ -16,10 +16,3 @@ blockquote.page-copyright {
 .gt-container .gt-meta {
     z-index: auto !important;
 }
-
-/*Classic admonitions*/
-.md-typeset .admonition,
-.md-typeset details {
-    border-width: 0;
-    border-left-width: 4px;
-}

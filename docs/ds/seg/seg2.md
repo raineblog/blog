@@ -123,73 +123,72 @@ int merge(int x, int y) {
 
 核心思想是，自底向上或自顶向下的，DFS 整棵树，把节点信息合并到下一个节点上。
 
-核心代码：
+??? note "点击查看代码"
+    ```cpp
+    int n;
 
-```cpp
-int n;
+    vector<int> g[N];
 
-vector<int> g[N];
+    int root[N], tot;
 
-int root[N], tot;
+    struct node {
+        int lss, rss;
+        struct vt {
+            int cnt, ans;
+            friend vt operator +(const vt &a, const vt &b) {
+                if (a.cnt > b.cnt) return a;
+                if (b.cnt > a.cnt) return b;
+                return vt{a.cnt, a.ans + b.ans};
+            }
+        } v;
+    } a[int(1e7)];
 
-struct node {
-    int lss, rss;
-    struct vt {
-        int cnt, ans;
-        friend vt operator +(const vt &a, const vt &b) {
-            if (a.cnt > b.cnt) return a;
-            if (b.cnt > a.cnt) return b;
-            return vt{a.cnt, a.ans + b.ans};
-        }
-    } v;
-} a[int(1e7)];
-
-void push_up(int k) {
-    a[k].v = a[a[k].lss].v + a[a[k].rss].v;
-}
-
-void modify(int &k, int l, int r, int x, int v) {
-    if (!k) k = ++tot;
-    if (l == r) {
-        a[k].v.ans = x;
-        a[k].v.cnt += v;
-        return;
+    void push_up(int k) {
+        a[k].v = a[a[k].lss].v + a[a[k].rss].v;
     }
-    int mid = (l + r) >> 1;
-    if (x <= mid)
-        modify(a[k].lss, l, mid, x, v);
-    else
-        modify(a[k].rss, mid + 1, r, x, v);
-    push_up(k);
-}
 
-int merge(int x, int y, int l, int r) {
-    if (!x || !y) return x | y;
-    if (l == r) {
-        a[x].v.cnt += a[y].v.cnt;
+    void modify(int &k, int l, int r, int x, int v) {
+        if (!k) k = ++tot;
+        if (l == r) {
+            a[k].v.ans = x;
+            a[k].v.cnt += v;
+            return;
+        }
+        int mid = (l + r) >> 1;
+        if (x <= mid)
+            modify(a[k].lss, l, mid, x, v);
+        else
+            modify(a[k].rss, mid + 1, r, x, v);
+        push_up(k);
+    }
+
+    int merge(int x, int y, int l, int r) {
+        if (!x || !y) return x | y;
+        if (l == r) {
+            a[x].v.cnt += a[y].v.cnt;
+            return x;
+        }
+        int mid = (l + r) >> 1;
+        a[x].lss = merge(a[x].lss, a[y].lss, l, mid);
+        a[x].rss = merge(a[x].rss, a[y].rss, mid + 1, r);
+        push_up(x);
         return x;
     }
-    int mid = (l + r) >> 1;
-    a[x].lss = merge(a[x].lss, a[y].lss, l, mid);
-    a[x].rss = merge(a[x].rss, a[y].rss, mid + 1, r);
-    push_up(x);
-    return x;
-}
 
-int ans[N];
+    int ans[N];
 
-int get_ans(int root) {
-    return a[root].v.ans;
-}
-
-void dfs(int u, int fa) {
-    for (int v : g[u]) if (v != fa) {
-        dfs(v, u);
-        root[u] = merge(root[u], root[v], 1, MAXN);
+    int get_ans(int root) {
+        return a[root].v.ans;
     }
-    ans[u] = get_ans(root[u]);
-}
-```
+
+    void dfs(int u, int fa) {
+        for (int v : g[u]) if (v != fa) {
+            dfs(v, u);
+            root[u] = merge(root[u], root[v], 1, MAXN);
+        }
+        ans[u] = get_ans(root[u]);
+    }
+    ```
 
 ## 线段树二分
 
@@ -233,74 +232,75 @@ UPD：大部分时候只有单调修改区间查询，因此用树状数组可�
 
 代码：
 
-```cpp
-namespace ds {
-    constexpr int N = 5e5 + 10;
+??? note "点击查看代码"
+    ```cpp
+    namespace ds {
+        constexpr int N = 5e5 + 10;
 
-    struct node {
-        int l, r, v;
-    } a[N << 2];
+        struct node {
+            int l, r, v;
+        } a[N << 2];
 
-    void build(int k, int l, int r) {
-        a[k] = {l, r, 0};
-        if (l == r) return;
-        int mid = (l + r) >> 1;
-        build(k << 1, l, mid);
-        build(k << 1 | 1, mid + 1, r);
-    }
-
-    void modify(int x, int v) {
-        int root = 1;
-        while (true) {
-            a[root].v += v;
-            int l = a[root].l, r = a[root].r;
-            if (l == r) break;
+        void build(int k, int l, int r) {
+            a[k] = {l, r, 0};
+            if (l == r) return;
             int mid = (l + r) >> 1;
-            if (x <= mid) root = root << 1;
-            else root = root << 1 | 1;
+            build(k << 1, l, mid);
+            build(k << 1 | 1, mid + 1, r);
         }
-    }
 
-    vector<int> pos;
-
-    int query(int k, int p, int &x) {
-        int l = a[k].l, r = a[k].r;
-        if (l >= p) {
-            if (a[k].v < x) {
-                x -= a[k].v;
-                return -1;
+        void modify(int x, int v) {
+            int root = 1;
+            while (true) {
+                a[root].v += v;
+                int l = a[root].l, r = a[root].r;
+                if (l == r) break;
+                int mid = (l + r) >> 1;
+                if (x <= mid) root = root << 1;
+                else root = root << 1 | 1;
             }
-            while (a[k].l != a[k].r) {
-                if (a[k << 1].v < x)
-                    x -= a[k << 1].v, k = k << 1 | 1;
-                else
-                    k = k << 1;
+        }
+
+        vector<int> pos;
+
+        int query(int k, int p, int &x) {
+            int l = a[k].l, r = a[k].r;
+            if (l >= p) {
+                if (a[k].v < x) {
+                    x -= a[k].v;
+                    return -1;
+                }
+                while (a[k].l != a[k].r) {
+                    if (a[k << 1].v < x)
+                        x -= a[k << 1].v, k = k << 1 | 1;
+                    else
+                        k = k << 1;
+                }
+                return a[k].l;
             }
-            return a[k].l;
+            if (l == r) return -1;
+            int mid = (l + r) >> 1;
+            if (p <= mid) {
+                int t = query(k << 1, p, x);
+                if (t != -1) return t;
+            }
+            return query(k << 1 | 1, p, x);
         }
-        if (l == r) return -1;
-        int mid = (l + r) >> 1;
-        if (p <= mid) {
-            int t = query(k << 1, p, x);
-            if (t != -1) return t;
+
+        void init(int n) {
+            build(1, 1, n);
         }
-        return query(k << 1 | 1, p, x);
-    }
 
-    void init(int n) {
-        build(1, 1, n);
-    }
+        void add(int x) {
+            modify(x, 1);
+        }
 
-    void add(int x) {
-        modify(x, 1);
-    }
+        void del(int x) {
+            modify(x, -1);
+        }
 
-    void del(int x) {
-        modify(x, -1);
+        int rnk(int l, int k) {
+            return query(1, l, k);
+        }
     }
-
-    int rnk(int l, int k) {
-        return query(1, l, k);
-    }
-}
-```
+    ```

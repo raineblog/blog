@@ -54,10 +54,10 @@ plugins:
 nav:
     - 简介:
         - index.md
+        - format.md
         - usage.md
         - discussion.md
         - setting.md
-        - start/hello.md
     - 数据结构:
         - ds/ds.md
         - 并查集:
@@ -70,6 +70,7 @@ nav:
         - 树状数组:
             - ds/fenwick/fenwick1.md
         - 线段树:
+            - ds/seg/seg1.md
             - ds/seg/seg2.md
             - ds/seg/scanning.md
             - ds/seg/seg_opt.md

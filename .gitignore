@@ -1,0 +1,11 @@
+_build/
+docs_build/
+site/
+.vscode/
+**/.DS_Store
+.env
+
+/authors.json
+_build/
+node_modules/
+*.pyc

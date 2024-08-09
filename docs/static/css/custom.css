@@ -13,6 +13,26 @@ html {
     scroll-behavior: smooth;
 }
 
+.katex-display {
+    margin-top: -1.5em !important;
+    margin-bottom: -1.5em !important;
+}
+
+.md-typeset div.arithmatex {
+    overflow: hidden !important; 
+}
+
+/*.md-typeset div.arithmatex>* {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: -5em !important;
+    margin-bottom: -5em !important;
+    padding-top: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+}*/
+
 /*Classic admonitions*/
 /*.md-typeset .admonition,
 .md-typeset details {

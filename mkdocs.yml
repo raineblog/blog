@@ -84,6 +84,20 @@ nav:
                 - ds/sqrt/mo/mo_tree.md
         - 珂朵莉树:
             - ds/odt/odt.md
+    - 数学:
+        - 线性代数:
+            - math/linear-algebra/vector.md
+            - math/linear-algebra/matrix.md
+            - math/linear-algebra/gauss.md
+        - 数论:
+            - math/number-theory/gcd.md
+            - math/number-theory/exgcd.md
+            - math/number-theory/linear-equation.md
+            - math/number-theory/inverse.md
+            - math/number-theory/prime.md
+            - math/number-theory/euler.md
+            - math/number-theory/crt.md
+            - math/number-theory/excrt.md
 
 # Customization
 extra:
@@ -92,10 +106,10 @@ extra:
     manifest: 'manifest.webmanifest'
 
 extra_javascript:
-    #- https://cdnjs.loli.net/ajax/libs/pangu/3.3.0/pangu.min.js
     - static/js/extra.js
     - static/js/custom.js
-    #- https://cdnjs.loli.net/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML
+    # - https://cdnjs.loli.net/ajax/libs/pangu/3.3.0/pangu.min.js
+    # - https://cdnjs.loli.net/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML
     - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js
     - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js
     - https://unpkg.com/katex@0.16.9/dist/katex.min.js
@@ -107,6 +121,7 @@ extra_javascript:
 extra_css:
     - static/css/extra.css
     - static/css/custom.css
+    # - static/css/han.css
     - https://cdnjs.cloudflare.com/ajax/libs/normalize-opentype.css/0.2.4/normalize-opentype.min.css
     - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css
     - https://cdn.jsdelivr.net/npm/katex@0.16.6/dist/katex.min.css
@@ -125,8 +140,8 @@ markdown_extensions:
         linenums: true
     - toc:
         permalink: true
-    # - pymdownx.arithmatex:
-    #     generic: true
+    - pymdownx.arithmatex:
+        generic: true
     - pymdownx.details
     - pymdownx.critic
     - pymdownx.caret

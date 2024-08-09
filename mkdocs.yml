@@ -23,7 +23,6 @@ theme:
         repo: fontawesome/brands/github-alt
    # logo: static/img/logo.png
     features:
-        - tabs: true
         - navigation.tabs
         - navigation.instant
         - navigation.tabs.sticky
@@ -31,6 +30,8 @@ theme:
         - search.highlight
         - search.share
         - content.action.edit
+        - content.code.copy
+        - content.footnote.tooltips
     include_search_page: false
     search_index_only: true
     font:
@@ -44,6 +45,7 @@ theme:
 # }
 
 plugins:
+    - glightbox
     - search
     - minify:
         minify_html: true
@@ -55,8 +57,32 @@ nav:
         - usage.md
         - discussion.md
         - setting.md
-    - 开始:
         - start/hello.md
+    - 数据结构:
+        - ds/ds.md
+        - 并查集:
+            - ds/dsu/dsu1.md
+            - ds/dsu/dsu2.md
+            - ds/dsu/dsu3.md
+        - RMQ 问题:
+            - ds/rmq/rmq.md
+            - ds/rmq/st.md
+        - 树状数组:
+            - ds/fenwick/fenwick1.md
+        - 线段树:
+            - ds/seg/seg2.md
+            - ds/seg/scanning.md
+            - ds/seg/seg_opt.md
+            - ds/seg/seg_lichao.md
+            - ds/seg/seg_cat.md
+        - 根号数据结构:
+            - ds/sqrt/block.md
+            - 莫队:
+                - ds/sqrt/mo/mo_algo.md
+                - ds/sqrt/mo/mo.md
+                - ds/sqrt/mo/mo_tree.md
+        - 珂朵莉树:
+            - ds/odt/odt.md
 
 # Customization
 extra:
@@ -89,6 +115,7 @@ extra_css:
 markdown_extensions:
     - md_in_html
     - admonition
+    - attr_list
     - def_list
     - footnotes
     - meta
@@ -97,21 +124,24 @@ markdown_extensions:
         linenums: true
     - toc:
         permalink: true
-    - pymdownx.arithmatex:
-        generic: true
-    - pymdownx.caret
-    - pymdownx.critic
+    # - pymdownx.arithmatex:
+    #     generic: true
     - pymdownx.details
+    - pymdownx.critic
+    - pymdownx.caret
+    - pymdownx.keys
+    - pymdownx.mark
+    - pymdownx.tilde
     - pymdownx.emoji:
         # emoji_index: !!python/name:materialx.emoji.twemoji
         emoji_generator: !!python/name:pymdownx.emoji.to_svg
-    - pymdownx.highlight
+    - pymdownx.highlight:
+        anchor_linenums: true
+        line_spans: __span
+        pygments_lang_class: true
     - pymdownx.inlinehilite
-    - pymdownx.keys
     - pymdownx.magiclink
-    - pymdownx.mark
     - pymdownx.smartsymbols
-
     - pymdownx.snippets:
         check_paths: true
     - pymdownx.progressbar
@@ -122,6 +152,5 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
     - pymdownx.tasklist:
         custom_checkbox: true
-    - pymdownx.tilde
     - pymdownx.tabbed:
         alternate_style: true

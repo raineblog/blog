@@ -5,10 +5,10 @@ site_author: RainPPR
 strict: false
 
 site_url: https://rainppr.github.io/
-repo_name: RainPPR/rainppr.github.io
+repo_name: RainPPR/blog
 
-repo_url: https://github.com/RainPPR/rainppr.github.io
-edit_uri: blob/master/project/docs/
+repo_url: https://github.com/RainPPR/blog
+edit_uri: blob/master/docs/
 # copyright: Copyright &copy; 2016 - 2023 CTF Wiki Team
 
 # Theme

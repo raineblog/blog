@@ -1,4 +1,4 @@
-window.MathJax = {
+/*window.MathJax = {
     tex2jax: {
       inlineMath: [ ["\\(","\\)"] ],
       displayMath: [ ["\\[","\\]"] ]
@@ -17,6 +17,7 @@ window.MathJax = {
     showProcessingMessages: false,
     messageStyle: "none"
   };
+ */
 window.addEventListener('load', function() { 
     var p=localStorage.getItem("data-md-color-primary");
     if (p){
@@ -32,6 +33,3 @@ window.addEventListener('load', function() {
     }
 
 }, false);
-
-//添加空格
-pangu.spacingPageBody();

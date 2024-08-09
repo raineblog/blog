@@ -1,0 +1,3 @@
+html, body { font-feature-settings: "liga", "kern"; }
+h1, h2, h3 { font-feature-settings: "kern", "dlig"; }
+html { scroll-behavior: smooth; }

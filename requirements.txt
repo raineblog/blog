@@ -1,5 +1,4 @@
 mkdocs
 mkdocs-glightbox
-mkdocs-material
 mkdocs-minify-plugin
 pymdown-extensions

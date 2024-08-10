@@ -6,6 +6,20 @@
 
 若 $a \bmod m = b \bmod m$，则称 $a$ 与 $b$ 关于模 $m$ 同余，记为 $a \equiv b \pmod m$.
 
+或者用带余除法的形式，
+
+给定正整数 $m$ 称为模，$a,b$ 为任意两个整数，满足：
+
+$$
+\def\arraystretch{1.1}
+\begin{array}{ll}
+a=q_1m+r_1,&0\le r_1<m\\
+b=q_2m+r_2,&0\le r_2<m\\
+\end{array}
+$$
+
+则称 $a,b$ 对 $m$ 同余。
+
 ### 同余的性质
 
 1. 反身性：$a \equiv a \pmod m$；

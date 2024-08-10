@@ -9,13 +9,100 @@ site_url: https://rainppr.github.io/
 repo_name: RainPPR/blog
 repo_url: https://github.com/RainPPR/blog
 edit_uri: blob/master/docs/
-# copyright: Copyright &copy; 2016 - 2023 CTF Wiki Team
+copyright: by RainPPR
+
+# Contents
+nav:
+    - 简介:
+        - index.md
+        - format.md
+        - usage.md
+        - discussion.md
+        - setting.md
+        - static/katex/README.md
+    - 数据结构:
+        - ds/ds.md
+        - 并查集:
+            - ds/dsu/dsu1.md
+            - ds/dsu/dsu2.md
+            - ds/dsu/dsu3.md
+        - RMQ 问题:
+            - ds/rmq/rmq.md
+            - ds/rmq/st.md
+        - 树状数组:
+            - ds/fenwick/fenwick1.md
+        - 线段树:
+            - ds/seg/seg1.md
+            - ds/seg/seg2.md
+            - ds/seg/scanning.md
+            - ds/seg/seg_opt.md
+            - ds/seg/seg_lichao.md
+            - ds/seg/seg_cat.md
+        - 根号数据结构:
+            - ds/sqrt/decomposition.md
+            - 莫队:
+                - ds/sqrt/mo/mo_algo.md
+                - ds/sqrt/mo/mo.md
+                - ds/sqrt/mo/mo_tree.md
+        - 珂朵莉树:
+            - ds/odt/odt.md
+    - 数学:
+        - 初等数学:
+            - math/elementary/sqrt.md
+            - math/elementary/inverse.md
+            - math/elementary/trigonometric.md
+        - 线性代数:
+            - math/linear-algebra/vector.md
+            - math/linear-algebra/matrix.md
+            - math/linear-algebra/gauss.md
+        - 数论:
+            - math/number-theory/index.md
+            - math/number-theory/gcd.md
+            - math/number-theory/exgcd.md
+            - math/number-theory/linear-equation.md
+            - math/number-theory/inverse.md
+            - math/number-theory/prime.md
+            - math/number-theory/euler.md
+            - math/number-theory/crt.md
+            - math/number-theory/excrt.md
+            - math/number-theory/decomposition.md
 
 # Theme
+
+# theme:
+#     name: material
+#     language: 'zh'
+#     palette:
+#         primary: white
+#         accent: red
+#         scheme: preference
+#     icon:
+#         repo: fontawesome/brands/github-alt
+#    # logo: static/img/logo.png
+#     features:
+#         - navigation.tabs
+#         - navigation.instant
+#         - navigation.tabs.sticky
+#         - search.suggest
+#         - search.highlight
+#         - search.share
+#         - content.action.edit
+#         - content.code.copy
+#         - content.footnote.tooltips
+#     include_search_page: false
+#     search_index_only: true
+#     font:
+#         text: 'Segoe UI'
+#         code: 'Fira Code'
+
 theme:
-    name: material
+    name: null
+    custom_dir: 'material/templates'
+    static_templates:
+        - 404.html
     language: 'zh'
     palette:
+        scheme: default
         primary: white
         accent: red
         scheme: preference
@@ -38,66 +125,11 @@ theme:
         text: 'Segoe UI'
         code: 'Fira Code'
 
-# body, text, code {
-#     font-family: Consolas, 'Courier New', -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", "Noto Sans", "Noto Sans CJK SC",
-#     "Noto Sans CJK", "Noto Sans CJK SC", "Source Han Sans", "PingFang SC", "Segoe UI", "Microsoft YaHei", sans-serif !important;
-#     /*font-family:  "Noto Sans", "Noto Sans SC", "Noto Sans CJK SC", 'LXGW WenKai GB';*/
-# }
-
 plugins:
     - glightbox
     - search
     - minify:
         minify_html: true
-
-# Contents
-nav:
-    - 简介:
-        - index.md
-        - format.md
-        - usage.md
-        - discussion.md
-        - setting.md
-    - 数据结构:
-        - ds/ds.md
-        - 并查集:
-            - ds/dsu/dsu1.md
-            - ds/dsu/dsu2.md
-            - ds/dsu/dsu3.md
-        - RMQ 问题:
-            - ds/rmq/rmq.md
-            - ds/rmq/st.md
-        - 树状数组:
-            - ds/fenwick/fenwick1.md
-        - 线段树:
-            - ds/seg/seg1.md
-            - ds/seg/seg2.md
-            - ds/seg/scanning.md
-            - ds/seg/seg_opt.md
-            - ds/seg/seg_lichao.md
-            - ds/seg/seg_cat.md
-        - 根号数据结构:
-            - ds/sqrt/block.md
-            - 莫队:
-                - ds/sqrt/mo/mo_algo.md
-                - ds/sqrt/mo/mo.md
-                - ds/sqrt/mo/mo_tree.md
-        - 珂朵莉树:
-            - ds/odt/odt.md
-    - 数学:
-        - 线性代数:
-            - math/linear-algebra/vector.md
-            - math/linear-algebra/matrix.md
-            - math/linear-algebra/gauss.md
-        - 数论:
-            - math/number-theory/gcd.md
-            - math/number-theory/exgcd.md
-            - math/number-theory/linear-equation.md
-            - math/number-theory/inverse.md
-            - math/number-theory/prime.md
-            - math/number-theory/euler.md
-            - math/number-theory/crt.md
-            - math/number-theory/excrt.md
 
 # Customization
 extra:
@@ -108,24 +140,35 @@ extra:
 extra_javascript:
     - static/js/extra.js
     - static/js/custom.js
+
+    - static/katex/katex.min.js
+    - static/katex/contrib/mhchem.min.js
+    - static/katex/contrib/auto-render.min.js
+    - static/katex/contrib/copy-tex.min.js
     # - https://cdnjs.loli.net/ajax/libs/pangu/3.3.0/pangu.min.js
     # - https://cdnjs.loli.net/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML
-    - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js
-    - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js
-    - https://unpkg.com/katex@0.16.9/dist/katex.min.js
-    - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js
-    - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js
-    - https://unpkg.com/katex@0.16.9/dist/contrib/auto-render.min.js
+
+    # - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js
+    # - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js
+    # - https://unpkg.com/katex@0.16.9/dist/katex.min.js
+
+    # - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js
+    # - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js
+    # - https://unpkg.com/katex@0.16.9/dist/contrib/auto-render.min.js
 
 
 extra_css:
     - static/css/extra.css
     - static/css/custom.css
-    # - static/css/han.css
-    - https://cdnjs.cloudflare.com/ajax/libs/normalize-opentype.css/0.2.4/normalize-opentype.min.css
-    - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css
-    - https://cdn.jsdelivr.net/npm/katex@0.16.6/dist/katex.min.css
-    - https://unpkg.com/katex@0.16.9/dist/katex.min.css
+
+    - static/katex/katex.min.css
+
+    # - static/css/normalize-opentype.css
+    # - https://cdnjs.cloudflare.com/ajax/libs/normalize-opentype.css/0.2.4/normalize-opentype.min.css
+
+    # - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css
+    # - https://cdn.jsdelivr.net/npm/katex@0.16.6/dist/katex.min.css
+    # - https://unpkg.com/katex@0.16.9/dist/katex.min.css
 
 # Extensions
 markdown_extensions:

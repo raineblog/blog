@@ -2,6 +2,8 @@
 
 RainPPR's blog
 
+<https://github.com/RainPPR/blog-giscus>
+
 ```html
 <details>
 <summary>点击查看代码</summary>
@@ -30,4 +32,3 @@ RainPPR's blog
 ## 参考资料与注释
 
 [^note1]: （冒号）表示总结上文。
-

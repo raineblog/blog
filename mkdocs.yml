@@ -19,7 +19,7 @@ nav:
         - usage.md
         - discussion.md
         - setting.md
-        - static/katex/README.md
+        - KaTeX v0.16.11: static/katex/README.md
     - 数据结构:
         - ds/ds.md
         - 并查集:
@@ -144,7 +144,8 @@ plugins:
     - search
     - minify:
         minify_html: true
-#    - mk2pdf-export
+#    - pdf-export:
+#        combined: true
 
 # Customization
 extra:

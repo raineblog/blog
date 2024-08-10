@@ -1,7 +1,3 @@
-disqus:
-
-# KaTeX v0.16.11
-
 <h1><a href="https://katex.org/">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://katex.org/img/katex-logo.svg">

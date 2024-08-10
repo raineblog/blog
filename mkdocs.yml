@@ -47,10 +47,6 @@ nav:
         - 珂朵莉树:
             - ds/odt/odt.md
     - 数学:
-        - 初等数学:
-            - math/elementary/sqrt.md
-            - math/elementary/inverse.md
-            - math/elementary/trigonometric.md
         - 线性代数:
             - math/linear-algebra/vector.md
             - math/linear-algebra/matrix.md
@@ -66,6 +62,11 @@ nav:
             - math/number-theory/crt.md
             - math/number-theory/excrt.md
             - math/number-theory/decomposition.md
+        - 中学数学:
+            - math/whk/sqrt.md
+            - math/whk/inverse.md
+            - math/whk/trigonometric.md
+            - math/whk/sequence.md
 
 # Theme
 
@@ -141,35 +142,25 @@ extra:
 
 extra_javascript:
     - static/js/extra.js
-    - static/js/custom.js
+
+    - static/js/jquery.min.js
+    # - static/js/bootstrap.min.js
+    # - static/js/fontawesome.min.js
 
     - static/katex/katex.min.js
     - static/katex/contrib/mhchem.min.js
     - static/katex/contrib/auto-render.min.js
     - static/katex/contrib/copy-tex.min.js
-    # - https://cdnjs.loli.net/ajax/libs/pangu/3.3.0/pangu.min.js
-    # - https://cdnjs.loli.net/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML
 
-    # - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js
-    # - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js
-    # - https://unpkg.com/katex@0.16.9/dist/katex.min.js
-
-    # - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js
-    # - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js
-    # - https://unpkg.com/katex@0.16.9/dist/contrib/auto-render.min.js
+    - static/js/custom.js
 
 extra_css:
     - static/css/extra.css
-    - static/css/custom.css
 
+    - static/css/all.min.css
     - static/katex/katex.min.css
 
-    # - static/css/normalize-opentype.css
-    # - https://cdnjs.cloudflare.com/ajax/libs/normalize-opentype.css/0.2.4/normalize-opentype.min.css
-
-    # - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css
-    # - https://cdn.jsdelivr.net/npm/katex@0.16.6/dist/katex.min.css
-    # - https://unpkg.com/katex@0.16.9/dist/katex.min.css
+    - static/css/custom.css
 
 # Extensions
 markdown_extensions:

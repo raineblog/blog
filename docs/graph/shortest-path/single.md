@@ -154,6 +154,8 @@ $$
 			bool flag = false;
 			for (auto t : g) {
 				int u = t.u, v = t.v;
+				if (dis[u] == 0x3f3f3f3f)
+					continue;
 				int w = t.w;
 				if (dis[v] > dis[u] + w) {
 					dis[v] = dis[u] + w;
@@ -161,9 +163,9 @@ $$
 				}
 			}
 			if (!flag)
-				return true;
+				return false;
 		}
-		return false;
+		return true;
 	}
 	```
 
@@ -275,18 +277,40 @@ $$
 	}
 	```
 
-### BFS 版 SPFA
+### DFS 版 SPFA
 
-通常用于判负环，不用像 SPFA 那样判进队次数的原因是：DFS 在栈内的只有祖先，而 BFS 有非祖先。
+通常用于判负环，复杂度依然不对。
 
-```cpp
-int dis[N], vis[N]; // 提前将 dis 赋为 INF
-bool dfs_spfa(int u) {
-	if (vis[u]) return true; vis[u] = true;
-	for (int i = h[u]; i != -1; i = ne[i])
-	if (dis[e[i]] > dis[u] + w[i]) {
-		dis[e[i]] = dis[u] + w[i];
-		if (dfs_spfa(e[i])) return true;
-	} return vis[u] = false;
-}
-```
+此处可以直接判断一个点是否出现在最短路中两次。
+
+因为 DFS 栈中只有祖先，但是 BFS 队列不满足这个性质。
+
+??? note "点击查看代码"
+	PS：板子题被卡了。
+	
+	```cpp
+	int dis[N], vis[N];
+
+	bool dfs(int u) {
+		if (vis[u])
+			return true;
+		vis[u] = 1;
+		for (auto t : g[u]) {
+			int v = t.v, w = t.w;
+			if (dis[v] > dis[u] + w) {
+				dis[v] = dis[u] + w;
+				if (dfs(v))
+					return true;
+			}
+		}
+		vis[u] = 0;
+		return false;
+	}
+
+	bool check(int s) {
+		memset(vis, 0, sizeof(int) * (n + 1));
+		memset(dis, 0x3f, sizeof(int) * (n + 1));
+		dis[s] = 0;
+		return dfs(s);
+	}
+	```

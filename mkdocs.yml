@@ -136,6 +136,8 @@ extra:
     disqus: 'RainPPR'
     pagetime: 'on'
     manifest: 'manifest.webmanifest'
+    githash: ''
+    # copyright: '<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh">CC BY-SA 4.0</a> 和 <a href="https://github.com/zTrix/sata-license">SATA</a>'
 
 extra_javascript:
     - static/js/extra.js
@@ -155,7 +157,6 @@ extra_javascript:
     # - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js
     # - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js
     # - https://unpkg.com/katex@0.16.9/dist/contrib/auto-render.min.js
-
 
 extra_css:
     - static/css/extra.css

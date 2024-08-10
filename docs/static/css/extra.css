@@ -16,3 +16,8 @@ blockquote.page-copyright {
 .gt-container .gt-meta {
     z-index: auto !important;
 }
+
+@media print {
+    .no-print { display: none !important; }
+    code, pre { white-space: pre-wrap; overflow: hidden; }
+}

@@ -38,14 +38,14 @@ nav:
             - ds/seg/seg_opt.md
             - ds/seg/seg_lichao.md
             - ds/seg/seg_cat.md
-        - 根号数据结构:
-            - ds/sqrt/decomposition.md
-            - 莫队:
-                - ds/sqrt/mo/mo_algo.md
-                - ds/sqrt/mo/mo.md
-                - ds/sqrt/mo/mo_tree.md
         - 珂朵莉树:
             - ds/odt/odt.md
+        - ds/sqrt/decomposition.md
+        - 离线算法:
+            - 莫队:
+                - ds/offline/mo/mo_algo.md
+                - ds/offline/mo/mo.md
+                - ds/offline/mo/mo_tree.md
     - 数学:
         - 线性代数:
             - math/linear-algebra/vector.md
@@ -67,6 +67,19 @@ nav:
             - math/whk/inverse.md
             - math/whk/trigonometric.md
             - math/whk/sequence.md
+    - 图论:
+        - 最短路:
+            - graph/shortest-path/index.md
+            - graph/shortest-path/single.md
+            - graph/shortest-path/all.md
+            - graph/shortest-path/diff.md
+        - 生成树:
+            - graph/spanning-tree/mst.md
+            - graph/spanning-tree/kruskal.md
+        - graph/tree.md
+        - graph/dsu-on-tree.md
+        - 树分治:
+            - graph/divide/point.md
 
 # Theme
 
@@ -131,6 +144,7 @@ plugins:
     - search
     - minify:
         minify_html: true
+#    - mk2pdf-export
 
 # Customization
 extra:

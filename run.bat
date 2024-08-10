@@ -1,5 +1,5 @@
 @echo off
-see:
+:seq
 mkdocs serve
-goto see
+goto seq
 pause

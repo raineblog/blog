@@ -1,23 +1,3 @@
-/*window.MathJax = {
-	tex2jax: {
-	  inlineMath: [ ["\\(","\\)"] ],
-	  displayMath: [ ["\\[","\\]"] ]
-	},
-	TeX: {
-	  TagSide: "right",
-	  TagIndent: ".8em",
-	  MultLineWidth: "85%",
-	  equationNumbers: {
-		autoNumber: "AMS",
-	  },
-	  unicode: {
-		fonts: "STIXGeneral,'Arial Unicode MS'"
-	  }
-	},
-	showProcessingMessages: false,
-	messageStyle: "none"
-  };
- */
 window.addEventListener('load', function () {
 	var p = localStorage.getItem("data-md-color-primary");
 	if (p) {
@@ -47,29 +27,6 @@ window.addEventListener('load', function () {
 }, false);
 */
 
-var cur = document.getElementsByClassName('page-time')[0]
-if (cur) {
-	var comments = document.getElementById('gitment_container');
-	var pos = 0;
-	if (comments) {
-		pos -= comments.textContent.length;
-	}
-	comments = document.getElementById('__comments');
-	if (comments) {
-		pos -= comments.textContent.length;
-	}
-	var textLength = 0;
-	if (pos < 0) textLength = (document.getElementsByClassName('md-content__inner')[0].textContent.slice(0, pos).replace(/\s/g, '').length - document.getElementsByTagName('h1')[0].textContent.replace(/\s/g, '').length - document.getElementsByClassName('page-copyright')[0].textContent.replace(/\s/g, '').length - 4);
-	else textLength = (document.getElementsByClassName('md-content__inner')[0].textContent.replace(/\s/g, '').length - document.getElementsByTagName('h1')[0].textContent.replace(/\s/g, '').length - document.getElementsByClassName('page-copyright')[0].textContent.replace(/\s/g, '').length - 4);
-	if (textLength <= 0) cur.innerHTML = `<p>本页面还在建设中，欢迎参与完善！</p>`;
-}
-
-document.getElementsByTagName("html")[0].lang = "zh-Hans"; // change language to `zh-Hans` for Han.js.
-
-var url = document.getElementsByClassName('page_edit_url')[0].href.split('?ref=')[1]
-// var url = document.getElementsByClassName('page_edit_url')[0].href.split('docs')[1]
-// var url = document.URL.replace(/http\S+\.org\//gi, '').replace(/#\S+$/gi, '').slice(0, -1);
-var script = document.createElement('script');
 function foo(response) {
 	var data = response.data;
 	var num = response.data.length;
@@ -102,26 +59,17 @@ function foo(response) {
 		document.getElementsByClassName('facts_modified')[0].innerHTML = (ti);
 		document.getElementsByClassName('page_contributors')[0].innerHTML = (sorted.join(', '));
 	} else if (!url.endsWith('index')) {
-		url += '/index';
+		console.log("ERROR");
+		/*url += '/index';
 		var script = document.createElement('script');
-		document.getElementsByClassName('edit_history')[0].setAttribute('href', `https://github.com/RainPPR/blog/commits/master/docs/${url}`);
+		document.getElementsByClassName('edit_history')[0].setAttribute('href', `https://github.com/RainPPR/blog/commits/main/docs/${url}`);
 		script.src = `https://api.github.com/repos/RainPPR/blog/commits?path=docs/${url}&callback=foo`;
-		document.getElementsByTagName('head')[0].appendChild(script);
+		document.getElementsByTagName('head')[0].appendChild(script);*/
+	} else {
+		console.log("ERROR ???");
 	}
 }
 
-if (url == "/index.md") {
-	// HomePage
-	document.getElementsByClassName('edit_history')[0].setAttribute('href', `https://github.com/RainPPR/blog/commits/master/docs/index.md`);
-	script.src = `https://api.github.com/repos/RainPPR/blog/commits?path=docs/index.md&callback=foo`;
-	document.getElementsByTagName('head')[0].appendChild(script);
-} else if (typeof (url) != 'undefined') {
-	document.getElementsByClassName('edit_history')[0].setAttribute('href', `https://github.com/RainPPR/blog/commits/master/docs${url}`);
-	script.src = `https://api.github.com/repos/RainPPR/blog/commits?path=docs${url}&callback=foo`;
-	document.getElementsByTagName('head')[0].appendChild(script);
-} else {
-	document.getElementsByClassName('edit_history')[0].setAttribute('href', `https://github.com/AFOI-wiki/commits/master`);
-	document.getElementsByClassName('facts_modified')[0].innerHTML = ('最近没更新过这个页面');
-	document.getElementsByClassName('page_contributors')[0].innerHTML = ('本页面是自动生成的');
-	document.getElementsByClassName('page_edit_url')[0].setAttribute('href', `#`);
-}
+
+
+

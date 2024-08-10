@@ -7,6 +7,7 @@
       {% set icon = config.theme.icon.edit or "material/file-edit-outline" %}
       {% include ".icons/" ~ icon ~ ".svg" %}
     </a>
+    <<div id="m_edit_url" style="display: none;">{{ page.edit_url }}</div>
   {% endif %}
   {% if "content.action.view" in features %}
     {% if "/blob/" in page.edit_url %}
@@ -18,5 +19,6 @@
       {% set icon = config.theme.icon.view or "material/file-eye-outline" %}
       {% include ".icons/" ~ icon ~ ".svg" %}
     </a>
+    <<div id="m_edit_url" style="display: none;">{{ page.edit_url | replace(part, 'raw') }}</div>
   {% endif %}
 {% endif %}

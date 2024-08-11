@@ -70,8 +70,8 @@ nav:
     - 图论:
         - 最短路:
             - graph/shortest-path/index.md
-            - graph/shortest-path/single.md
-            - graph/shortest-path/all.md
+            - graph/shortest-path/sssp.md
+            - graph/shortest-path/apsp.md
             - graph/shortest-path/diff.md
         - 生成树:
             - graph/spanning-tree/mst.md

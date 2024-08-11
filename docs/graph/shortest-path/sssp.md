@@ -1,5 +1,7 @@
 # 单源最短路
 
+Single Source Shortest Path Problem (SSSP)。
+
 ## Dijkstra
 
 该算法，Dijkstra（/ˈdikstrɑ/ 或 /ˈdɛikstrɑ/）是一种求解非负权图上单源最短路径的算法。
@@ -70,7 +72,7 @@
 				int v = t.v, w = t.w;
 				if (dis[v] > dis[u] + w) {
 					dis[v] = dis[u] + w;
-					vis[v] ? 0 : heap.push({dis[v], v});
+					heap.push({dis[v], v});
 				}
 			}
 		}
@@ -93,25 +95,28 @@
 
 那么这就是一个 $\mathcal O(n\log n+m\log n)$ 的做法。
 
-但是我们可以用 `__gnu_pbds::priority_queue<>` 配合 `Tag = pairing_heap_tag`。
+???+ note "更优的复杂度？"
+	但是我们可以用 `__gnu_pbds::priority_queue<>` 配合 `Tag = pairing_heap_tag`。
 
-这个实现称为配对堆，可以做到均摊 $\mathcal O(\log n)$ 的弹出、$\mathcal O(1)$ 插入。
+	这个实现称为配对堆，可以做到均摊 $\mathcal O(\log n)$ 的弹出、$\mathcal O(1)$ 插入。
 
-那么，我们的复杂度就是 $\mathcal O(n\log n+m)$。
+	那么，我们的复杂度就是 $\mathcal O(n\log n+m)$。
 
-```cpp
-template<typename T, typename CMP = less<T>>
-using pqueue = __gnu_pbds::priority_queue<T, CMP>;
-// using pqueue = priority_queue<T, vector<T>, CMP>;
-```
+	```cpp
+	template<typename T, typename CMP = less<T>>
+	using pqueue = __gnu_pbds::priority_queue<T, CMP>;
+	// using pqueue = priority_queue<T, vector<T>, CMP>;
+	```
 
 | 实现 | 复杂度 | 适用情景 |
 | :-: | :-: | :-: |
 | 朴素算法 | $\mathcal O(n^2+m)$ | 数据量小 |
 | 优先队列优化 | $\mathcal O(n\log n+m\log n)$ | 稀疏图，边数为 $\mathcal O(n)$ 等级的 |
-| 配对堆优化 | $\mathcal O(n\log n+m)$ | 稠密图，边数为 $\mathcal O(n^2)$ 等级的 |
+| Fibonacci 堆优化 | $\mathcal O(n\log n+m)$ | 稠密图，边数为 $\mathcal O(n^2)$ 等级的 |
 
-一般来说，最后一个严格更优，但是数据量小的时候，其常数大跑得慢。
+一般来说，最后一个严格更优，但是数据量小的时候跑得不一定快。
+
+说句闲话，Dijkstra 也可以魔改后用于负权图，详见 Johnson 算法。
 
 ## Bellman–Ford
 
@@ -181,7 +186,7 @@ $$
 
 但是目前大部分 Bellman-Ford 的优化都可能会被卡，且速度也快不了多少，因此不讲。
 
-??? "拓展：Bellman-Ford 的其他优化（摘自 OI-Wiki）"
+???+ "拓展：Bellman-Ford 的其他优化（摘自 OI-Wiki）"
 	除了队列优化（SPFA）之外，Bellman–Ford 还有其他形式的优化，这些优化在部分图上效果明显，但在某些特殊图上，最坏复杂度可能达到指数级。
 
 	+ 堆优化：将队列换成堆，与 Dijkstra 的区别是允许一个点多次入队。在有负权边的图可能被卡成指数级复杂度。

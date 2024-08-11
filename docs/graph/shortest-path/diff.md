@@ -27,7 +27,7 @@
 
 我们建一个超级源点 $\mathit{rt}$ 并从 $\mathit{rt}$ 开始跑最短路，注意到边权有可能非负，于是我们跑队列优化的 Bellman–Ford（俗称 SPFA，它没死）。
 
-如果我们被要求判断是否存在解，就可以使用栈优化的 Bellman–Ford，更快，详见 [最短路](https://www.cnblogs.com/RainPPR/p/shortest-path.html)。
+如果我们被要求判断是否存在解，就可以使用栈优化的 Bellman–Ford，更快，详见单源最短路。
 
 ### 常见的转换
 
@@ -42,7 +42,6 @@
 | $x_i-x_j=c$ | $x_i-x_j\le c,x_i-x_j\ge c$ | `add(j, i, c), add(i, j, -c)` |
 | $x_i=x_j$ | $x_i-x_j\le 0,x_i-x_j\ge 0$ | `add(j, i, 0), add(i, j, 0)` |
 | $x_i/x_j\le c$ | $\log x_i-\log x_j\le \log c$ | `add(log(j), log(i), log(c))` |
-| 数不胜数 | 自行总结 | 注意细节 |
 
 ## 练习题
 

@@ -62,6 +62,7 @@ nav:
             - math/number-theory/crt.md
             - math/number-theory/excrt.md
             - math/number-theory/decomposition.md
+            - math/number-theory/bsgs.md
         - 中学数学:
             - math/whk/sqrt.md
             - math/whk/inverse.md
@@ -80,6 +81,10 @@ nav:
         - graph/dsu-on-tree.md
         - 树分治:
             - graph/divide/point.md
+        - 最近公共祖先:
+            - graph/lca/index.md
+            - graph/lca/binary.md
+            - graph/lca/dfs.md
 
 # Theme
 

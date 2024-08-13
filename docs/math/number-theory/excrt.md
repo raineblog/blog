@@ -59,7 +59,7 @@ $$
 $$
 \left\{\begin{array}{l}
 p = zs \\
-q = -zs \\
+q = -zt \\
 \end{array}\right.
 $$
 
@@ -75,13 +75,13 @@ $$
 
 手模一下可知新的方程是模 $\operatorname{lcm}(m_1, m_2)$ 意义下的。
 
-然后再考虑将特解转为通解，这一点很简单，在此引用 rxj 的一句话：从线性代数的角度讲，这个通解的构造方式是十分平凡的。对 $\operatorname{lcm}(m_1, m_2)$ 取模的结果，将整个整数集划分成了 $\operatorname{lcm}(m_1, m_2)$ 个等价类，哪个等价类里面有特解，那整个等价类肯定全都是解。
+然后再考虑将特解转为通解，这一点很简单，在此引用 rxz 的一句话：从线性代数的角度讲，这个通解的构造方式是十分平凡的。对 $\operatorname{lcm}(m_1, m_2)$ 取模的结果，将整个整数集划分成了 $\operatorname{lcm}(m_1, m_2)$ 个等价类，哪个等价类里面有特解，那整个等价类肯定全都是解。
 
 也就是通解 $x' = x_0 + k\times\operatorname{lcm}(m_1, m_2)$，其中 $k \in \mathbb Z$.
 
 然后就可以得出合并后的方程：$x \equiv x' \pmod{\operatorname{lcm}(m_1, m_2)}$.
 
-> 如果你没看懂，可以再看看 rxj 的 <https://www.luogu.com.cn/blog/blue/kuo-zhan-zhong-guo-sheng-yu-ding-li>
+> 如果你没看懂，可以再看看 rxz 的 <https://www.luogu.com.cn/article/lr8vtpzl>
 
 代码（此处的乘法比较容易溢出，一般开大一点，`long long` 不行就 `int128`）：
 

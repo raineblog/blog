@@ -95,8 +95,10 @@ $$
 即：
 
 $$
-\left\{\begin{array}{l}  x = x_0 + k \times \dfrac{\operatorname{lcm}(a, b)}{a} \\  y = y_0 + k \times \dfrac{\operatorname{lcm}(a, b)}{b}\end{array}\right.$. 其中 $k \in \mathbb{Z}
+\left\{\begin{array}{l}  x = x_0 + k \times \dfrac{\operatorname{lcm}(a, b)}{a} \\  y = y_0 + k \times \dfrac{\operatorname{lcm}(a, b)}{b}\end{array}\right
 $$
+
+其中 $k \in \mathbb{Z}$。
 
 ## Reference
 

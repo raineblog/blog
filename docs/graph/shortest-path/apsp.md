@@ -243,3 +243,31 @@ $$
 		return false;
 	}
 	```
+
+## 传递闭包
+
+### 问题描述
+
+给定无权图 $G$ 及若干条边，判断任意两点是否联通。
+
+可以按照 Floyd 的思路，换为 0/1 边权、先 bitand 再 bitor 运算即可。
+
+使用 `bitset` 优化可以轻松做到 $\mathcal O(n^3/\omega)$。
+
+### 实现
+
+```cpp
+void Main() {
+	n = read<int>();
+	for (int i = 1; i <= n; ++i)
+		for (int j = 1; j <= n; ++j)
+			a[i][j] = read<bool>();
+	for (int k = 1; k <= n; ++k)
+		for (int i = 1; i <= n; ++i)
+			if (a[i][k])
+				a[i] |= a[k];
+	for (int i = 1; i <= n; ++i)
+		for (int j = 1; j <= n; ++j)
+			cout << a[i][j] << " \n"[j == n];
+}
+```

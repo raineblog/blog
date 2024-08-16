@@ -276,60 +276,49 @@ $$
 
     这些是经过验证的，可以放心使用。
 
-代码：
+??? note "点击查看代码"
+    ```cpp
+    using u64 = uint64_t;
+    using u128 = __uint128_t;
 
-```cpp
-using u64 = uint64_t;
-using u128 = __uint128_t;
+    u64 Pow(u64 a, u64 b, u64 p) {
+        u64 r = 1;
+        for (; b; b >>= 1) {
+            if (b & 1)
+                r = (u128)r * a % p;
+            a = (u128)a * a % p;
+        }
+        return r;
+    }
 
-u64 Pow(u64 a, u64 b, u64 p) {
-	u64 r = 1;
-	for (; b; b >>= 1) {
-		if (b & 1)
-			r = (u128)r * a % p;
-		a = (u128)a * a % p;
-	}
-	return r;
-}
+    bool Miller_Rabin(u64 a, u64 n, u64 d, int r) {
+        u64 k = Pow(a, d, n);
+        if (k == 1)
+            return true;
+        for (int i = 0; i < r; ++i) {
+            if (k == n - 1)
+                return true;
+            k = (u128)k * k % n;
+        }
+        return false;
+    }
 
-bool Miller_Rabin(u64 a, u64 n, u64 d, int r) {
-	u64 k = Pow(a, d, n);
-	if (k == 1)
-		return true;
-	for (int i = 0; i < r; ++i) {
-		if (k == n - 1)
-			return true;
-		k = (u128)k * k % n;
-	}
-	return false;
-}
+    vector<int> pri{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
 
-vector<int> pri{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
-
-bool isPrime(u64 n) {
-	if (n < 3 || n % 2 == 0)
-		return n == 2;
-	int r = __builtin_ctzll(n - 1);
-	u64 d = (n - 1) >> r;
-	for (int i : pri) {
-		if (n == i)
-			return true;
-		if (!Miller_Rabin(i, n, d, r))
-			return false;
-	}
-	return true;
-}
-
-void Main() {
-	int T;
-	cin >> T;
-	while (T--) {
-		u64 x;
-		cin >> x;
-		puts(isPrime(x) ? "YES" : "NO");
-	}
-}
-```
+    bool isPrime(u64 n) {
+        if (n < 3 || n % 2 == 0)
+            return n == 2;
+        int r = __builtin_ctzll(n - 1);
+        u64 d = (n - 1) >> r;
+        for (int i : pri) {
+            if (n == i)
+                return true;
+            if (!Miller_Rabin(i, n, d, r))
+                return false;
+        }
+        return true;
+    }
+    ```
 
 ## Reference
 

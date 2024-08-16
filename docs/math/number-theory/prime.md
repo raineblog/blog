@@ -82,23 +82,84 @@ $$
 
 ## 素数判断
 
-### 试除法
+试除法：找 $n$ 可能存在的因子 $k$，判断 $k \mid n$。
 
-试除法：所有的试除法，无论是 $\mathcal O(n)$ 的还是 $\mathcal O(\sqrt n)$ 的，其本质都相同：
-
-即找 $n$ 可能存在的因子 $k$，判断 $k \mid n$。
-
-咕咕咕。
-
-### 素性测试
-
-素性测试旨在不用分解因数的方式，判断一个数是否为素数。
+素性测试：在不用分解因数的方式，判断一个数是否为素数。
 
 素性测试分为两种：
 
 * 确定性测试：（绝对正确的）确定一个数是否为素数。
 
 * 概率性测试：具有较高正确率，但是不完全保证准确。
+
+### 试除法
+
+#### 暴力
+
+我们根据定义，枚举 $[2,n-1]$ 的每一个数，判断是否整除，
+
+```cpp
+bool isPrime(int n) {
+	if (n <= 1)
+		return false;
+	for (int i = 2; i < n; ++i)
+		if (n % i == 0)
+			return false;
+	return true;
+}
+```
+
+时间复杂度显然是 $\mathcal O(n^2)$ 的。
+
+#### 优化
+
+注意到如果 $x$ 是 $n$ 的因数，那么 $n/x$ 也是。
+
+我们钦定，
+
+$$
+\begin{aligned}
+x&\le\frac{n}{x}\\
+x^2&\le n\\
+x&\le\sqrt{n}
+\end{aligned}
+$$
+
+也就是我们只需要枚举 $[2,\lfloor\sqrt n\rfloor]$ 即可。
+
+```cpp
+bool isPrime(int n) {
+	if (n <= 1)
+		return false;
+	for (int i = 2; 1ll * i * i <= n; ++i)
+		if (n % i == 0)
+			return false;
+	return true;
+}
+```
+
+#### 常数优化
+
+注意到一个 $>3$ 的质数，模 $6$ 只可能等于 $1,5$。
+
+而此时我们也只需要判断模 $5+6k,7+6k,k\in\mathbb N$ 即可。
+
+```cpp
+bool isPrime(int n) {
+	if (n <= 1)
+		return false;
+	if (n <= 3)
+		return true;
+	if (n % 6 != 1 && n % 6 != 5)
+		return false;
+	for (int i = 5; 1ll * i * i <= n; i += 6)
+		if (n % i == 0 || n % (i + 2) == 0)
+			return false;
+	return true;
+}
+```
+
+这个时间复杂度也是 $\mathcal O(\sqrt n)$ 的，但是带 $1/3$ 的常数。
 
 ### Fermat 素性检验
 
@@ -218,7 +279,7 @@ $$
 代码：
 
 ```cpp
-using u64 = long long;
+using u64 = uint64_t;
 using u128 = __uint128_t;
 
 u64 Pow(u64 a, u64 b, u64 p) {

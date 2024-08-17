@@ -20,6 +20,8 @@ nav:
         - discussion.md
         - setting.md
         - KaTeX v0.16.11: static/katex/README.md
+    - 基础算法:
+        - basic/prefix.md
     - 数据结构:
         - ds/ds.md
         - 并查集:

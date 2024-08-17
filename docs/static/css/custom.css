@@ -13,6 +13,10 @@ html {
     scroll-behavior: smooth;
 }
 
+.glightbox img, img {
+    display: block; margin: auto;
+}
+
 .katex-display {
     margin-top: -1.5em !important;
     margin-bottom: -1.5em !important;

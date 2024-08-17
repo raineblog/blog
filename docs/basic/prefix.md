@@ -88,7 +88,7 @@ C++ 语言中自带的前缀和函数为 `std::partial_sum`，
     使用 STL 函数，
 
     ```cpp
-    partial_sum(A + 1, A + n + 1, A + 2);
+    partial_sum(A + 1, A + n + 1, A + 1);
     ```
 
     进行原地的前缀和。

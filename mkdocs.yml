@@ -22,6 +22,10 @@ nav:
         - KaTeX v0.16.11: static/katex/README.md
     - 基础算法:
         - basic/prefix.md
+        - basic/xor-hashing.md
+    - 动态规划:
+        - dp/basic.md
+        - dp/sequence.md
     - 数据结构:
         - ds/ds.md
         - 并查集:

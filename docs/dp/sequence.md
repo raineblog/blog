@@ -436,4 +436,97 @@ $$
     }
     ```
 
+#### P2285 [HNOI2004] 打鼹鼠
+
+简单题，设 $F(i)$ 表示达到第 $i$ 个，钦定 $i$ 必须打的最大个数。
+
+注意到我们一定是从一个移到另一个，打完再继续移动，因此这么设计是正确的。
+
+考虑转移，
+
+$$
+F(i)=\max\{F(j)+1,\operatorname{if}j\to i\text{ is valid.}\}
+$$
+
+直接做是 $\mathcal O(N^2)$ 的，但是似乎可以过。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, m;
+
+    struct node {
+        int t, x, y;
+    } a[N];
+
+    int F[N];
+
+    int dis(int i, int j) {
+        return abs(a[i].x - a[j].x) + abs(a[i].y - a[j].y);
+    }
+
+    bool check(int j, int i) {
+        return dis(i, j) <= abs(a[i].t - a[j].t);
+    }
+
+    void Main() {
+        cin >> n >> m;
+        for (int i = 1; i <= m; ++i)
+            cin >> a[i].t >> a[i].x >> a[i].y;
+        for (int i = 1; i <= m; ++i) {
+            F[i] = 1;
+            for (int j = 1; j < i; ++j)
+                if (check(j, i))
+                    F[i] = max(F[i], F[j] + 1);
+        }
+        int ans = F[1];
+        for (int i = 2; i <= m; ++i)
+            ans = max(ans, F[i]);
+        cout << ans << endl;
+    }
+    ```
+
+#### P4933 大师
+
+好题。
+
+设 $F(i,v)$ 表示以 $i$ 结尾长度至少为 $2$ 的公差为 $v$ 的等差数列个数。
+
+那么，虽然 $v$ 最大可能是 $2\times10^4$ 级别的，但是最多只有 $\mathcal O(N)$ 个是有效的。
+
+因此，我们对于每个 $i$ 枚举前一个 $j$，进行转移：
+
+$$
+F(i,v)=\sum_{j<i}(F(j,v)+1),\text{if $A_i-A_j=v$}.
+$$
+
+那么，答案就是，
+
+$$
+\text{Ans}=n+\sum_{i=1}^n\sum_vF(i,v)
+$$
+
+这么做时间复杂度是 $\mathcal O(n^2)$ 的，可以使用 `std::unordered_map` 达到这个复杂度。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, A[N];
+
+    ll S[N];
+
+    unordered_map<int, ll> F[N];
+
+    void Main() {
+        cin >> n;
+        copy_n(istream_iterator<int>(cin), n, A + 1);
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j < i; ++j)
+                F[i][A[i] - A[j]] = (F[i][A[i] - A[j]] + F[j][A[i] - A[j]] + 1) % MOD;
+        ll ans = n;
+        for (int i = 1; i <= n; ++i)
+            for (auto t : F[i])
+                ans = (ans + t.second) % MOD;
+        cout << ans << endl;
+    }
+    ```
+
 ## 区间 DP

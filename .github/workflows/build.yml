@@ -1,29 +1,32 @@
-name: Deploy to Github Pages
-    on:
-        push:
-            branches:
-                - master
-                - main
-    jobs:
-        deploy:
-            runs-on: ubuntu-latest
-            steps:
-                - name: Checkout main
-                  uses: actions/checkout@v4
-                - name: Setup Python
-                  uses: actions/setup-python@v
-                  with:
-                    python-version: '3.10'
-                    cache: pipenv
-                - name: Install Python dependencies
-                  run: |
-                    pip install mkdocs
-                    pip install mkdocs-material
-                    pip install mkdocs-minify-plugin
-                    pip install pymdown-extensions
-                - uses: actions/cache@v2
-                  with:
-                    key: ${{ github.ref }}
-                    path: .cache
-                - name: Page Build
-                  run: mkdocs gh-deploy -v
+name: Build
+
+on:
+    push:
+        branches:
+            - master
+            - main
+
+jobs:
+    build:
+        name: Page Build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout main
+              uses: actions/checkout@v4
+            - name: Setup Python
+              uses: actions/setup-python@v
+              with:
+                python-version: '3.10'
+                cache: pipenv
+            - name: Install Python dependencies
+              run: |
+                pip install mkdocs
+                pip install mkdocs-material
+                pip install mkdocs-minify-plugin
+                pip install pymdown-extensions
+            - uses: actions/cache@v2
+              with:
+                key: ${{ github.ref }}
+                path: .cache
+            - name: Page Build
+              run: mkdocs gh-deploy -v

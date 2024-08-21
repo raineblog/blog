@@ -30,4 +30,4 @@ jobs:
                 key: ${{ github.ref }}
                 path: .cache
             - name: Page Build
-              run: mkdocs gh-deploy -v
+              run: mkdocs build -v

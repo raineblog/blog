@@ -1,12 +1,10 @@
-# 序列 DP
+# 线性 DP
+
+## 概念
 
 序列 DP 可以说时最常见的 DP 模型。
 
 可以将在序列上 DP 的，都称为序列 DP，例如线性 DP 和区间 DP。
-
-## 线性 DP
-
-### 概念
 
 线性 DP 有很多维度，大部分都是一维的。
 
@@ -14,7 +12,7 @@
 
 也有二维的，用 $f(i,j,\dots)$ 表示两个序列前 $i,j$ 个元素的答案。
 
-### 经典模型
+## 经典模型
 
 #### 最长上升子序列
 
@@ -123,7 +121,7 @@ $$
 
 直接转移就是 $\mathcal O(N^3)$ 的。
 
-### 例题
+## 例题
 
 #### P1002 [NOIP2002 普及组] 过河卒
 
@@ -529,4 +527,236 @@ $$
     }
     ```
 
-## 区间 DP
+#### P1435 [IOI2000] 回文字串
+
+这题也有区间 DP 做法。
+
+注意到答案一定是字符串长度减去最长回文子串。
+
+考虑如何求最长回文子串，容易想到是将字符串逆序后求 LCS 即可。
+
+??? note "点击查看代码"
+    ```cpp
+    int F[1010][1010];
+
+    // LCS: a.size() == b.size()
+    int Main(string a, string b) {
+        int n = a.size();
+        memset(F, 0, sizeof F);
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= n; ++j)
+                if (a[i - 1] == b[j - 1])
+                    F[i][j] = F[i - 1][j - 1] + 1;
+                else
+                    F[i][j] = max(F[i][j - 1], F[i - 1][j]);
+        return F[n][n];
+    }
+
+    int Main(string a) {
+        string b(a);
+        reverse(begin(b), end(b));
+        return a.size() - Main(a, b);
+    }
+
+    void Main() {
+        string str;
+        cin >> str;
+        cout << Main(str) << endl;
+    }
+    ```
+
+#### P2340 [USACO03FALL] Cow Exhibition G
+
+考虑经典状态设计，设 $F(i,x)$ 表示前 $i$ 头牛，智商为 $x$ 时的最大情商。
+
+转移直接转移即可，可以使用 `unordered_map` 更方便的实现，那么就是，
+
+设 $F(i)$ 表示前 $i$ 头牛的决策集合，一个二元组第一维为智商，第二维为对于的最大情商。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, A[N], B[N];
+    unordered_map<int, int> F[N];
+
+    void update(int i, int x, int y) {
+        if (F[i].count(x))
+            F[i][x] = max(F[i][x], y);
+        else
+            F[i][x] = y;
+    }
+
+    void Main() {
+        cin >> n;
+        for (int i = 1; i <= n; ++i)
+            cin >> A[i] >> B[i];
+        update(1, 0, 0);
+        for (int i = 1; i <= n; ++i) {
+            for (auto t : F[i]) {
+                update(i + 1, t.first + A[i], t.second + B[i]);
+                update(i + 1, t.first, t.second);
+            }
+        }
+        int Ans = -1e9;
+        for (auto t : F[n + 1])
+            if (t.first >= 0 && t.second >= 0)
+                Ans = max(Ans, t.first + t.second);
+        cout << Ans << endl;
+    }
+    ```
+
+#### P4310 绝世好题
+
+注意到只需要相邻与不为零，那么容易想到，
+
+设 $F(i)$ 表示以 $i$ 结尾的最大长度，转移，
+
+$$
+F(i)=\max\{F(j)+1,\text{if $(A_i$ bitand $B_j)\neq0$}\}
+$$
+
+超时了，我们考虑拆位，注意到一个数会联通所有其中 $1$ 的位。
+
+那么我们只需要把这个数的所有位统一考虑即可，即用这个数更新所有的联通的位的答案。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, A[N], F[40];
+
+    void Main() {
+        int n;
+        cin >> n;
+        int ans = 1;
+        for (int i = 1; i <= n; ++i) {
+            int x;
+            cin >> x;
+            for (int k = 0; k < 40; ++k)
+                if ((x >> k) & 1)
+                    ans = max(ans, ++F[k]);
+            for (int k = 0; k < 40; ++k)
+                if ((x >> k) & 1)
+                    F[k] = max(F[k], ans);
+        }
+        cout << ans << endl;
+    }
+    ```
+
+#### P1004 [NOIP2000 提高组] 方格取数
+
+经典双进程 DP 思路，首先容易想到四方 DP 的思路。
+
+设 $F(x_1,y_1,x_2,y_2)$ 表示第一、二个进程分别走到的位置，最大得分。
+
+每次转移一起走一个即可。
+
+??? note "点击查看代码"
+    ```cpp
+
+    int n;
+
+    int A[11][11];
+    int F[11][11][11][11];
+
+    int w(int x1, int y1, int x2, int y2) {
+        if (x1 == x2 and y1 == y2)
+            return A[x1][y1];
+        return A[x1][y1] + A[x2][y2];
+    }
+
+    void Main() {
+        cin >> n;
+        int x, y, t;
+        while (cin >> x >> y >> t)
+            A[x][y] = t;
+        for (int x1 = 1; x1 <= n; ++x1)
+            for (int y1 = 1; y1 <= n; ++y1)
+                for (int x2 = 1; x2 <= n; ++x2)
+                    for (int y2 = 1; y2 <= n; ++y2)
+                        F[x1][y1][x2][y2] = max({
+                        F[x1 - 1][y1][x2][y2 - 1],
+                        F[x1 - 1][y1][x2 - 1][y2],
+                        F[x1][y1 - 1][x2][y2 - 1],
+                        F[x1][y1 - 1][x2 - 1][y2]
+                    }) + w(x1, y1, x2, y2);
+        cout << F[n][n][n][n] << endl;
+    }
+    ```
+
+还可以优化到三方。
+
+设 $F(k,x_1,x_2)$ 表示各自走了 $k$ 步，分别到了两个行数的最大得分。
+
+转移也是直接一起走一步即可，代码略。
+
+#### P1006 [NOIP2008 提高组] 传纸条
+
+和上一题类似，但是要求路径不交。
+
+我们令 $F(i,j,k,l)$ 表示两个人的位置，并钦定 $(i,j)$ 靠左下、$(k,l)$ 靠右上。
+
+那么路径不交的充要条件就是始终 $l>j$，这是显然的。
+
+那么直接转移即可。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, m;
+    int A[N][N];
+    int F[N][N][N][N];
+
+    void Main() {
+        cin >> n >> m;
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                cin >> A[i][j];
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                for (int k = 1; k <= n; ++k)
+                    for (int l = j + 1; l <= m; ++l)
+                        F[i][j][k][l] = max({
+                        F[i - 1][j][k][l - 1],
+                        F[i - 1][j][k - 1][l],
+                        F[i][j - 1][k][l - 1],
+                        F[i][j - 1][k - 1][l]
+                    }) + A[i][j] + A[k][l];
+        cout << F[n][m - 1][n - 1][m] << endl;
+    }
+    ```
+
+#### P3147 [USACO16OPEN] 262144 P
+
+设 $F(i,x)$ 表示左端点为 $x$，最近可能在哪里合并出来 $i$。
+
+转移显然，
+
+$$
+F(i,x)=F(i-1,F(i-1,x)+1)
+$$
+
+考虑初始状态，
+
+$$
+F(A_i,i)=i
+$$
+
+注意到合并出来的数字一定是递增的，那么直接转移即可。
+
+??? note "点击查看代码"
+    ```cpp
+    void Main() {
+        cin >> n;
+        for (int i = 1; i <= n; ++i) {
+            int x;
+            cin >> x;
+            F[x][i] = i;
+        }
+        int ans = 0;
+        for (int i = 2; i < 60; ++i)
+            for (int x = 1; x <= n; ++x) {
+                if (!F[i][x] && F[i - 1][x])
+                    F[i][x] = F[i - 1][F[i - 1][x] + 1];
+                if (F[i][x])
+                    ans = i;
+            }
+        cout << ans << endl;
+    }
+    ```

@@ -21,6 +21,8 @@ jobs:
               run: |
                 pip install mkdocs
                 pip install mkdocs-material
+                pip install mkdocs-glightbox
+                pip install mkdocs-macros-plugin
                 pip install mkdocs-minify-plugin
                 pip install pymdown-extensions
             - uses: actions/cache@v2

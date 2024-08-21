@@ -31,5 +31,5 @@ jobs:
             - name: Page Build
               run: |
                 mkdocs get-deps>requirements.txt
-                mkdocs gh-deploy -v
+                mkdocs gh-deploy --force -v
 

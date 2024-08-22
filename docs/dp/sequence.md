@@ -146,7 +146,7 @@ $$
 
 ## 例题
 
-#### P1002 [NOIP2002 普及组] 过河卒
+#### [P1002 [NOIP2002 普及组] 过河卒](https://www.luogu.com.cn/problem/P1002)
 
 经典的地图上 DP 的问题。
 
@@ -162,7 +162,7 @@ $$
 
 时间复杂度是 $\mathcal O(N^2)$ 的，注意开 `long long`。
 
-#### P1216 [IOI1994] 数字三角形
+#### [P1216 [IOI1994] 数字三角形](https://www.luogu.com.cn/problem/P1216)
 
 设 $F(i,j)$ 表示走到第 $i$ 行第 $j$ 列的最大价值。
 
@@ -183,7 +183,7 @@ $$
         ans = max(ans, dp[n][i]);
     ```
 
-#### P1020 [NOIP1999 提高组] 导弹拦截
+#### [P1020 [NOIP1999 提高组] 导弹拦截](https://www.luogu.com.cn/problem/P1020)
 
 第一个显然就是最长不上升子序列，令 $x\gets-x$ 跑 LIS 即可。
 
@@ -197,7 +197,7 @@ $$
 
 跑两次 LIS 解决即可。
 
-#### P1091 [NOIP2004 提高组] 合唱队形
+#### [P1091 [NOIP2004 提高组] 合唱队形](https://www.luogu.com.cn/problem/P1091)
 
 我们发现就是正反两次 LIS 即可。
 
@@ -226,7 +226,7 @@ $$
     }
     ```
 
-#### P8020 [ONTAK2015] Badania naukowe
+#### [P8020 [ONTAK2015] Badania naukowe](https://www.luogu.com.cn/problem/P8020)
 
 有意思的题，完整版看我题解：<https://www.luogu.com.cn/article/6n2rn1mf>。
 
@@ -310,7 +310,7 @@ $$
     }
     ```
 
-#### P1095 [NOIP2007 普及组] 守望者的逃离
+#### [P1095 [NOIP2007 普及组] 守望者的逃离](https://www.luogu.com.cn/problem/P1095)
 
 注意到，如果我们一直使用魔法、等着恢复的话，平均的每秒移动是不优于直接走的。
 
@@ -342,7 +342,7 @@ $$
 
 下面的 `F[i] < F[i - 1] + 17` 一定会从某一个点开始一直执行，因此正确性是显然的。
 
-#### P1650 田忌赛马
+#### [P1650 田忌赛马](https://www.luogu.com.cn/problem/P1650)
 
 注意到田忌出马，一定是最强的几个加上最弱的几个。
 
@@ -385,7 +385,7 @@ $$
     }
     ```
 
-#### P1541 [NOIP2010 提高组] 乌龟棋
+#### [P1541 [NOIP2010 提高组] 乌龟棋](https://www.luogu.com.cn/problem/P1541)
 
 看题解区第一篇的思路，是很简单的，但是我们使用记忆化搜索可以更简单的做。
 
@@ -442,7 +442,7 @@ $$
     }
     ```
 
-#### P1868 饥饿的奶牛
+#### [P1868 饥饿的奶牛](https://www.luogu.com.cn/problem/P1868)
 
 这个也是经典转移思想的应用：
 
@@ -541,7 +541,7 @@ $$
     }
     ```
 
-#### P2285 [HNOI2004] 打鼹鼠
+#### [P2285 [HNOI2004] 打鼹鼠](https://www.luogu.com.cn/problem/P2285)
 
 简单题，设 $F(i)$ 表示达到第 $i$ 个，钦定 $i$ 必须打的最大个数。
 
@@ -590,7 +590,7 @@ $$
     }
     ```
 
-#### P4933 大师
+#### [P4933 大师](https://www.luogu.com.cn/problem/P4933)
 
 好题。
 
@@ -634,7 +634,7 @@ $$
     }
     ```
 
-#### P1435 [IOI2000] 回文字串
+#### [P1435 [IOI2000] 回文字串](https://www.luogu.com.cn/problem/P1435)
 
 这题也有区间 DP 做法。
 
@@ -672,7 +672,7 @@ $$
     }
     ```
 
-#### P2340 [USACO03FALL] Cow Exhibition G
+#### [P2340 [USACO03FALL] Cow Exhibition G](https://www.luogu.com.cn/problem/P2340)
 
 考虑经典状态设计，设 $F(i,x)$ 表示前 $i$ 头牛，智商为 $x$ 时的最大情商。
 
@@ -711,7 +711,7 @@ $$
     }
     ```
 
-#### P4310 绝世好题
+#### [P4310 绝世好题](https://www.luogu.com.cn/problem/P4310)
 
 注意到只需要相邻与不为零，那么容易想到，
 
@@ -747,7 +747,7 @@ $$
     }
     ```
 
-#### P1004 [NOIP2000 提高组] 方格取数
+#### [P1004 [NOIP2000 提高组] 方格取数](https://www.luogu.com.cn/problem/P1004)
 
 经典双进程 DP 思路，首先容易想到四方 DP 的思路。
 
@@ -794,7 +794,7 @@ $$
 
 转移也是直接一起走一步即可，代码略。
 
-#### P1006 [NOIP2008 提高组] 传纸条
+#### [P1006 [NOIP2008 提高组] 传纸条](https://www.luogu.com.cn/problem/P1006)
 
 和上一题类似，但是要求路径不交。
 
@@ -829,7 +829,7 @@ $$
     }
     ```
 
-#### P3147 [USACO16OPEN] 262144 P
+#### [P3147 [USACO16OPEN] 262144 P](https://www.luogu.com.cn/problem/P3147)
 
 设 $F(i,x)$ 表示左端点为 $x$，最近可能在哪里合并出来 $i$。
 
@@ -868,7 +868,7 @@ $$
     }
     ```
 
-#### P1854 花店橱窗布置
+#### [P1854 花店橱窗布置](https://www.luogu.com.cn/problem/P1854)
 
 题面复杂实际简单。
 
@@ -919,7 +919,7 @@ $$
     }
     ```
 
-#### P1874 快速求和
+#### [P1874 快速求和](https://www.luogu.com.cn/problem/P1874)
 
 有一些有意思的技巧。
 
@@ -995,3 +995,91 @@ $$
         cout << Ans << endl;
     }
     ```
+
+#### [P3558 [POI2013] BAJ-Bytecomputer](https://www.luogu.com.cn/problem/P3558)
+
+首先注意到只需要单调不降，因此让序列出现 $-2,2$ 等一定不优。
+
+因此考虑设 $F(i,-1/0/1)$ 表示考虑前 $i$ 个字符，
+
+让第 $i$ 个变为 $-1/0/1$ 且前面单调不降的最小次数。
+
+转移，若 $A_i=-1$，
+
+$$
+\begin{aligned}
+F(i,-1)&=F(i-1,-1)\\
+F(i,0)&=\inf\\
+F(i,1)&=F(i-1,1)+2
+\end{aligned}
+$$
+
+若 $A_i=0$，
+
+$$
+\begin{aligned}
+F(i,-1)&=F(i-1,-1)+1\\
+F(i,0)&=\min\{F(i-1,0),F(i-1,-1)\}\\
+F(i,1)&=F(i-1,1)+1
+\end{aligned}
+$$
+
+若 $A_i=1$，
+
+$$
+\begin{aligned}
+F(i,-1)&=F(i-1,-1)+2\\
+F(i,0)&=F(i-1,-1)+1\\
+F(i,1)&=\min\{F(i-1,-1),F(i-1,0),F(i-1,1)\}
+\end{aligned}
+$$
+
+这比较好理解，注意特判 $i=1$ 即可。
+
+??? note "点击查看代码"
+    ```cpp
+    int n;
+
+    struct node {
+        int a[3];
+        int &operator [](int x) {
+            return a[x + 1];
+        }
+    } F[N];
+
+    void Main() {
+        cin >> n;
+        F[1][-1] = 1e9;
+        F[1][0] = 1e9;
+        F[1][1] = 1e9;
+        int x;
+        cin >> x;
+        F[1][x] = 0;
+        for (int i = 2; i <= n; ++i) {
+            cin >> x;
+            if (x == -1) {
+                F[i][-1] = F[i - 1][-1];
+                F[i][0] = 1e9;
+                F[i][1] = F[i - 1][1] + 2;
+            }
+            if (x == 0) {
+                F[i][-1] = F[i - 1][-1] + 1;
+                F[i][0] = min(F[i - 1][0], F[i - 1][-1]);
+                F[i][1] = F[i - 1][1] + 1;
+            }
+            if (x == 1) {
+                F[i][-1] = F[i - 1][-1] + 2;
+                F[i][0] = F[i - 1][-1] + 1;
+                F[i][1] = min({F[i - 1][-1], F[i - 1][0], F[i - 1][1]});
+            }
+        }
+        int ans = min({F[n][-1], F[n][0], F[n][1]});
+        if (ans >= 1e9) {
+            puts("BRAK");
+            return;
+        }
+        cout << ans << endl;
+    }
+    ```
+
+

@@ -12,7 +12,9 @@
 
 也有二维的，用 $f(i,j,\dots)$ 表示两个序列前 $i,j$ 个元素的答案。
 
-## 经典模型
+## 序列模型
+
+### 经典例题
 
 #### 最长上升子序列
 
@@ -144,44 +146,7 @@ $$
 
 直接转移就是 $\mathcal O(N^3)$ 的。
 
-## 例题
-
-#### [P1002 [NOIP2002 普及组] 过河卒](https://www.luogu.com.cn/problem/P1002)
-
-经典的地图上 DP 的问题。
-
-设 $F(x,y)$ 表示到 $(x,y)$ 的方案数，那么显然，
-
-$$
-F(x,y)=\begin{cases}
-0&\text{if $x,y$ is not valid}\\
-1&\text{if $x=1$ or $y=1$}\\
-F(x-1,y)+F(x,y-1)&\text{otherwise.}
-\end{cases}
-$$
-
-时间复杂度是 $\mathcal O(N^2)$ 的，注意开 `long long`。
-
-#### [P1216 [IOI1994] 数字三角形](https://www.luogu.com.cn/problem/P1216)
-
-设 $F(i,j)$ 表示走到第 $i$ 行第 $j$ 列的最大价值。
-
-$$
-F(i,j)=A(i,j)+\max\{F(i-1,j),F(i-1,j-1)\}
-$$
-
-表示从上一行的这一个、上一个转移。
-
-??? note "点击查看代码"
-    ```cpp
-    dp[0][0] = 0;
-    for (int i = 1; i <= n; ++i)
-        for (int j = 1; j <= i; ++j)
-            dp[i][j] = a[i][j] + max(dp[i - 1][j], dp[i - 1][j - 1]);
-    int ans = -1;
-    for (int i = 1; i <= n; ++i)
-        ans = max(ans, dp[n][i]);
-    ```
+### 其他例题
 
 #### [P1020 [NOIP1999 提高组] 导弹拦截](https://www.luogu.com.cn/problem/P1020)
 
@@ -310,80 +275,9 @@ $$
     }
     ```
 
-#### [P1095 [NOIP2007 普及组] 守望者的逃离](https://www.luogu.com.cn/problem/P1095)
+## 路径模型
 
-注意到，如果我们一直使用魔法、等着恢复的话，平均的每秒移动是不优于直接走的。
-
-因此，答案一定可以表示为，花光魔法，然后等一定时间后一直走到终点的路径。
-
-??? note "点击查看代码"
-    ```cpp
-    void Main() {
-        cin >> M >> S >> T;
-        for (int i = 1; i <= T; ++i) {
-            if (M >= 10)
-                F[i] = F[i - 1] + 60, M -= 10;
-            else
-                F[i] = F[i - 1], M += 4;
-        }
-        for (int i = 1; i <= T; ++i) {
-            if (F[i] < F[i - 1] + 17)
-                F[i] = F[i - 1] + 17;
-            if (F[i] >= S) {
-                cout << "Yes" << endl;
-                cout << i << endl;
-                return;
-            }
-        }
-        cout << "No" << endl;
-        cout << F[T] << endl;
-    }
-    ```
-
-下面的 `F[i] < F[i - 1] + 17` 一定会从某一个点开始一直执行，因此正确性是显然的。
-
-#### [P1650 田忌赛马](https://www.luogu.com.cn/problem/P1650)
-
-注意到田忌出马，一定是最强的几个加上最弱的几个。
-
-其中强的用于获胜得分，弱的用于摸鱼混轮数让强的得分。
-
-因此，我们考虑 DP，令 $F(i,j)$ 表示：
-
-进行了 $i$ 轮，田忌从强的出了 $j$ 个的最大分数。
-
-考虑第 $i$ 个田忌出什么，讨论即可，转移：
-
-$$
-F(i,j)=\max\{F(i-1,j)+w(i,n-(i-j)+1),F(i-1,j-1)+w(i,j)\}
-$$
-
-其中 $w(i,j)$ 表示齐王的第 $i$ 匹马对田忌的第 $j$ 匹马的得分。
-
-直接转移即可，时间复杂度 $\mathcal O(N^2)$。
-
-??? note "点击查看代码"
-    ```cpp
-    void Main() {
-        cin >> n;
-        for (int i = 1; i <= n; ++i)
-            cin >> A[i];
-        for (int i = 1; i <= n; ++i)
-            cin >> B[i];
-        sort(A + 1, A + n + 1);
-        sort(B + 1, B + n + 1);
-        for (int i = 1; i <= n; ++i) {
-            F[i][0] = F[i - 1][0] + G(i, n - i + 1);
-            F[i][i] = F[i - 1][i - 1] + G(i, i);
-            for (int j = 1; j < i; ++j)
-                F[i][j] = max(F[i - 1][j] + G(i, n - (i - j) + 1), F[i - 1][j - 1] + G(i, j));
-        }
-        int Ans = -1e9;
-        for (int i = 0; i <= n; ++i)
-            Ans = max(Ans, F[n][i]);
-        cout << Ans << endl;
-    }
-    ```
+### 一维模型
 
 #### [P1541 [NOIP2010 提高组] 乌龟棋](https://www.luogu.com.cn/problem/P1541)
 
@@ -441,6 +335,391 @@ $$
         cout << dfs(1, C[1], C[2], C[3], C[4]) << endl;
     }
     ```
+
+#### [P2285 [HNOI2004] 打鼹鼠](https://www.luogu.com.cn/problem/P2285)
+
+简单题，设 $F(i)$ 表示达到第 $i$ 个，钦定 $i$ 必须打的最大个数。
+
+注意到我们一定是从一个移到另一个，打完再继续移动，因此这么设计是正确的。
+
+考虑转移，
+
+$$
+F(i)=\max\{F(j)+1,\operatorname{if}j\to i\text{ is valid.}\}
+$$
+
+直接做是 $\mathcal O(N^2)$ 的，但是似乎可以过。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, m;
+
+    struct node {
+        int t, x, y;
+    } a[N];
+
+    int F[N];
+
+    int dis(int i, int j) {
+        return abs(a[i].x - a[j].x) + abs(a[i].y - a[j].y);
+    }
+
+    bool check(int j, int i) {
+        return dis(i, j) <= abs(a[i].t - a[j].t);
+    }
+
+    void Main() {
+        cin >> n >> m;
+        for (int i = 1; i <= m; ++i)
+            cin >> a[i].t >> a[i].x >> a[i].y;
+        for (int i = 1; i <= m; ++i) {
+            F[i] = 1;
+            for (int j = 1; j < i; ++j)
+                if (check(j, i))
+                    F[i] = max(F[i], F[j] + 1);
+        }
+        int ans = F[1];
+        for (int i = 2; i <= m; ++i)
+            ans = max(ans, F[i]);
+        cout << ans << endl;
+    }
+    ```
+
+#### [P4933 大师](https://www.luogu.com.cn/problem/P4933)
+
+好题。
+
+设 $F(i,v)$ 表示以 $i$ 结尾长度至少为 $2$ 的公差为 $v$ 的等差数列个数。
+
+那么，虽然 $v$ 最大可能是 $2\times10^4$ 级别的，但是最多只有 $\mathcal O(N)$ 个是有效的。
+
+因此，我们对于每个 $i$ 枚举前一个 $j$，进行转移：
+
+$$
+F(i,v)=\sum_{j<i}(F(j,v)+1),\text{if $A_i-A_j=v$}.
+$$
+
+那么，答案就是，
+
+$$
+\text{Ans}=n+\sum_{i=1}^n\sum_vF(i,v)
+$$
+
+这么做时间复杂度是 $\mathcal O(n^2)$ 的，可以使用 `std::unordered_map` 达到这个复杂度。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, A[N];
+
+    ll S[N];
+
+    unordered_map<int, ll> F[N];
+
+    void Main() {
+        cin >> n;
+        copy_n(istream_iterator<int>(cin), n, A + 1);
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j < i; ++j)
+                F[i][A[i] - A[j]] = (F[i][A[i] - A[j]] + F[j][A[i] - A[j]] + 1) % MOD;
+        ll ans = n;
+        for (int i = 1; i <= n; ++i)
+            for (auto t : F[i])
+                ans = (ans + t.second) % MOD;
+        cout << ans << endl;
+    }
+    ```
+
+#### [P2340 [USACO03FALL] Cow Exhibition G](https://www.luogu.com.cn/problem/P2340)
+
+考虑经典状态设计，设 $F(i,x)$ 表示前 $i$ 头牛，智商为 $x$ 时的最大情商。
+
+转移直接转移即可，可以使用 `unordered_map` 更方便的实现，那么就是，
+
+设 $F(i)$ 表示前 $i$ 头牛的决策集合，一个二元组第一维为智商，第二维为对于的最大情商。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, A[N], B[N];
+    unordered_map<int, int> F[N];
+
+    void update(int i, int x, int y) {
+        if (F[i].count(x))
+            F[i][x] = max(F[i][x], y);
+        else
+            F[i][x] = y;
+    }
+
+    void Main() {
+        cin >> n;
+        for (int i = 1; i <= n; ++i)
+            cin >> A[i] >> B[i];
+        update(1, 0, 0);
+        for (int i = 1; i <= n; ++i) {
+            for (auto t : F[i]) {
+                update(i + 1, t.first + A[i], t.second + B[i]);
+                update(i + 1, t.first, t.second);
+            }
+        }
+        int Ans = -1e9;
+        for (auto t : F[n + 1])
+            if (t.first >= 0 && t.second >= 0)
+                Ans = max(Ans, t.first + t.second);
+        cout << Ans << endl;
+    }
+    ```
+
+#### [P4310 绝世好题](https://www.luogu.com.cn/problem/P4310)
+
+注意到只需要相邻与不为零，那么容易想到，
+
+设 $F(i)$ 表示以 $i$ 结尾的最大长度，转移，
+
+$$
+F(i)=\max\{F(j)+1,\text{if $(A_i$ bitand $B_j)\neq0$}\}
+$$
+
+超时了，我们考虑拆位，注意到一个数会联通所有其中 $1$ 的位。
+
+那么我们只需要把这个数的所有位统一考虑即可，即用这个数更新所有的联通的位的答案。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, A[N], F[40];
+
+    void Main() {
+        int n;
+        cin >> n;
+        int ans = 1;
+        for (int i = 1; i <= n; ++i) {
+            int x;
+            cin >> x;
+            for (int k = 0; k < 40; ++k)
+                if ((x >> k) & 1)
+                    ans = max(ans, ++F[k]);
+            for (int k = 0; k < 40; ++k)
+                if ((x >> k) & 1)
+                    F[k] = max(F[k], ans);
+        }
+        cout << ans << endl;
+    }
+    ```
+
+#### [P1854 花店橱窗布置](https://www.luogu.com.cn/problem/P1854)
+
+题面复杂实际简单。
+
+设 $F(i,j)$ 表示前 $i$ 支花插在前 $j$ 个花瓶中，其中钦定第 $i$ 支花放在 $j$ 花瓶中的最大得分。
+
+考虑转移，枚举第 $i-1$ 支花插在哪里即可，
+
+$$
+F(i,j)=A(i,j)+\max_{k<j}\{F(i-1,k\}
+$$
+
+复杂度是 $\mathcal O(N^3)$ 的，可以接受。
+
+注意到要记录方案，那么设 $G(i,j)$ 表示 $F(i,j)$ 是从哪个 $k$ 转移来的，直接倒序记录即可。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, m;
+
+    int A[N][N];
+    int F[N][N], G[N][N];
+
+    void Main() {
+        cin >> n >> m;
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                cin >> A[i][j];
+        memset(F, -0x3f, sizeof F);
+        F[0][0] = 0;
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                for (int k = 0; k < j; ++k)
+                    if (F[i - 1][k] + A[i][j] > F[i][j])
+                        F[i][j] = F[i - 1][k] + A[i][j], G[i][j] = k;
+        int Ans = -1e9, Pos = 0;
+        for (int i = 1; i <= m; ++i)
+            if (F[n][i] > Ans)
+                Ans = F[n][i], Pos = i;
+        cout << Ans << endl;
+        vector<int> Res;
+        for (int i = n; i >= 1; --i) {
+            Res.push_back(Pos);
+            Pos = G[i][Pos];
+        }
+        for (auto it = Res.rbegin(); it != Res.rend(); ++it)
+            cout << *it << " ";
+        cout << endl;
+    }
+    ```
+
+### 二维模型
+
+#### [P1216 [IOI1994] 数字三角形](https://www.luogu.com.cn/problem/P1216)
+
+设 $F(i,j)$ 表示走到第 $i$ 行第 $j$ 列的最大价值。
+
+$$
+F(i,j)=A(i,j)+\max\{F(i-1,j),F(i-1,j-1)\}
+$$
+
+表示从上一行的这一个、上一个转移。
+
+??? note "点击查看代码"
+    ```cpp
+    dp[0][0] = 0;
+    for (int i = 1; i <= n; ++i)
+        for (int j = 1; j <= i; ++j)
+            dp[i][j] = a[i][j] + max(dp[i - 1][j], dp[i - 1][j - 1]);
+    int ans = -1;
+    for (int i = 1; i <= n; ++i)
+        ans = max(ans, dp[n][i]);
+    ```
+
+#### [P1002 [NOIP2002 普及组] 过河卒](https://www.luogu.com.cn/problem/P1002)
+
+经典的地图上 DP 的问题。
+
+设 $F(x,y)$ 表示到 $(x,y)$ 的方案数，那么显然，
+
+$$
+F(x,y)=\begin{cases}
+0&\text{if $x,y$ is not valid}\\
+1&\text{if $x=1$ or $y=1$}\\
+F(x-1,y)+F(x,y-1)&\text{otherwise.}
+\end{cases}
+$$
+
+时间复杂度是 $\mathcal O(N^2)$ 的，注意开 `long long`。
+
+#### [P1004 [NOIP2000 提高组] 方格取数](https://www.luogu.com.cn/problem/P1004)
+
+经典双进程 DP 思路，首先容易想到四方 DP 的思路。
+
+设 $F(x_1,y_1,x_2,y_2)$ 表示第一、二个进程分别走到的位置，最大得分。
+
+每次转移一起走一个即可。
+
+??? note "点击查看代码"
+    ```cpp
+
+    int n;
+
+    int A[11][11];
+    int F[11][11][11][11];
+
+    int w(int x1, int y1, int x2, int y2) {
+        if (x1 == x2 and y1 == y2)
+            return A[x1][y1];
+        return A[x1][y1] + A[x2][y2];
+    }
+
+    void Main() {
+        cin >> n;
+        int x, y, t;
+        while (cin >> x >> y >> t)
+            A[x][y] = t;
+        for (int x1 = 1; x1 <= n; ++x1)
+            for (int y1 = 1; y1 <= n; ++y1)
+                for (int x2 = 1; x2 <= n; ++x2)
+                    for (int y2 = 1; y2 <= n; ++y2)
+                        F[x1][y1][x2][y2] = max({
+                        F[x1 - 1][y1][x2][y2 - 1],
+                        F[x1 - 1][y1][x2 - 1][y2],
+                        F[x1][y1 - 1][x2][y2 - 1],
+                        F[x1][y1 - 1][x2 - 1][y2]
+                    }) + w(x1, y1, x2, y2);
+        cout << F[n][n][n][n] << endl;
+    }
+    ```
+
+还可以优化到三方。
+
+设 $F(k,x_1,x_2)$ 表示各自走了 $k$ 步，分别到了两个行数的最大得分。
+
+转移也是直接一起走一步即可，代码略。
+
+#### [P1006 [NOIP2008 提高组] 传纸条](https://www.luogu.com.cn/problem/P1006)
+
+和上一题类似，但是要求路径不交。
+
+我们令 $F(i,j,k,l)$ 表示两个人的位置，并钦定 $(i,j)$ 靠左下、$(k,l)$ 靠右上。
+
+那么路径不交的充要条件就是始终 $l>j$，这是显然的。
+
+那么直接转移即可。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, m;
+    int A[N][N];
+    int F[N][N][N][N];
+
+    void Main() {
+        cin >> n >> m;
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                cin >> A[i][j];
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                for (int k = 1; k <= n; ++k)
+                    for (int l = j + 1; l <= m; ++l)
+                        F[i][j][k][l] = max({
+                        F[i - 1][j][k][l - 1],
+                        F[i - 1][j][k - 1][l],
+                        F[i][j - 1][k][l - 1],
+                        F[i][j - 1][k - 1][l]
+                    }) + A[i][j] + A[k][l];
+        cout << F[n][m - 1][n - 1][m] << endl;
+    }
+    ```
+
+## 分组模型
+
+### 合并模型
+
+#### [P3147 [USACO16OPEN] 262144 P](https://www.luogu.com.cn/problem/P3147)
+
+设 $F(i,x)$ 表示左端点为 $x$，最近可能在哪里合并出来 $i$。
+
+转移显然，
+
+$$
+F(i,x)=F(i-1,F(i-1,x)+1)
+$$
+
+考虑初始状态，
+
+$$
+F(A_i,i)=i
+$$
+
+注意到合并出来的数字一定是递增的，那么直接转移即可。
+
+??? note "点击查看代码"
+    ```cpp
+    void Main() {
+        cin >> n;
+        for (int i = 1; i <= n; ++i) {
+            int x;
+            cin >> x;
+            F[x][i] = i;
+        }
+        int ans = 0;
+        for (int i = 2; i < 60; ++i)
+            for (int x = 1; x <= n; ++x) {
+                if (!F[i][x] && F[i - 1][x])
+                    F[i][x] = F[i - 1][F[i - 1][x] + 1];
+                if (F[i][x])
+                    ans = i;
+            }
+        cout << ans << endl;
+    }
+    ```
+
+### 分割模型
 
 #### [P1868 饥饿的奶牛](https://www.luogu.com.cn/problem/P1868)
 
@@ -541,384 +820,6 @@ $$
     }
     ```
 
-#### [P2285 [HNOI2004] 打鼹鼠](https://www.luogu.com.cn/problem/P2285)
-
-简单题，设 $F(i)$ 表示达到第 $i$ 个，钦定 $i$ 必须打的最大个数。
-
-注意到我们一定是从一个移到另一个，打完再继续移动，因此这么设计是正确的。
-
-考虑转移，
-
-$$
-F(i)=\max\{F(j)+1,\operatorname{if}j\to i\text{ is valid.}\}
-$$
-
-直接做是 $\mathcal O(N^2)$ 的，但是似乎可以过。
-
-??? note "点击查看代码"
-    ```cpp
-    int n, m;
-
-    struct node {
-        int t, x, y;
-    } a[N];
-
-    int F[N];
-
-    int dis(int i, int j) {
-        return abs(a[i].x - a[j].x) + abs(a[i].y - a[j].y);
-    }
-
-    bool check(int j, int i) {
-        return dis(i, j) <= abs(a[i].t - a[j].t);
-    }
-
-    void Main() {
-        cin >> n >> m;
-        for (int i = 1; i <= m; ++i)
-            cin >> a[i].t >> a[i].x >> a[i].y;
-        for (int i = 1; i <= m; ++i) {
-            F[i] = 1;
-            for (int j = 1; j < i; ++j)
-                if (check(j, i))
-                    F[i] = max(F[i], F[j] + 1);
-        }
-        int ans = F[1];
-        for (int i = 2; i <= m; ++i)
-            ans = max(ans, F[i]);
-        cout << ans << endl;
-    }
-    ```
-
-#### [P4933 大师](https://www.luogu.com.cn/problem/P4933)
-
-好题。
-
-设 $F(i,v)$ 表示以 $i$ 结尾长度至少为 $2$ 的公差为 $v$ 的等差数列个数。
-
-那么，虽然 $v$ 最大可能是 $2\times10^4$ 级别的，但是最多只有 $\mathcal O(N)$ 个是有效的。
-
-因此，我们对于每个 $i$ 枚举前一个 $j$，进行转移：
-
-$$
-F(i,v)=\sum_{j<i}(F(j,v)+1),\text{if $A_i-A_j=v$}.
-$$
-
-那么，答案就是，
-
-$$
-\text{Ans}=n+\sum_{i=1}^n\sum_vF(i,v)
-$$
-
-这么做时间复杂度是 $\mathcal O(n^2)$ 的，可以使用 `std::unordered_map` 达到这个复杂度。
-
-??? note "点击查看代码"
-    ```cpp
-    int n, A[N];
-
-    ll S[N];
-
-    unordered_map<int, ll> F[N];
-
-    void Main() {
-        cin >> n;
-        copy_n(istream_iterator<int>(cin), n, A + 1);
-        for (int i = 1; i <= n; ++i)
-            for (int j = 1; j < i; ++j)
-                F[i][A[i] - A[j]] = (F[i][A[i] - A[j]] + F[j][A[i] - A[j]] + 1) % MOD;
-        ll ans = n;
-        for (int i = 1; i <= n; ++i)
-            for (auto t : F[i])
-                ans = (ans + t.second) % MOD;
-        cout << ans << endl;
-    }
-    ```
-
-#### [P1435 [IOI2000] 回文字串](https://www.luogu.com.cn/problem/P1435)
-
-这题也有区间 DP 做法。
-
-注意到答案一定是字符串长度减去最长回文子串。
-
-考虑如何求最长回文子串，容易想到是将字符串逆序后求 LCS 即可。
-
-??? note "点击查看代码"
-    ```cpp
-    int F[1010][1010];
-
-    // LCS: a.size() == b.size()
-    int Main(string a, string b) {
-        int n = a.size();
-        memset(F, 0, sizeof F);
-        for (int i = 1; i <= n; ++i)
-            for (int j = 1; j <= n; ++j)
-                if (a[i - 1] == b[j - 1])
-                    F[i][j] = F[i - 1][j - 1] + 1;
-                else
-                    F[i][j] = max(F[i][j - 1], F[i - 1][j]);
-        return F[n][n];
-    }
-
-    int Main(string a) {
-        string b(a);
-        reverse(begin(b), end(b));
-        return a.size() - Main(a, b);
-    }
-
-    void Main() {
-        string str;
-        cin >> str;
-        cout << Main(str) << endl;
-    }
-    ```
-
-#### [P2340 [USACO03FALL] Cow Exhibition G](https://www.luogu.com.cn/problem/P2340)
-
-考虑经典状态设计，设 $F(i,x)$ 表示前 $i$ 头牛，智商为 $x$ 时的最大情商。
-
-转移直接转移即可，可以使用 `unordered_map` 更方便的实现，那么就是，
-
-设 $F(i)$ 表示前 $i$ 头牛的决策集合，一个二元组第一维为智商，第二维为对于的最大情商。
-
-??? note "点击查看代码"
-    ```cpp
-    int n, A[N], B[N];
-    unordered_map<int, int> F[N];
-
-    void update(int i, int x, int y) {
-        if (F[i].count(x))
-            F[i][x] = max(F[i][x], y);
-        else
-            F[i][x] = y;
-    }
-
-    void Main() {
-        cin >> n;
-        for (int i = 1; i <= n; ++i)
-            cin >> A[i] >> B[i];
-        update(1, 0, 0);
-        for (int i = 1; i <= n; ++i) {
-            for (auto t : F[i]) {
-                update(i + 1, t.first + A[i], t.second + B[i]);
-                update(i + 1, t.first, t.second);
-            }
-        }
-        int Ans = -1e9;
-        for (auto t : F[n + 1])
-            if (t.first >= 0 && t.second >= 0)
-                Ans = max(Ans, t.first + t.second);
-        cout << Ans << endl;
-    }
-    ```
-
-#### [P4310 绝世好题](https://www.luogu.com.cn/problem/P4310)
-
-注意到只需要相邻与不为零，那么容易想到，
-
-设 $F(i)$ 表示以 $i$ 结尾的最大长度，转移，
-
-$$
-F(i)=\max\{F(j)+1,\text{if $(A_i$ bitand $B_j)\neq0$}\}
-$$
-
-超时了，我们考虑拆位，注意到一个数会联通所有其中 $1$ 的位。
-
-那么我们只需要把这个数的所有位统一考虑即可，即用这个数更新所有的联通的位的答案。
-
-??? note "点击查看代码"
-    ```cpp
-    int n, A[N], F[40];
-
-    void Main() {
-        int n;
-        cin >> n;
-        int ans = 1;
-        for (int i = 1; i <= n; ++i) {
-            int x;
-            cin >> x;
-            for (int k = 0; k < 40; ++k)
-                if ((x >> k) & 1)
-                    ans = max(ans, ++F[k]);
-            for (int k = 0; k < 40; ++k)
-                if ((x >> k) & 1)
-                    F[k] = max(F[k], ans);
-        }
-        cout << ans << endl;
-    }
-    ```
-
-#### [P1004 [NOIP2000 提高组] 方格取数](https://www.luogu.com.cn/problem/P1004)
-
-经典双进程 DP 思路，首先容易想到四方 DP 的思路。
-
-设 $F(x_1,y_1,x_2,y_2)$ 表示第一、二个进程分别走到的位置，最大得分。
-
-每次转移一起走一个即可。
-
-??? note "点击查看代码"
-    ```cpp
-
-    int n;
-
-    int A[11][11];
-    int F[11][11][11][11];
-
-    int w(int x1, int y1, int x2, int y2) {
-        if (x1 == x2 and y1 == y2)
-            return A[x1][y1];
-        return A[x1][y1] + A[x2][y2];
-    }
-
-    void Main() {
-        cin >> n;
-        int x, y, t;
-        while (cin >> x >> y >> t)
-            A[x][y] = t;
-        for (int x1 = 1; x1 <= n; ++x1)
-            for (int y1 = 1; y1 <= n; ++y1)
-                for (int x2 = 1; x2 <= n; ++x2)
-                    for (int y2 = 1; y2 <= n; ++y2)
-                        F[x1][y1][x2][y2] = max({
-                        F[x1 - 1][y1][x2][y2 - 1],
-                        F[x1 - 1][y1][x2 - 1][y2],
-                        F[x1][y1 - 1][x2][y2 - 1],
-                        F[x1][y1 - 1][x2 - 1][y2]
-                    }) + w(x1, y1, x2, y2);
-        cout << F[n][n][n][n] << endl;
-    }
-    ```
-
-还可以优化到三方。
-
-设 $F(k,x_1,x_2)$ 表示各自走了 $k$ 步，分别到了两个行数的最大得分。
-
-转移也是直接一起走一步即可，代码略。
-
-#### [P1006 [NOIP2008 提高组] 传纸条](https://www.luogu.com.cn/problem/P1006)
-
-和上一题类似，但是要求路径不交。
-
-我们令 $F(i,j,k,l)$ 表示两个人的位置，并钦定 $(i,j)$ 靠左下、$(k,l)$ 靠右上。
-
-那么路径不交的充要条件就是始终 $l>j$，这是显然的。
-
-那么直接转移即可。
-
-??? note "点击查看代码"
-    ```cpp
-    int n, m;
-    int A[N][N];
-    int F[N][N][N][N];
-
-    void Main() {
-        cin >> n >> m;
-        for (int i = 1; i <= n; ++i)
-            for (int j = 1; j <= m; ++j)
-                cin >> A[i][j];
-        for (int i = 1; i <= n; ++i)
-            for (int j = 1; j <= m; ++j)
-                for (int k = 1; k <= n; ++k)
-                    for (int l = j + 1; l <= m; ++l)
-                        F[i][j][k][l] = max({
-                        F[i - 1][j][k][l - 1],
-                        F[i - 1][j][k - 1][l],
-                        F[i][j - 1][k][l - 1],
-                        F[i][j - 1][k - 1][l]
-                    }) + A[i][j] + A[k][l];
-        cout << F[n][m - 1][n - 1][m] << endl;
-    }
-    ```
-
-#### [P3147 [USACO16OPEN] 262144 P](https://www.luogu.com.cn/problem/P3147)
-
-设 $F(i,x)$ 表示左端点为 $x$，最近可能在哪里合并出来 $i$。
-
-转移显然，
-
-$$
-F(i,x)=F(i-1,F(i-1,x)+1)
-$$
-
-考虑初始状态，
-
-$$
-F(A_i,i)=i
-$$
-
-注意到合并出来的数字一定是递增的，那么直接转移即可。
-
-??? note "点击查看代码"
-    ```cpp
-    void Main() {
-        cin >> n;
-        for (int i = 1; i <= n; ++i) {
-            int x;
-            cin >> x;
-            F[x][i] = i;
-        }
-        int ans = 0;
-        for (int i = 2; i < 60; ++i)
-            for (int x = 1; x <= n; ++x) {
-                if (!F[i][x] && F[i - 1][x])
-                    F[i][x] = F[i - 1][F[i - 1][x] + 1];
-                if (F[i][x])
-                    ans = i;
-            }
-        cout << ans << endl;
-    }
-    ```
-
-#### [P1854 花店橱窗布置](https://www.luogu.com.cn/problem/P1854)
-
-题面复杂实际简单。
-
-设 $F(i,j)$ 表示前 $i$ 支花插在前 $j$ 个花瓶中，其中钦定第 $i$ 支花放在 $j$ 花瓶中的最大得分。
-
-考虑转移，枚举第 $i-1$ 支花插在哪里即可，
-
-$$
-F(i,j)=A(i,j)+\max_{k<j}\{F(i-1,k\}
-$$
-
-复杂度是 $\mathcal O(N^3)$ 的，可以接受。
-
-注意到要记录方案，那么设 $G(i,j)$ 表示 $F(i,j)$ 是从哪个 $k$ 转移来的，直接倒序记录即可。
-
-??? note "点击查看代码"
-    ```cpp
-    int n, m;
-
-    int A[N][N];
-    int F[N][N], G[N][N];
-
-    void Main() {
-        cin >> n >> m;
-        for (int i = 1; i <= n; ++i)
-            for (int j = 1; j <= m; ++j)
-                cin >> A[i][j];
-        memset(F, -0x3f, sizeof F);
-        F[0][0] = 0;
-        for (int i = 1; i <= n; ++i)
-            for (int j = 1; j <= m; ++j)
-                for (int k = 0; k < j; ++k)
-                    if (F[i - 1][k] + A[i][j] > F[i][j])
-                        F[i][j] = F[i - 1][k] + A[i][j], G[i][j] = k;
-        int Ans = -1e9, Pos = 0;
-        for (int i = 1; i <= m; ++i)
-            if (F[n][i] > Ans)
-                Ans = F[n][i], Pos = i;
-        cout << Ans << endl;
-        vector<int> Res;
-        for (int i = n; i >= 1; --i) {
-            Res.push_back(Pos);
-            Pos = G[i][Pos];
-        }
-        for (auto it = Res.rbegin(); it != Res.rend(); ++it)
-            cout << *it << " ";
-        cout << endl;
-    }
-    ```
-
 #### [P1874 快速求和](https://www.luogu.com.cn/problem/P1874)
 
 有一些有意思的技巧。
@@ -995,6 +896,218 @@ $$
         cout << Ans << endl;
     }
     ```
+
+## 最大子段和模型
+
+### [P1115 最大子段和](https://www.luogu.com.cn/problem/P1115)
+
+设 $F(x)$ 表示以 $x$ 结尾的最大字段和，设 $S(x)$ 表示原数组的前缀和。
+
+思路一：
+
+$$
+F(x)=\max_{y<x}\{S(x)-S(y)\}=S(x)-\min_{y<x}S(y)
+$$
+
+注意到维护前缀最小值即可。
+
+思路二：
+
+$$
+F(x)=\max\{A(x),F(x)-1+A(x)\}=A(x)+\max\{F(x-1),0\}
+$$
+
+一个元素只可能加入前面的或者自己单独。
+
+??? note "点击查看代码"
+    ```cpp
+    int F[N];
+
+    int MSS(int *A, int n, function<int(int, int)> cmp) {
+        for (int i = 1; i <= n; ++i)
+            F[i] = cmp(F[i - 1], 0ll) + A[i];
+        int Ans = F[1];
+        for (int i = 2; i <= n; ++i)
+            Ans = cmp(Ans, F[i]);
+        return Ans;
+    }
+    ```
+
+思路三：
+
+我们枚举中点，向下递归分治，类似线段树（下文简述）的合并即可。
+
+### [51Nod-1050 环状最大子段和](https://vjudge.net/problem/51Nod-1050)
+
+容易发现，环形只是在序列的基础上加了一种情况：跨过某个端点到了另一边。
+
+因此，我们将最大字段和转化为，序列的总和减去一个最小字段和（作为不选的一段）。
+
+注意到这样有可能将整个序列删去，因此只需要用 $[1,n),(1,n]$ 的最小值即可。
+
+??? note "点击查看代码"
+    ```cpp
+    // 上文的 MSS 函数
+
+    int n, Sum, A[N];
+
+    void Main() {
+        cin >> n, Sum = 0;
+        if (n == 1) {
+            int x;
+            cin >> x;
+            cout << x << endl;
+            return;
+        }
+        for (int i = 1; i <= n; ++i)
+            cin >> A[i], Sum += A[i];
+        auto Max = [] (int a, int b) {
+            return max(a, b);
+        };
+        auto Min = [] (int a, int b) {
+            return min(a, b);
+        };
+        int Ans = MSS(A, n, Max);
+        Ans = max(Ans, Sum - MSS(A, n - 1, Min));
+        Ans = max(Ans, Sum - MSS(A + 1, n - 1, Min));
+        cout << Ans << endl;
+    }
+    ```
+
+同时也可以断环成链，转化为长度限制的最大字段和问题。
+
+### [P2642 最大双子段和](https://www.luogu.com.cn/problem/P2642)
+
+注意到一定存在一个分割点，将两个段分开，因此考虑枚举这个位置。
+
+我们预处理出来，一个位置之前、之后分别的最大字段和，加起来即可。
+
+### [P1121 环状最大双子段和](https://www.luogu.com.cn/problem/P1121)
+
+### 长度限制的最大字段和
+
+
+
+### 其他方法概述
+
+## 其他例题
+
+### 简单题
+
+#### [P1095 [NOIP2007 普及组] 守望者的逃离](https://www.luogu.com.cn/problem/P1095)
+
+注意到，如果我们一直使用魔法、等着恢复的话，平均的每秒移动是不优于直接走的。
+
+因此，答案一定可以表示为，花光魔法，然后等一定时间后一直走到终点的路径。
+
+??? note "点击查看代码"
+    ```cpp
+    void Main() {
+        cin >> M >> S >> T;
+        for (int i = 1; i <= T; ++i) {
+            if (M >= 10)
+                F[i] = F[i - 1] + 60, M -= 10;
+            else
+                F[i] = F[i - 1], M += 4;
+        }
+        for (int i = 1; i <= T; ++i) {
+            if (F[i] < F[i - 1] + 17)
+                F[i] = F[i - 1] + 17;
+            if (F[i] >= S) {
+                cout << "Yes" << endl;
+                cout << i << endl;
+                return;
+            }
+        }
+        cout << "No" << endl;
+        cout << F[T] << endl;
+    }
+    ```
+
+下面的 `F[i] < F[i - 1] + 17` 一定会从某一个点开始一直执行，因此正确性是显然的。
+
+#### [P1650 田忌赛马](https://www.luogu.com.cn/problem/P1650)
+
+注意到田忌出马，一定是最强的几个加上最弱的几个。
+
+其中强的用于获胜得分，弱的用于摸鱼混轮数让强的得分。
+
+因此，我们考虑 DP，令 $F(i,j)$ 表示：
+
+进行了 $i$ 轮，田忌从强的出了 $j$ 个的最大分数。
+
+考虑第 $i$ 个田忌出什么，讨论即可，转移：
+
+$$
+F(i,j)=\max\{F(i-1,j)+w(i,n-(i-j)+1),F(i-1,j-1)+w(i,j)\}
+$$
+
+其中 $w(i,j)$ 表示齐王的第 $i$ 匹马对田忌的第 $j$ 匹马的得分。
+
+直接转移即可，时间复杂度 $\mathcal O(N^2)$。
+
+??? note "点击查看代码"
+    ```cpp
+    void Main() {
+        cin >> n;
+        for (int i = 1; i <= n; ++i)
+            cin >> A[i];
+        for (int i = 1; i <= n; ++i)
+            cin >> B[i];
+        sort(A + 1, A + n + 1);
+        sort(B + 1, B + n + 1);
+        for (int i = 1; i <= n; ++i) {
+            F[i][0] = F[i - 1][0] + G(i, n - i + 1);
+            F[i][i] = F[i - 1][i - 1] + G(i, i);
+            for (int j = 1; j < i; ++j)
+                F[i][j] = max(F[i - 1][j] + G(i, n - (i - j) + 1), F[i - 1][j - 1] + G(i, j));
+        }
+        int Ans = -1e9;
+        for (int i = 0; i <= n; ++i)
+            Ans = max(Ans, F[n][i]);
+        cout << Ans << endl;
+    }
+    ```
+
+#### [P1435 [IOI2000] 回文字串](https://www.luogu.com.cn/problem/P1435)
+
+这题也有区间 DP 做法。
+
+注意到答案一定是字符串长度减去最长回文子串。
+
+考虑如何求最长回文子串，容易想到是将字符串逆序后求 LCS 即可。
+
+??? note "点击查看代码"
+    ```cpp
+    int F[1010][1010];
+
+    // LCS: a.size() == b.size()
+    int Main(string a, string b) {
+        int n = a.size();
+        memset(F, 0, sizeof F);
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= n; ++j)
+                if (a[i - 1] == b[j - 1])
+                    F[i][j] = F[i - 1][j - 1] + 1;
+                else
+                    F[i][j] = max(F[i][j - 1], F[i - 1][j]);
+        return F[n][n];
+    }
+
+    int Main(string a) {
+        string b(a);
+        reverse(begin(b), end(b));
+        return a.size() - Main(a, b);
+    }
+
+    void Main() {
+        string str;
+        cin >> str;
+        cout << Main(str) << endl;
+    }
+    ```
+
+### 中档题
 
 #### [P3558 [POI2013] BAJ-Bytecomputer](https://www.luogu.com.cn/problem/P3558)
 

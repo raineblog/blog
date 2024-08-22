@@ -760,3 +760,127 @@ $$
         cout << ans << endl;
     }
     ```
+
+#### P1854 花店橱窗布置
+
+题面复杂实际简单。
+
+设 $F(i,j)$ 表示前 $i$ 支花插在前 $j$ 个花瓶中，其中钦定第 $i$ 支花放在 $j$ 花瓶中的最大得分。
+
+考虑转移，枚举第 $i-1$ 支花插在哪里即可，
+
+$$
+F(i,j)=A(i,j)+\max_{k<j}\{F(i-1,k\}
+$$
+
+复杂度是 $\mathcal O(N^3)$ 的，可以接受。
+
+注意到要记录方案，那么设 $G(i,j)$ 表示 $F(i,j)$ 是从哪个 $k$ 转移来的，直接倒序记录即可。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, m;
+
+    int A[N][N];
+    int F[N][N], G[N][N];
+
+    void Main() {
+        cin >> n >> m;
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                cin >> A[i][j];
+        memset(F, -0x3f, sizeof F);
+        F[0][0] = 0;
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                for (int k = 0; k < j; ++k)
+                    if (F[i - 1][k] + A[i][j] > F[i][j])
+                        F[i][j] = F[i - 1][k] + A[i][j], G[i][j] = k;
+        int Ans = -1e9, Pos = 0;
+        for (int i = 1; i <= m; ++i)
+            if (F[n][i] > Ans)
+                Ans = F[n][i], Pos = i;
+        cout << Ans << endl;
+        vector<int> Res;
+        for (int i = n; i >= 1; --i) {
+            Res.push_back(Pos);
+            Pos = G[i][Pos];
+        }
+        for (auto it = Res.rbegin(); it != Res.rend(); ++it)
+            cout << *it << " ";
+        cout << endl;
+    }
+    ```
+
+#### P1874 快速求和
+
+有一些有意思的技巧。
+
+首先我们设 $S(i,j)$ 表示 $[i,j]$ 的数位组成的数字。
+
+考虑这个东西如何计算，首先注意到我们要组成的数最大是 $10^5$，那么超过的都没意义。
+
+因此，我们考虑取模（？），具体的，我们令 $S(i,j)$ 表示 $[i,j]$ 的数字模一个大数 $P$（比 $10^5$ 大即可）。
+
+那么，我们只需要类似字符串哈希的，求出 $S(i)$ 表示前 $i$ 个数码的数字，然后，
+
+$$
+S(i,j)=S(j)-S(i-1)\times P^{j-i+1}
+$$
+
+即可，这是很有意思的。
+
+然后考虑求解答案，设 $F(i,j)$ 表示考虑前 $i$ 个数位，组成 $j$ 的最小花费。
+
+那么转移只需要枚举这个加号的位置即可，
+
+$$
+F(i,j)=\min_{k<i}\{F(k,j-S(k+1,i))+1\}
+$$
+
+直接转移即可，注意到还是 $S(k+1,i)>j$ 之后就没意义了，因此反着枚举超过就 `break` 即可。
+
+??? note "点击查看代码"
+    ```cpp
+    constexpr int MOD = 1e9 + 7;
+
+    int n, tar;
+
+    string str;
+
+    int R[50], S[50];
+
+    void init() {
+        R[0] = 1, S[0] = 0;
+        for (int i = 1; i <= n; ++i) {
+            R[i] = R[i - 1] * 10ll % MOD;
+            S[i] = (S[i - 1] * 10ll % MOD + str[i - 1] - '0') % MOD;
+        }
+    }
+
+    int get(int l, int r) {
+        return (S[r] - 1ll * S[l - 1] * R[r - l + 1] % MOD + MOD) % MOD;
+    }
+
+    int F[50][(int)1e5 + 10];
+
+    void Main() {
+        cin >> str >> tar;
+        n = str.size(), init();
+        memset(F, 0x3f, sizeof F);
+        F[0][0] = -1;
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= tar; ++j) {
+                for (int k = i - 1; k >= 0; --k) {
+                    int t = get(k + 1, i);
+                    if (t > j)
+                        break;
+                    F[i][j] = min(F[i][j], F[k][j - t] + 1);
+                }
+            }
+        int Ans = F[n][tar];
+        if (Ans + 1 >= 0x3f3f3f3f)
+            Ans = -1;
+        cout << Ans << endl;
+    }
+    ```

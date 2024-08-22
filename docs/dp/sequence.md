@@ -72,7 +72,7 @@ $$
 
 $$
 f(i,j)=\begin{cases}
-f(i-1,j-1)&A_i=B_j\\
+f(i-1,j-1)+1&A_i=B_j\\
 \max\{f(i,j-1),f(i-1,j)\}&A_i\neq B_j
 \end{cases}
 $$
@@ -87,6 +87,29 @@ $$
                 f[i][j] = f[i - 1][j - 1] + 1;
             else
                 f[i][j] = max(f[i - 1][j], f[i][j - 1]);
+    ```
+
+三串 LCS：设 $F(i,j,k)$ 表示 $A[1,i],B[1,j],C[1,k]$ 的 LCS，转移分讨即可。
+
+??? note "点击查看代码"
+    ```cpp
+    int F[N][N][N];
+
+    int Main(string A, string B, string C) {
+        for (int i = 1; i <= A.size(); ++i) {
+            char a = A[i - 1];
+            for (int j = 1; j <= B.size(); ++j) {
+                int b = B[j - 1];
+                for (int k = 1; k <= C.size(); ++k) {
+                    char c = C[k - 1];
+                    F[i][j][k] = max({F[i][j][k - 1], F[i][j - 1][k], F[i - 1][j][k]});
+                    if (a == b && b == c)
+                        F[i][j][k] = max(F[i][j][k], F[i - 1][j - 1][k - 1] + 1);
+                }
+            }
+        }
+        return F[A.size()][B.size()][C.size()];
+    }
     ```
 
 如果 $A,B$ 是排列，那么存在更优的做法。
@@ -200,6 +223,90 @@ $$
         for (int i = 1; i <= n; ++i)
             ans = max(ans, P[i] + Q[i] - 1);
         cout << n - ans << endl;
+    }
+    ```
+
+#### P8020 [ONTAK2015] Badania naukowe
+
+有意思的题，完整版看我题解：<https://www.luogu.com.cn/article/6n2rn1mf>。
+
+我们使用 $P(i)$ 表示从 $A_i$ 开始匹配 $C$，到最后一个字符的下标 $j$。
+
+同理，使用 $Q(i)$ 表示从 $B_i$ 开始匹配 $C$，最后一个字符的下标 $j$。
+
+设 $F(i,j)$ 表示 $A[1,i]$ 和 $B[1,j]$ 的 LCS（最长公共子序列）。
+
+设 $G(i,j)$ 表示 $A[i,n]$ 和 $B[j,m]$ 的 LCS（最长公共子序列）。
+
+那么，答案可以表示为，
+
+$$
+\max_{i,j}\{
+F(i-1,j-1)+G(P(i)+1,Q(j)+1)+\lvert C\rvert,
+\text{if $\langle i,j\rangle$ is valid.}
+\}
+$$
+
+也就是前面的和后面的 LCS 可以直接计入答案，再加上子串 $C$ 的长度。
+
+??? note "点击查看代码"
+    ```cpp
+    constexpr int N = 3e3 + 10;
+
+    void init_matching(int n, int *A, int k, int *C, int *P) {
+        for (int i = 1; i + k - 1 <= n; ++i) {
+            int p = i, q = 1;
+            while (p <= n && q <= k) {
+                q += (A[p] == C[q]);
+                ++p;
+            }
+            P[i] = (q > k) ? p - 1 : 0;
+        }
+    }
+
+    int n, A[N], P[N];
+    int m, B[N], Q[N];
+    int k, C[N];
+    int F[N][N], G[N][N];
+
+    void init_LCS() {
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                if (A[i] == B[j])
+                    F[i][j] = F[i - 1][j - 1] + 1;
+                else
+                    F[i][j] = max(F[i][j - 1], F[i - 1][j]);
+    }
+
+    void init_rLCS() {
+        for (int i = n; i >= 1; --i)
+            for (int j = m; j >= 1; --j)
+                if (A[i] == B[j])
+                    G[i][j] = G[i + 1][j + 1] + 1;
+                else
+                    G[i][j] = max(G[i][j + 1], G[i + 1][j]);
+    }
+
+    int get_ans() {
+        int Ans = -1;
+        for (int i = 1; i + k - 1 <= n; ++i)
+            for (int j = 1; j + k - 1 <= m; ++j)
+                if (P[i] && Q[j])
+                    Ans = max(Ans, F[i - 1][j - 1] + G[P[i] + 1][Q[j] + 1] + k);
+        return Ans;
+    }
+
+    void Main() {
+        cin >> n;
+        copy_n(istream_iterator<int>(cin), n, A + 1);
+        cin >> m;
+        copy_n(istream_iterator<int>(cin), m, B + 1);
+        cin >> k;
+        copy_n(istream_iterator<int>(cin), k, C + 1);
+        init_matching(n, A, k, C, P);
+        init_matching(m, B, k, C, Q);
+        init_LCS(), init_rLCS();
+        cout << get_ans() << endl;
     }
     ```
 
@@ -820,7 +927,9 @@ $$
 
 考虑这个东西如何计算，首先注意到我们要组成的数最大是 $10^5$，那么超过的都没意义。
 
-因此，我们考虑取模（？），具体的，我们令 $S(i,j)$ 表示 $[i,j]$ 的数字模一个大数 $P$（比 $10^5$ 大即可）。
+因此，我们考虑取模（？）。
+
+具体的，我们令 $S(i,j)$ 表示 $[i,j]$ 的数字模一个大数 $P$（比 $10^5$ 大即可）。
 
 那么，我们只需要类似字符串哈希的，求出 $S(i)$ 表示前 $i$ 个数码的数字，然后，
 
@@ -838,7 +947,9 @@ $$
 F(i,j)=\min_{k<i}\{F(k,j-S(k+1,i))+1\}
 $$
 
-直接转移即可，注意到还是 $S(k+1,i)>j$ 之后就没意义了，因此反着枚举超过就 `break` 即可。
+直接转移即可，注意到还是 $S(k+1,i)>j$ 之后就没意义了。
+
+因此反着枚举超过就 `break` 即可。
 
 ??? note "点击查看代码"
     ```cpp

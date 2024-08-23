@@ -27,6 +27,7 @@ nav:
         - dp/basic.md
         - dp/sequence.md
         - dp/interval.md
+        - dp/opt/mono.md
     - 数据结构:
         - ds/ds.md
         - 并查集:

@@ -16,7 +16,7 @@
 
 ### 经典例题
 
-#### 最长上升子序列
+#### [B3637 最长上升子序列](https://www.luogu.com.cn/problem/B3637)
 
 设 $f(i)$ 表示以 $A(i)$ 结尾的最长上升子序列 LIS 长度，考虑转移。
 
@@ -66,7 +66,7 @@ $$
 
 使用二分查找，时间复杂度是 $\mathcal O(N\log N)$ 的。
 
-#### 最长公共子序列
+#### [P1439 最长公共子序列](https://www.luogu.com.cn/problem/P1439)
 
 设 $f(i,j)$ 表示 $A[1,i]$ 和 $B[1,j]$ 的 LCS。
 
@@ -132,7 +132,7 @@ $$
         ++Ans;
     ```
 
-#### 编辑距离
+#### [P2758 编辑距离](https://www.luogu.com.cn/problem/P2758)
 
 每次操作可以删除、插入、修改一个字符，
 
@@ -146,7 +146,172 @@ $$
 
 直接转移就是 $\mathcal O(N^3)$ 的。
 
+#### [P1115 最大子段和](https://www.luogu.com.cn/problem/P1115)
+
+设 $F(x)$ 表示以 $x$ 结尾的最大字段和，设 $S(x)$ 表示原数组的前缀和。
+
+思路一：
+
+$$
+F(x)=\max_{y<x}\{S(x)-S(y)\}=S(x)-\min_{y<x}S(y)
+$$
+
+注意到维护前缀最小值即可。
+
+思路二：
+
+$$
+F(x)=\max\{A(x),F(x)-1+A(x)\}=A(x)+\max\{F(x-1),0\}
+$$
+
+一个元素只可能加入前面的或者自己单独。
+
+??? note "点击查看代码"
+    ```cpp
+    int F[N];
+
+    int MSS(int *A, int n, function<int(int, int)> cmp) {
+        for (int i = 1; i <= n; ++i)
+            F[i] = cmp(F[i - 1], 0ll) + A[i];
+        int Ans = F[1];
+        for (int i = 2; i <= n; ++i)
+            Ans = cmp(Ans, F[i]);
+        return Ans;
+    }
+    ```
+
 ### 其他例题
+
+#### [51Nod-1050 环状最大子段和](https://vjudge.net/problem/51Nod-1050)
+
+容易发现，环形只是在序列的基础上加了一种情况：跨过某个端点到了另一边。
+
+因此，我们将最大字段和转化为，序列的总和减去一个最小字段和（作为不选的一段）。
+
+注意到这样有可能将整个序列删去，因此只需要用 $[1,n),(1,n]$ 的最小值即可。
+
+??? note "点击查看代码"
+    ```cpp
+    // 上文的 MSS 函数
+
+    int n, Sum, A[N];
+
+    void Main() {
+        cin >> n, Sum = 0;
+        if (n == 1) {
+            int x;
+            cin >> x;
+            cout << x << endl;
+            return;
+        }
+        for (int i = 1; i <= n; ++i)
+            cin >> A[i], Sum += A[i];
+        auto Max = [] (int a, int b) {
+            return max(a, b);
+        };
+        auto Min = [] (int a, int b) {
+            return min(a, b);
+        };
+        int Ans = MSS(A, n, Max);
+        Ans = max(Ans, Sum - MSS(A, n - 1, Min));
+        Ans = max(Ans, Sum - MSS(A + 1, n - 1, Min));
+        cout << Ans << endl;
+    }
+    ```
+
+同时也可以断环成链，转化为长度限制的最大字段和问题。
+
+#### [P2642 最大双子段和](https://www.luogu.com.cn/problem/P2642)
+
+注意到一定存在一个分割点，将两个段分开，因此考虑枚举这个位置。
+
+我们预处理出来，一个位置之前、之后分别的最大字段和，加起来即可。
+
+??? note "点击查看代码"
+    ```cpp
+    int n, A[N];
+
+    void init_MSS(int *F) {
+        F[0] = -1e9;
+        for (int i = 1; i <= n; ++i)
+            F[i] = max(F[i - 1], 0ll) + A[i];
+        for (int i = 1; i <= n; ++i)
+            F[i] = max(F[i - 1], F[i]);
+    }
+
+    void init_rMSS(int *F) {
+        F[n + 1] = -1e9;
+        for (int i = n; i >= 1; --i)
+            F[i] = max(F[i + 1], 0ll) + A[i];
+        for (int i = n; i >= 1; --i)
+            F[i] = max(F[i + 1], F[i]);
+    }
+
+    int F[N], G[N];
+
+    void Main() {
+        cin >> n;
+        copy_n(istream_iterator<int>(cin), n, A + 1);
+        init_MSS(F), init_rMSS(G);
+        int Ans = -1e9;
+        for (int i = 2; i < n; ++i)
+            Ans = max(Ans, F[i - 1] + G[i + 1]);
+        cout << Ans << endl;
+    }
+    ```
+
+注意此时这道题要求序列两边非空。
+
+#### [P1121 环状最大双子段和](https://www.luogu.com.cn/problem/P1121)
+
+容易推广，我们跑一次最大双字段和，两次最小双字段和即可。
+
+??? note "点击查看代码"
+    ```cpp
+    template<int emp>
+    int calc(int n, int *A, function<int(int, int)> cmp) {
+        static int F[N], G[N];
+        F[0] = G[n + 1] = emp;
+        int Ans = emp;
+        for (int i = 1; i <= n; ++i)
+            F[i] = cmp(F[i - 1], 0) + A[i];
+        for (int i = 1; i <= n; ++i)
+            F[i] = cmp(F[i], F[i - 1]);
+        for (int i = n; i >= 1; --i)
+            G[i] = cmp(G[i + 1], 0) + A[i];
+        for (int i = n; i >= 1; --i)
+            G[i] = cmp(G[i], G[i + 1]);
+        for (int i = 2; i < n; ++i)
+            Ans = cmp(Ans, F[i - 1] + G[i + 1]);
+        return Ans;
+    }
+
+    int n, Sum, A[N];
+
+    void Main() {
+        cin >> n, Sum = 0;
+        for (int i = 1; i <= n; ++i)
+            cin >> A[i], Sum += A[i];
+        auto Max = [] (int a, int b) {
+            return max(a, b);
+        };
+        auto Min = [] (int a, int b) {
+            return min(a, b);
+        };
+        int Ans = calc < (int) -1e9 > (n, A, Max);
+        Ans = max(Ans, Sum - calc < 0 > (n - 1, A, Min));
+        Ans = max(Ans, Sum - calc < 0 > (n - 1, A + 1, Min));
+        cout << Ans << endl;
+    }
+    ```
+
+需要注意每个题可能会是否可以相邻、是否可以为空做出要求，不过很好改。
+
+#### [CSES-1644 有长度限制](https://vjudge.net/problem/CSES-1644)
+
+我们要求长度在区间 $[L,R]$ 内的最大字段和。
+
+具体内容见单调队列优化 DP 文章。
 
 #### [P1020 [NOIP1999 提高组] 导弹拦截](https://www.luogu.com.cn/problem/P1020)
 
@@ -896,99 +1061,6 @@ $$
         cout << Ans << endl;
     }
     ```
-
-## 最大子段和模型
-
-### [P1115 最大子段和](https://www.luogu.com.cn/problem/P1115)
-
-设 $F(x)$ 表示以 $x$ 结尾的最大字段和，设 $S(x)$ 表示原数组的前缀和。
-
-思路一：
-
-$$
-F(x)=\max_{y<x}\{S(x)-S(y)\}=S(x)-\min_{y<x}S(y)
-$$
-
-注意到维护前缀最小值即可。
-
-思路二：
-
-$$
-F(x)=\max\{A(x),F(x)-1+A(x)\}=A(x)+\max\{F(x-1),0\}
-$$
-
-一个元素只可能加入前面的或者自己单独。
-
-??? note "点击查看代码"
-    ```cpp
-    int F[N];
-
-    int MSS(int *A, int n, function<int(int, int)> cmp) {
-        for (int i = 1; i <= n; ++i)
-            F[i] = cmp(F[i - 1], 0ll) + A[i];
-        int Ans = F[1];
-        for (int i = 2; i <= n; ++i)
-            Ans = cmp(Ans, F[i]);
-        return Ans;
-    }
-    ```
-
-思路三：
-
-我们枚举中点，向下递归分治，类似线段树（下文简述）的合并即可。
-
-### [51Nod-1050 环状最大子段和](https://vjudge.net/problem/51Nod-1050)
-
-容易发现，环形只是在序列的基础上加了一种情况：跨过某个端点到了另一边。
-
-因此，我们将最大字段和转化为，序列的总和减去一个最小字段和（作为不选的一段）。
-
-注意到这样有可能将整个序列删去，因此只需要用 $[1,n),(1,n]$ 的最小值即可。
-
-??? note "点击查看代码"
-    ```cpp
-    // 上文的 MSS 函数
-
-    int n, Sum, A[N];
-
-    void Main() {
-        cin >> n, Sum = 0;
-        if (n == 1) {
-            int x;
-            cin >> x;
-            cout << x << endl;
-            return;
-        }
-        for (int i = 1; i <= n; ++i)
-            cin >> A[i], Sum += A[i];
-        auto Max = [] (int a, int b) {
-            return max(a, b);
-        };
-        auto Min = [] (int a, int b) {
-            return min(a, b);
-        };
-        int Ans = MSS(A, n, Max);
-        Ans = max(Ans, Sum - MSS(A, n - 1, Min));
-        Ans = max(Ans, Sum - MSS(A + 1, n - 1, Min));
-        cout << Ans << endl;
-    }
-    ```
-
-同时也可以断环成链，转化为长度限制的最大字段和问题。
-
-### [P2642 最大双子段和](https://www.luogu.com.cn/problem/P2642)
-
-注意到一定存在一个分割点，将两个段分开，因此考虑枚举这个位置。
-
-我们预处理出来，一个位置之前、之后分别的最大字段和，加起来即可。
-
-### [P1121 环状最大双子段和](https://www.luogu.com.cn/problem/P1121)
-
-### 长度限制的最大字段和
-
-
-
-### 其他方法概述
 
 ## 其他例题
 

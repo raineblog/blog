@@ -14,84 +14,84 @@ copyright: by RainPPR
 # Contents
 nav:
     - 简介:
-        - index.md
-        - format.md
-        - usage.md
-        - discussion.md
-        - setting.md
+        - 简介: index.md
+        - 格式手册: format.md
+        - 如何使用: usage.md
+        - 讨论交流: discussion.md
+        - 设置: setting.md
     - 基础算法:
-        - basic/prefix.md
-        - basic/xor-hashing.md
-    - 动态规划:
-        - dp/basic.md
-        - dp/sequence.md
-        - dp/interval.md
-        - dp/opt/mono.md
-    - 数据结构:
-        - ds/ds.md
-        - 并查集:
-            - ds/dsu/dsu1.md
-            - ds/dsu/dsu2.md
-            - ds/dsu/dsu3.md
-        - RMQ 问题:
-            - ds/rmq/rmq.md
-            - ds/rmq/st.md
-        - 树状数组:
-            - ds/fenwick/fenwick1.md
-        - 线段树:
-            - ds/seg/seg1.md
-            - ds/seg/seg2.md
-            - ds/seg/scanning.md
-            - ds/seg/seg_opt.md
-            - ds/seg/seg_lichao.md
-            - ds/seg/seg_cat.md
-        - 珂朵莉树:
-            - ds/odt/odt.md
-        - ds/sqrt/decomposition.md
-        - 离线算法:
-            - 莫队:
-                - ds/offline/mo/mo_algo.md
-                - ds/offline/mo/mo.md
-                - ds/offline/mo/mo_tree.md
-    - 数学:
-        - 线性代数:
-            - math/linear-algebra/vector.md
-            - math/linear-algebra/matrix.md
-            - math/linear-algebra/gauss.md
-        - 数论:
-            - math/number-theory/index.md
-            - math/number-theory/gcd.md
-            - math/number-theory/exgcd.md
-            - math/number-theory/linear-equation.md
-            - math/number-theory/inverse.md
-            - math/number-theory/prime.md
-            - math/number-theory/euler.md
-            - math/number-theory/crt.md
-            - math/number-theory/excrt.md
-            - math/number-theory/decomposition.md
-            - math/number-theory/bsgs.md
-        - 中学数学:
-            - math/whk/sqrt.md
-            - math/whk/inverse.md
-            - math/whk/trigonometric.md
-            - math/whk/sequence.md
-    - 图论:
-        - 最短路:
-            - graph/shortest-path/index.md
-            - graph/shortest-path/sssp.md
-            - graph/shortest-path/apsp.md
-            - graph/shortest-path/diff.md
-        - 生成树:
-            - graph/spanning-tree/mst.md
-            - graph/spanning-tree/kruskal.md
-        - graph/tree.md
-        - graph/dsu-on-tree.md
-        - 树分治:
-            - graph/divide/point.md
-        - 最近公共祖先:
-            - graph/lca/index.md
-            - graph/lca/binary.md
-            - graph/lca/dfs.md
+        - 前缀和及差分: basic/prefix.md
+        - 异或哈希算法: basic/xor-hashing.md
+    # - 动态规划:
+    #     - dp/basic.md
+    #     - dp/sequence.md
+    #     - dp/interval.md
+    #     - dp/opt/mono.md
+    # - 数据结构:
+    #     - ds/ds.md
+    #     - 并查集:
+    #         - ds/dsu/dsu1.md
+    #         - ds/dsu/dsu2.md
+    #         - ds/dsu/dsu3.md
+    #     - RMQ 问题:
+    #         - ds/rmq/rmq.md
+    #         - ds/rmq/st.md
+    #     - 树状数组:
+    #         - ds/fenwick/fenwick1.md
+    #     - 线段树:
+    #         - ds/seg/seg1.md
+    #         - ds/seg/seg2.md
+    #         - ds/seg/scanning.md
+    #         - ds/seg/seg_opt.md
+    #         - ds/seg/seg_lichao.md
+    #         - ds/seg/seg_cat.md
+    #     - 珂朵莉树:
+    #         - ds/odt/odt.md
+    #     - ds/sqrt/decomposition.md
+    #     - 离线算法:
+    #         - 莫队:
+    #             - ds/offline/mo/mo_algo.md
+    #             - ds/offline/mo/mo.md
+    #             - ds/offline/mo/mo_tree.md
+    # - 数学:
+    #     - 线性代数:
+    #         - math/linear-algebra/vector.md
+    #         - math/linear-algebra/matrix.md
+    #         - math/linear-algebra/gauss.md
+    #     - 数论:
+    #         - math/number-theory/index.md
+    #         - math/number-theory/gcd.md
+    #         - math/number-theory/exgcd.md
+    #         - math/number-theory/linear-equation.md
+    #         - math/number-theory/inverse.md
+    #         - math/number-theory/prime.md
+    #         - math/number-theory/euler.md
+    #         - math/number-theory/crt.md
+    #         - math/number-theory/excrt.md
+    #         - math/number-theory/decomposition.md
+    #         - math/number-theory/bsgs.md
+    #     - 中学数学:
+    #         - math/whk/sqrt.md
+    #         - math/whk/inverse.md
+    #         - math/whk/trigonometric.md
+    #         - math/whk/sequence.md
+    # - 图论:
+    #     - 最短路:
+    #         - graph/shortest-path/index.md
+    #         - graph/shortest-path/sssp.md
+    #         - graph/shortest-path/apsp.md
+    #         - graph/shortest-path/diff.md
+    #     - 生成树:
+    #         - graph/spanning-tree/mst.md
+    #         - graph/spanning-tree/kruskal.md
+    #     - graph/tree.md
+    #     - graph/dsu-on-tree.md
+    #     - 树分治:
+    #         - graph/divide/point.md
+    #     - 最近公共祖先:
+    #         - graph/lca/index.md
+    #         - graph/lca/binary.md
+    #         - graph/lca/dfs.md
 
 # Theme
 

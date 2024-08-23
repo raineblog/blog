@@ -19,7 +19,6 @@ nav:
         - usage.md
         - discussion.md
         - setting.md
-        - KaTeX v0.16.11: static/katex/README.md
     - 基础算法:
         - basic/prefix.md
         - basic/xor-hashing.md
@@ -132,7 +131,7 @@ theme:
         scheme: default
         primary: white
         accent: red
-        scheme: preference
+        # scheme: preference
     icon:
         repo: fontawesome/brands/github-alt
    # logo: static/img/logo.png

@@ -30,6 +30,7 @@ jobs:
       - name: Pre Build
         run: |
           git submodule update --init --recursive
+          git submodule update --remote
           git rev-parse --short HEAD | xargs -I % sed -i "s/githash: ''/githash: '%'/g" mkdocs.yml
       - name: Page Build
         run: mkdocs gh-deploy --force -v

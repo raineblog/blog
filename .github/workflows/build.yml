@@ -32,6 +32,7 @@ jobs:
           git config --global diff.submodule log
           git submodule update --init --recursive
           git submodule update --remote
+          git add .
           git commit -m "Update Submodule"
           git push
       - name: Page Build

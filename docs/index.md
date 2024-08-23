@@ -1,6 +1,6 @@
 # 简介
 
-## 这里是 **RainPPR's Blog**！[![GitHub watchers](https://img.shields.io/github/watchers/RainPPR/blog) ![GitHub forks](https://img.shields.io/github/forks/RainPPR/blog) ![GitHub stars](https://img.shields.io/github/stars/RainPPR/blog)](https://github.com/RainPPR/blog)
+## 这里是 **RainPPR's Blog**！
 
 以上是作者的自娱自乐。
 

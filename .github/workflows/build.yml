@@ -27,16 +27,13 @@ jobs:
           python-version: '3.x'
       - name: Install Python dependencies
         run: pip install -r ./requirements.txt
-      - name: Update Submodule5
+      - name: Update Submodule
         run: |
+          git config --global diff.submodule log
           git submodule update --init --recursive
-          python -c "import this"
-          git submodule update --remote --force
-      - name: Push Changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          git submodule update --remote
+          git commit -m "Update Submodule"
+          git push
       - name: Page Build
         run: |
           git rev-parse --short HEAD | xargs -I % sed -i "s/githash: ''/githash: '%'/g" mkdocs.yml

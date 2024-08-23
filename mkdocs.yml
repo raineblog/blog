@@ -15,10 +15,10 @@ copyright: by RainPPR
 nav:
     - 简介:
         - index.md
-        - format.md
-        - usage.md
-        - discussion.md
-        - setting.md
+        - intro/format.md
+        - intro/usage.md
+        - intro/discussion.md
+        - intro/setting.md
     - 基础算法:
         - basic/prefix.md
         - basic/xor-hashing.md

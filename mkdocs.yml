@@ -4,7 +4,7 @@ site_description: by RainPPR
 site_author: RainPPR
 strict: false
 
-site_url: https://rainppr.github.io/
+site_url: https://rainppr.github.io/blog/
 
 repo_name: RainPPR/blog
 repo_url: https://github.com/RainPPR/blog

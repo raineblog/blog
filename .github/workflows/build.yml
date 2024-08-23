@@ -29,7 +29,7 @@ jobs:
         run: pip install -r ./requirements.txt
       - name: Update Submodule
         run: |
-          git submodule update --init --recursive
+          # git submodule update --init --recursive
           git submodule update --remote
       - name: Push Changes
         uses: ad-m/github-push-action@master

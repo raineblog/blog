@@ -27,13 +27,19 @@ jobs:
           python-version: '3.x'
       - name: Install Python dependencies
         run: pip install -r ./requirements.txt
-      - name: Pre Build
+      - name: Update Submodule
         run: |
           git submodule update --init --recursive
           git submodule update --remote
-          git rev-parse --short HEAD | xargs -I % sed -i "s/githash: ''/githash: '%'/g" mkdocs.yml
+      - name: Push Changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
       - name: Page Build
-        run: mkdocs gh-deploy --force -v
+        run: |
+          git rev-parse --short HEAD | xargs -I % sed -i "s/githash: ''/githash: '%'/g" mkdocs.yml
+          mkdocs gh-deploy --force -v
 
       # - uses: actions/cache@v4
       #   with:

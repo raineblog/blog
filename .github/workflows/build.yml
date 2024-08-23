@@ -27,9 +27,10 @@ jobs:
           python-version: '3.x'
       - name: Install Python dependencies
         run: pip install -r ./requirements.txt
-      - name: Update Submodule
+      - name: Update Submodule5
         run: |
           git submodule update --init --recursive
+          python -c "import this"
           git submodule update --remote --force
       - name: Push Changes
         uses: ad-m/github-push-action@master

@@ -7,3 +7,5 @@
 可以在 `vscode.dev` 上进行编辑。
 
 咕咕咕，在机房可以用 <https://vscode.dev/github/RainPPR/blog?vscode-lang=zh-cn> 编辑（也许）。
+
+喵喵喵。

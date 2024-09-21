@@ -246,7 +246,7 @@ C++11/14：-std=c++11，-std=c++14
 
 * 对数恒等式：
 
-	*$\log_kn = \dfrac{\log_xn}{\log_xk}$
+	* $\log_kn = \dfrac{\log_xn}{\log_xk}$
 
 * 整数溢出：
 

@@ -19,6 +19,8 @@ nav:
         - intro/usage.md
         - intro/discussion.md
         - intro/setting.md
+    - 比赛相关:
+        - contest/pre.md
     - 基础算法:
         - basic/prefix.md
         - basic/xor-hashing.md

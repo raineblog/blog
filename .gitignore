@@ -43,7 +43,7 @@ TODO
 tmp
 
 # IDEs
-.vscode
+# .vscode
 .idea
 *~
 

@@ -141,9 +141,13 @@ theme:
         - navigation.tabs
         - navigation.instant
         - navigation.tabs.sticky
+        - navigation.prune
+        - navigation.path
         - search.suggest
         - search.highlight
         - search.share
+        - header.autohide
+        - announce.dismiss
         - content.action.edit
         - content.code.copy
         - content.footnote.tooltips
@@ -156,8 +160,10 @@ theme:
 plugins:
     - glightbox
     - search
-    - minify:
-        minify_html: true
+    # - minify:
+    #     minify_html: true
+    - optimize:
+        cache_dir: mkcache
 #    - pdf-export:
 #        combined: true
 

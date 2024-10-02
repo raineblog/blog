@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
+      - name: Cache Optimize
+        uses: actions/cache@v4
+        with:
+          path: mkcache
+          key: ${{ runner.os }}-mkcache
 
       - name: Setup Python
         uses: actions/setup-python@v5

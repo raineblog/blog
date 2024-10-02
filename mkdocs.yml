@@ -146,7 +146,7 @@ theme:
         - search.suggest
         - search.highlight
         - search.share
-        - header.autohide
+        # - header.autohide
         - announce.dismiss
         - content.action.edit
         - content.code.copy

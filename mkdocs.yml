@@ -120,7 +120,7 @@ nav:
 #         code: 'Fira Code'
 
 theme:
-    name: material
+    name: null
     custom_dir: 'material/templates'
     # static_templates:
     #     - 404.html

@@ -62,6 +62,7 @@ nav:
             - math/linear-algebra/gauss.md
         - 数论:
             - math/number-theory/index.md
+            - math/number-theory/qpow.md
             - math/number-theory/gcd.md
             - math/number-theory/exgcd.md
             - math/number-theory/linear-equation.md

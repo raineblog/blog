@@ -146,6 +146,7 @@ theme:
         - announce.dismiss
         - content.action.edit
         - content.code.copy
+        - content.code.select
         - content.footnote.tooltips
     include_search_page: false
     search_index_only: true
@@ -212,13 +213,18 @@ markdown_extensions:
     - pymdownx.keys
     - pymdownx.mark
     - pymdownx.tilde
+    - pymdownx.betterem
     - pymdownx.emoji:
         # emoji_index: !!python/name:materialx.emoji.twemoji
         emoji_generator: !!python/name:pymdownx.emoji.to_svg
     - pymdownx.highlight:
         anchor_linenums: true
-        line_spans: __span
+        use_pygments: true
         pygments_lang_class: true
+        auto_title: true
+        linenums: true
+        line_spans: __span
+    - pymdownx.superfences
     - pymdownx.inlinehilite
     - pymdownx.magiclink
     - pymdownx.smartsymbols

@@ -225,10 +225,11 @@ markdown_extensions:
     - pymdownx.highlight:
         anchor_linenums: true
         use_pygments: false
-        # pygments_lang_class: true
+        pygments_lang_class: true
         auto_title: true
         linenums: true
         line_spans: __span
+    - pymdownx.superfences
     - pymdownx.inlinehilite
     - pymdownx.magiclink
     - pymdownx.smartsymbols

@@ -77,7 +77,7 @@ $$
 
 ### 引入
 
-我们发现，如果跑 $n$ 次 Dijkstra 算法，复杂度是 $\mathcal O(n^2\log n+nm\log n)$。
+我们发现，如果跑 $n$ 次 Dijkstra 算法，复杂度是 $\mathcal O(nm\log m)$。
 
 容易发现这个复杂度在稀疏图上面优于 Floyd-Warshall 算法。
 
@@ -165,7 +165,7 @@ $$
 
 ### 实现
 
-使用魔法平板电视。
+可以使用魔法平板电视（
 
 ??? note "点击查看代码"
 	```cpp

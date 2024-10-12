@@ -6,7 +6,7 @@ Single Source Shortest Path Problem (SSSP)。
 
 该算法，Dijkstra（/ˈdikstrɑ/ 或 /ˈdɛikstrɑ/）是一种求解非负权图上单源最短路径的算法。
 
-朴素算法复杂度为 $\mathcal O(n^2)$，堆优化为 $\mathcal O(m\log n)$，使用 Fibonacci 堆（支持 $\mathcal O(1)$ 插入）可以做到 $\mathcal O(n\log n+m)$ 但是不好写。
+朴素算法复杂度为 $\mathcal O(n^2)$，堆优化为 $\mathcal O(m\log m)$，使用 Fibonacci 堆（支持 $\mathcal O(1)$ 插入）可以做到 $\mathcal O(n\log n+m)$。
 
 ### 朴素算法
 
@@ -83,35 +83,12 @@ Single Source Shortest Path Problem (SSSP)。
 
 首先，朴素算法显然就是 $\mathcal O(n^2+m)$ 的。
 
-考虑分析堆优化版本的复杂度。
-
-共计 $\mathcal{O}(n)$ 次弹出，$\mathcal{O}(m)$ 次插入操作，
-
-假设我们可以做到 $\mathcal O(A)$ 的弹出，$\mathcal O(B)$ 的插入，
-
-那么时间复杂度为 $\mathcal O(nA+mB)$。
-
-首先我们可以使用 `std::priority_queue` 为 $A=B=\mathcal O(\log n)$，
-
-那么这就是一个 $\mathcal O(n\log n+m\log n)$ 的做法。
-
-???+ note "更优的复杂度？"
-	但是我们可以用 `__gnu_pbds::priority_queue<>` 配合 `Tag = pairing_heap_tag`。
-
-	这个实现称为配对堆，可以做到均摊 $\mathcal O(\log n)$ 的弹出、$\mathcal O(1)$ 插入。
-
-	那么，我们的复杂度就是 $\mathcal O(n\log n+m)$。
-
-	```cpp
-	template<typename T, typename CMP = less<T>>
-	using pqueue = __gnu_pbds::priority_queue<T, CMP>;
-	// using pqueue = priority_queue<T, vector<T>, CMP>;
-	```
+考虑分析堆优化版本的复杂度，有结论：优先队列中存在的元素个数在 $\mathcal O(m)$，单次是单 $\log$ 的，因此总时间复杂度为 $\mathcal O(m\log m)$。
 
 | 实现 | 复杂度 | 适用情景 |
 | :-: | :-: | :-: |
 | 朴素算法 | $\mathcal O(n^2+m)$ | 数据量小 |
-| 优先队列优化 | $\mathcal O(n\log n+m\log n)$ | 稀疏图，边数为 $\mathcal O(n)$ 等级的 |
+| 优先队列优化 | $\mathcal O(m\log m)$ | 稀疏图，边数为 $\mathcal O(n)$ 等级的 |
 | Fibonacci 堆优化 | $\mathcal O(n\log n+m)$ | 稠密图，边数为 $\mathcal O(n^2)$ 等级的 |
 
 一般来说，最后一个严格更优，但是数据量小的时候跑得不一定快。

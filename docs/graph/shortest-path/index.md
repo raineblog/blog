@@ -12,7 +12,7 @@
 | 类型 | *全源* | *全源* | 单源 | 单源 | 单源 |
 | 作用于 | 任意图 | 任意图 | 任意图 | 任意图 | *非负权图* |
 | 检测负环 | 能 | 能 | 能 | 能 | *不能* |
-| 时间复杂度 | $\mathcal{O}(n^3)$ | $\mathcal{O}(nm \log m)$ | $\mathcal{O}(nm)$ | $\mathcal{O}(m)$－$\mathcal{O}(nm)$ | 略 |
+| 时间复杂度 | $\mathcal{O}(n^3)$ | $\mathcal{O}(nm \log m)$ | $\mathcal{O}(nm)$ | $\mathcal{O}(m)$－$\mathcal{O}(nm)$ | $\mathcal O(m\log m)$ - $\mathcal O(n^2)$  |
 
 总结：
 

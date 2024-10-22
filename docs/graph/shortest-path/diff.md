@@ -41,7 +41,6 @@
 | $x_i-x_j\ge c$ | $x_j-x_i\le -c$ | `add(i, j, -c)` |
 | $x_i-x_j=c$ | $x_i-x_j\le c,x_i-x_j\ge c$ | `add(j, i, c), add(i, j, -c)` |
 | $x_i=x_j$ | $x_i-x_j\le 0,x_i-x_j\ge 0$ | `add(j, i, 0), add(i, j, 0)` |
-| $x_i/x_j\le c$ | $\log x_i-\log x_j\le \log c$ | `add(log(j), log(i), log(c))` |
 
 常见安排位置问题，可能需要注意 $x_i-x_{i-1}\ge1$ 这种坑点。
 

@@ -44,6 +44,92 @@
 
 常见安排位置问题，可能需要注意 $x_i-x_{i-1}\ge1$ 这种坑点。
 
+## 示例代码
+
+???+ note
+  ```cpp
+  int n;
+  
+  struct edge {
+  	int v, w;
+  	edge() = default;
+  	edge(int v, int w): v(v), w(w) {}
+  };
+  
+  vector<edge> G[N];
+  
+  void merge(int a, int b, int x) {
+  	// D(a) <= D(b) + x
+  	G[b].emplace_back(a, x);
+  }
+  
+  int solve(int root) {
+  	vector<int> dis(n + 1, 1e18);
+  	vector<int> vis(n + 1, 0);
+  	vector<int> len(n + 1, 0);
+  
+  	dis[root] = 0;
+  	vis[root] = 1;
+  	len[root] = 0;
+  
+  	queue<int> q;
+  	q.push(root);
+  
+  	while (!q.empty()) {
+  		int u = q.front();
+  		q.pop();
+  		vis[u] = 0;
+  		for (auto t : G[u]) {
+  			int v = t.v, w = t.w;
+  			if (dis[v] <= dis[u] + w)
+  				continue;
+  			dis[v] = dis[u] + w;
+  			len[v] = len[u] + 1;
+  			if (len[v] > n)
+  				return -1;
+  			if (!vis[v]) {
+  				q.push(v);
+  				vis[v] = 1;
+  			}
+  		}
+  	}
+  
+  	int res = dis[n] - dis[1];
+  	return res > 1e10 ? -2 : res;
+  }
+  
+  void Main() {
+  	int l, d;
+  	cin >> n >> l >> d;
+  	merge(1, 0, 0);
+  	for (int i = 2; i <= n; ++i) {
+  		// D(i - 1) <= D(i) - 1
+  		// D(i) <= D(0) - 0
+  		merge(i, 0, 0);
+  		merge(i - 1, i, -1);
+  	}
+  	while (l--) {
+  		int a, b, x;
+  		cin >> a >> b >> x;
+  		// D(b) - D(a) <= x
+  		// D(b) <= D(a) + x
+  		merge(b, a, x);
+  	}
+  	while (d--) {
+  		int a, b, x;
+  		cin >> a >> b >> x;
+  		// D(b) - D(a) >= x
+  		// D(a) <= D(b) - x
+  		merge(a, b, -x);
+  	}
+  	if (solve(0) == -1)
+  		cout << "-1" << endl;
+  	else
+  		cout << solve(1) << endl;
+  	return;
+  }
+  ```
+
 ## 练习题
 
 见：<https://www.luogu.com.cn/training/418255>

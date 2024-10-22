@@ -1181,6 +1181,20 @@ $$
 
 ### 中档题
 
+#### [CF1446B Catching Cheaters](https://www.luogu.com.cn/problem/CF1446B)
+
+注意到类似于双序列模型，我们记 $F(i,j)$ 表示 $A[1\dots i]$ 和 $B[1\dots j]$ 的最大价值，钦定 $A(i)$ 和 $B(j)$ 必须选择。容易写出：
+
+$$
+F(i,j)=
+\begin{cases}
+F(i-1,j-1)+2&\text{if $A_i=B_j$}\\
+\max\{0,F(i-1,j)-1,F(i,j-1)-1\}&\text{otherwise.}
+\end{cases}
+$$
+
+直接实现即可。
+
 #### [P3558 [POI2013] BAJ-Bytecomputer](https://www.luogu.com.cn/problem/P3558)
 
 首先注意到只需要单调不降，因此让序列出现 $-2,2$ 等一定不优。

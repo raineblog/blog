@@ -10,4 +10,5 @@
     "editor.fontLigatures": true,
     "editor.unicodeHighlight.nonBasicASCII": false,
     "editor.codeActionsOnSave": {},
+    "explorer.confirmDragAndDrop": false,
 }

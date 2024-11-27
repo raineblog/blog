@@ -92,48 +92,15 @@ nav:
             - graph/lca/binary.md
             - graph/lca/dfs.md
 
-# Theme
-
-# theme:
-#     name: material
-#     language: 'zh'
-#     palette:
-#         primary: white
-#         accent: red
-#         scheme: preference
-#     icon:
-#         repo: fontawesome/brands/github-alt
-#    # logo: static/img/logo.png
-#     features:
-#         - navigation.tabs
-#         - navigation.instant
-#         - navigation.tabs.sticky
-#         - search.suggest
-#         - search.highlight
-#         - search.share
-#         - content.action.edit
-#         - content.code.copy
-#         - content.footnote.tooltips
-#     include_search_page: false
-#     search_index_only: true
-#     font:
-#         text: 'Segoe UI'
-#         code: 'Fira Code'
-
 theme:
     name: null
     custom_dir: 'material/templates'
-    # static_templates:
-    #     - 404.html
     language: 'zh'
     palette:
         scheme: default
         primary: white
         accent: red
         # scheme: preference
-    icon:
-        repo: fontawesome/brands/github-alt
-   # logo: static/img/logo.png
     features:
         - navigation.tabs
         - navigation.instant
@@ -143,31 +110,22 @@ theme:
         - search.suggest
         - search.highlight
         - search.share
-        # - header.autohide
         - announce.dismiss
         - content.action.edit
         - content.code.copy
         - content.code.select
         - content.footnote.tooltips
+        # - header.autohide
     include_search_page: false
     search_index_only: true
-    font:
-        text: 'Segoe UI'
-        code: 'Fira Code'
 
 plugins:
     - glightbox
     - search
     - minify:
         minify_html: true
-    # - optimize:
-    #     cache_dir: mkcache
-#    - pdf-export:
-#        combined: true
 
-# Customization
 extra:
-    # disqus: 'RainPPR'
     pagetime: 'on'
     manifest: 'manifest.webmanifest'
     githash: ''
@@ -221,7 +179,6 @@ markdown_extensions:
     - pymdownx.tilde
     - pymdownx.betterem
     - pymdownx.emoji:
-        # emoji_index: !!python/name:materialx.emoji.twemoji
         emoji_generator: !!python/name:pymdownx.emoji.to_svg
     - pymdownx.highlight:
         anchor_linenums: true

@@ -120,6 +120,9 @@ theme:
     search_index_only: true
     icon:
         repo: fontawesome/brands/github-alt
+    font:
+        text: 'Segoe UI'
+        code: 'Fira Code'
 
 plugins:
     - glightbox

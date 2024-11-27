@@ -118,6 +118,8 @@ theme:
         # - header.autohide
     include_search_page: false
     search_index_only: true
+    icon:
+        repo: fontawesome/brands/github-alt
 
 plugins:
     - glightbox

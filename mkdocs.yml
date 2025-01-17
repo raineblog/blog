@@ -183,6 +183,7 @@ markdown_extensions:
     - pymdownx.mark
     - pymdownx.tilde
     - pymdownx.betterem
+    - pymdownx.blocks.caption
     - pymdownx.emoji:
         emoji_generator: !!python/name:pymdownx.emoji.to_svg
     - pymdownx.highlight:

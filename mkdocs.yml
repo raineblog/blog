@@ -1,15 +1,15 @@
 # Project Information
-site_name: RainPPR's Blog
-site_description: by RainPPR
-site_author: RainPPR
+site_name: raine's Blog
+site_description: by raine
+site_author: raine
 strict: false
 
-site_url: https://rainppr.github.io/blog/
+site_url: https://raineblog.github.io/blog/
 
-repo_name: RainPPR/blog
-repo_url: https://github.com/RainPPR/blog
+repo_name: raineblog/blog
+repo_url: https://github.com/raineblog/blog
 edit_uri: edit/main/docs/
-copyright: by RainPPR
+copyright: by raineblog
 
 # Contents
 nav:

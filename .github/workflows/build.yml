@@ -43,6 +43,7 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
       - name: Update Submodule
         run: |
+          git submodule sync
           git config --global diff.submodule log
           git submodule update --init --recursive
           git submodule update --remote

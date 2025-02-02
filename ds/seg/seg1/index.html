@@ -1,0 +1,349 @@
+<!doctype html><html lang=zh class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="by raine"><meta name=author content=raine><link href=https://raineblog.github.io/blog/ds/seg/seg1/ rel=canonical><link href=../../fenwick/fenwick1/ rel=prev><link href=../seg2/ rel=next><link rel=icon href=../../..><meta name=generator content="mkdocs-1.6.1, mkdocs-material-9.5.31"><title>线段树基础 - raine's Blog</title><link rel=stylesheet href=../../../assets/stylesheets/main.3cba04c6.min.css><link rel=stylesheet href=../../../assets/stylesheets/palette.06af60db.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Segoe+UI:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback"><style>:root{--md-text-font:"Segoe UI";--md-code-font:"Fira Code"}</style><link rel=stylesheet href=../../../assets/stylesheets/extra.css><link rel=stylesheet href=../../../assets/stylesheets/all.min.css><link rel=stylesheet href=../../../assets/katex/katex.min.css><link rel=stylesheet href=../../../assets/highlight/styles/stackoverflow-light.min.css><link rel=stylesheet href=../../../assets/stylesheets/custom.css><script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><link href=../../../assets/stylesheets/glightbox.min.css rel=stylesheet><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style><script src=../../../assets/javascripts/glightbox.min.js></script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary=white data-md-color-accent=red> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#_1 class=md-skip> 跳转至 </a> </div> <div data-md-component=announce> </div> <header class="md-header md-header--shadow md-header--lifted" data-md-component=header> <nav class="md-header__inner md-grid" aria-label=页眉> <a href=../../.. title="raine's Blog" class="md-header__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> raine's Blog </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> 线段树基础 </span> </div> </div> </div> <div class=md-header__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> </nav> <nav class=md-tabs aria-label=标签 data-md-component=tabs> <div class=md-grid> <ul class=md-tabs__list> <li class=md-tabs__item> <a href=../../.. class=md-tabs__link> 简介 </a> </li> <li class=md-tabs__item> <a href=../../../contest/pre/ class=md-tabs__link> 比赛相关 </a> </li> <li class=md-tabs__item> <a href=../../../basic/prefix/ class=md-tabs__link> 基础算法 </a> </li> <li class=md-tabs__item> <a href=../../../dp/basic/ class=md-tabs__link> 动态规划 </a> </li> <li class="md-tabs__item md-tabs__item--active"> <a href=../../ds/ class=md-tabs__link> 数据结构 </a> </li> <li class=md-tabs__item> <a href=../../../math/linear-algebra/vector/ class=md-tabs__link> 数学 </a> </li> <li class=md-tabs__item> <a href=../../../graph/shortest-path/ class=md-tabs__link> 图论 </a> </li> </ul> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--lifted" aria-label=导航栏 data-md-level=0> <label class=md-nav__title for=__drawer> <a href=../../.. title="raine's Blog" class="md-nav__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> raine's Blog </label> <div class=md-nav__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../.. class=md-nav__link> <span class=md-ellipsis> 简介 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../contest/pre/ class=md-nav__link> <span class=md-ellipsis> 比赛相关 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../basic/prefix/ class=md-nav__link> <span class=md-ellipsis> 基础算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../dp/basic/ class=md-nav__link> <span class=md-ellipsis> 动态规划 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_5 checked> <label class=md-nav__link for=__nav_5 id=__nav_5_label tabindex> <span class=md-ellipsis> 数据结构 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=1 aria-labelledby=__nav_5_label aria-expanded=true> <label class=md-nav__title for=__nav_5> <span class="md-nav__icon md-icon"></span> 数据结构 </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../../ds/ class=md-nav__link> <span class=md-ellipsis> 数据结构 </span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../dsu/dsu1/ class=md-nav__link> <span class=md-ellipsis> 并查集 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../rmq/rmq/ class=md-nav__link> <span class=md-ellipsis> RMQ 问题 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../fenwick/fenwick1/ class=md-nav__link> <span class=md-ellipsis> 树状数组 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_5_5 checked> <label class=md-nav__link for=__nav_5_5 id=__nav_5_5_label tabindex=0> <span class=md-ellipsis> 线段树 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=2 aria-labelledby=__nav_5_5_label aria-expanded=true> <label class=md-nav__title for=__nav_5_5> <span class="md-nav__icon md-icon"></span> 线段树 </label> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> <span class=md-ellipsis> 线段树基础 </span> <span class="md-nav__icon md-icon"></span> </label> <a href=./ class="md-nav__link md-nav__link--active"> <span class=md-ellipsis> 线段树基础 </span> </a> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 咕咕咕 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 例题 </span> </a> <nav class=md-nav aria-label=例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p3372-1 class=md-nav__link> <span class=md-ellipsis> 例题一：P3372 线段树 1 </span> </a> </li> <li class=md-nav__item> <a href=#p3373-2 class=md-nav__link> <span class=md-ellipsis> 例题二：P3373 线段树 2 </span> </a> </li> <li class=md-nav__item> <a href=#cf438d-the-child-and-sequence class=md-nav__link> <span class=md-ellipsis> 例题三：CF438D The Child and Sequence </span> </a> </li> <li class=md-nav__item> <a href=#gss class=md-nav__link> <span class=md-ellipsis> 例题四：最大字段和 GSS 系列 </span> </a> </li> <li class=md-nav__item> <a href=#p1253 class=md-nav__link> <span class=md-ellipsis> 例题五：P1253 扶苏的问题 </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=../seg2/ class=md-nav__link> <span class=md-ellipsis> 线段树提高 </span> </a> </li> <li class=md-nav__item> <a href=../scanning/ class=md-nav__link> <span class=md-ellipsis> 扫描线算法 </span> </a> </li> <li class=md-nav__item> <a href=../seg_opt/ class=md-nav__link> <span class=md-ellipsis> 线段树优化 </span> </a> </li> <li class=md-nav__item> <a href=../seg_lichao/ class=md-nav__link> <span class=md-ellipsis> 李超线段树 </span> </a> </li> <li class=md-nav__item> <a href=../seg_cat/ class=md-nav__link> <span class=md-ellipsis> 猫树 </span> </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../odt/odt/ class=md-nav__link> <span class=md-ellipsis> 珂朵莉树 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class=md-nav__item> <a href=../../sqrt/decomposition/ class=md-nav__link> <span class=md-ellipsis> 数列分块 </span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../offline/mo/mo_algo/ class=md-nav__link> <span class=md-ellipsis> 离线算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../math/linear-algebra/vector/ class=md-nav__link> <span class=md-ellipsis> 数学 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../graph/shortest-path/ class=md-nav__link> <span class=md-ellipsis> 图论 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </div> </div> </div> <div class="md-sidebar md-sidebar--secondary" data-md-component=sidebar data-md-type=toc> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 咕咕咕 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 例题 </span> </a> <nav class=md-nav aria-label=例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p3372-1 class=md-nav__link> <span class=md-ellipsis> 例题一：P3372 线段树 1 </span> </a> </li> <li class=md-nav__item> <a href=#p3373-2 class=md-nav__link> <span class=md-ellipsis> 例题二：P3373 线段树 2 </span> </a> </li> <li class=md-nav__item> <a href=#cf438d-the-child-and-sequence class=md-nav__link> <span class=md-ellipsis> 例题三：CF438D The Child and Sequence </span> </a> </li> <li class=md-nav__item> <a href=#gss class=md-nav__link> <span class=md-ellipsis> 例题四：最大字段和 GSS 系列 </span> </a> </li> <li class=md-nav__item> <a href=#p1253 class=md-nav__link> <span class=md-ellipsis> 例题五：P1253 扶苏的问题 </span> </a> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <a href=https://github.com/raineblog/blog/edit/main/docs/ds/seg/seg1.md title=编辑此页 class="md-content__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg> </a> <div id=m_edit_url style="display: none;">https://github.com/raineblog/blog/edit/main/docs/ds/seg/seg1.md</div> <h1 id=_1>线段树基础<a class=headerlink href=#_1 title="Permanent link">&para;</a></h1> <h2 id=_2>咕咕咕<a class=headerlink href=#_2 title="Permanent link">&para;</a></h2> <h2 id=_3>例题<a class=headerlink href=#_3 title="Permanent link">&para;</a></h2> <pre class=highlight><code class=language-cpp>using ll = long long;
+constexpr ll mod = 998244353;
+constexpr int root = 1;</code></pre> <h3 id=p3372-1>例题一：P3372 线段树 1<a class=headerlink href=#p3372-1 title="Permanent link">&para;</a></h3> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>class seg_t {
+
+private:
+
+struct emm {
+    int l, r;
+    ll v, lz;
+};
+
+int n; vector&lt;emm&gt; a;
+
+void pushup(int k) {
+    a[k].v = a[k * 2].v + a[k * 2 + 1].v;
+}
+
+void run(int k, ll v) {
+    a[k].lz += v;
+    a[k].v += v * (a[k].r - a[k].l + 1);
+}
+
+void pushdown(int k) {
+    if (!a[k].lz) return;
+    run(k * 2, a[k].lz);
+    run(k * 2 + 1, a[k].lz);
+    a[k].lz = 0;
+}
+
+void build(vector&lt;ll&gt; &amp;q, int k, int l, int r) {
+    a[k].lz = 0, a[k].l = l, a[k].r = r;
+    if (l == r) { a[k].v = q[l]; return; }
+    int mid = l + (r - l &gt;&gt; 1);
+    build(q, k * 2, l, mid);
+    build(q, k * 2 + 1, mid + 1, r);
+    pushup(k);
+}
+
+void modify(int k, const int p, const int q, const ll v) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l &gt;= p &amp;&amp; r &lt;= q) { run(k, v); return; }
+    pushdown(k);
+    int mid = l + (r - l &gt;&gt; 1);
+    if (mid &gt;= p) modify(k * 2, p, q, v);
+    if (mid + 1 &lt;= q) modify(k * 2 + 1, p, q, v);
+    pushup(k);
+}
+
+ll query(int k, const int p, const int q) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l &gt;= p &amp;&amp; r &lt;= q) return a[k].v;
+    pushdown(k);
+    int mid = l + (r - l &gt;&gt; 1); ll res = 0;
+    if (mid &gt;= p) res += query(k * 2, p, q);
+    if (mid + 1 &lt;= q) res += query(k * 2 + 1, p, q);
+    return res;
+}
+
+public:
+
+seg_t(vector&lt;ll&gt; &amp;q) { n = q.size(), a.resize(4 * n); build(q, 1, 1, n); }
+void add(int l, int r, ll v) { modify(1, l, r, v); }
+ll sum(int l, int r) { return query(1, l, r); }
+
+};</code></pre> </details> <h3 id=p3373-2>例题二：P3373 线段树 2<a class=headerlink href=#p3373-2 title="Permanent link">&para;</a></h3> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>class seg_t {
+
+private:
+
+struct emm {
+    int l, r;
+    ll v, ad, ml;
+};
+
+int n; vector&lt;emm&gt; a;
+
+void push_up(int k) {
+    (a[k].v = a[k * 2].v + a[k * 2 + 1].v) %= mod;
+}
+
+void action_add(int k, ll t) {
+    (a[k].ad += t) %= mod;
+    (a[k].v += t * (a[k].r - a[k].l + 1) % mod) %= mod;
+}
+
+void action_mul(int k, ll t) {
+    (a[k].v *= t) %= mod;
+    (a[k].ad *= t) %= mod, (a[k].ml *= t) %= mod;
+}
+
+void push_down(int k) {
+    if (a[k].ml != 1) {
+        action_mul(k * 2, a[k].ml);
+        action_mul(k * 2 + 1, a[k].ml);
+        a[k].ml = 1;
+    } if (a[k].ad) {
+        action_add(k * 2, a[k].ad);
+        action_add(k * 2 + 1, a[k].ad);
+        a[k].ad = 0;
+    }
+}
+
+void build(vector&lt;ll&gt; &amp;q, int k, int l, int r) {
+    a[k].l = l, a[k].r = r; a[k].ad = 0, a[k].ml = 1;
+    if (l == r) { a[k].v = q[l]; return; }
+    int mid = l + (r - l &gt;&gt; 1);
+    build(q, k * 2, l, mid);
+    build(q, k * 2 + 1, mid + 1, r);
+    push_up(k);
+}
+
+ll query(int k, int p, int q) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l &gt;= p &amp;&amp; r &lt;= q) return a[k].v;
+    push_down(k); int mid = l + (r - l &gt;&gt; 1);
+    ll res = 0;
+    if (mid &gt;= p) res += query(k * 2, p, q);
+    if (mid + 1 &lt;= q) res += query(k * 2 + 1, p, q);
+    return res % mod;
+}
+
+void modify_add(int k, int p, int q, ll v) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l &gt;= p &amp;&amp; r &lt;= q) { action_add(k, v); return; }
+    push_down(k); int mid = l + (r - l &gt;&gt; 1);
+    if (mid &gt;= p) modify_add(k * 2, p, q, v);
+    if (mid + 1 &lt;= q) modify_add(k * 2 + 1, p, q, v);
+    push_up(k);
+}
+
+void modify_mul(int k, int p, int q, ll v) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l &gt;= p &amp;&amp; r &lt;= q) { action_mul(k, v); return; }
+    push_down(k); int mid = l + (r - l &gt;&gt; 1);
+    if (mid &gt;= p) modify_mul(k * 2, p, q, v);
+    if (mid + 1 &lt;= q) modify_mul(k * 2 + 1, p, q, v);
+    push_up(k);
+}
+
+public:
+
+seg_t(vector&lt;ll&gt; &amp;q) { n = q.size(); a.resize(n * 4); build(q, root, 1, n); }
+ll sum(int l, int r) { return query(root, l, r); }
+void add(int l, int r, ll v) { modify_add(root, l, r, v); }
+void mul(int l, int r, ll v) { modify_mul(root, l, r, v); }
+
+};</code></pre> </details> <h3 id=cf438d-the-child-and-sequence>例题三：CF438D The Child and Sequence<a class=headerlink href=#cf438d-the-child-and-sequence title="Permanent link">&para;</a></h3> <p>取模的两个定理。一个是不取模，一个是取了小于一半。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>class seg_t {
+
+private:
+
+struct emm {
+    int l, r;
+    ll v, mx;
+};
+
+int n; vector&lt;emm&gt; a;
+
+void push_up(int k) {
+    a[k].v = a[k * 2].v + a[k * 2 + 1].v;
+    a[k].mx = max(a[k * 2].mx, a[k * 2 + 1].mx);
+}
+
+void build(vector&lt;ll&gt; &amp;q, int k, int l, int r) {
+    a[k].l = l, a[k].r = r;
+    if (l == r) { a[k].v = a[k].mx = q[l]; return; }
+    int mid = l + (r - l &gt;&gt; 1);
+    build(q, k * 2, l, mid);
+    build(q, k * 2 + 1, mid + 1, r);
+    push_up(k);
+}
+
+ll query(int k, int p, int q) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l &gt;= p &amp;&amp; r &lt;= q) return a[k].v;
+    int mid = l + (r - l &gt;&gt; 1); ll res = 0;
+    if (mid &gt;= p) res += query(k * 2, p, q);
+    if (mid + 1 &lt;= q) res += query(k * 2 + 1, p, q);
+    return res;
+}
+
+void modify(int k, int x, ll v) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l == r) { a[k].v = a[k].mx = v; return; }
+    int mid = l + (r - l &gt;&gt; 1);
+    if (x &lt;= mid) modify(k * 2, x, v);
+    else modify(k * 2 + 1, x, v);
+    push_up(k);
+}
+
+void putmod(int k, int p, int q, ll m) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l == r) { a[k].v = a[k].mx = a[k].v % m; return; }
+    int mid = l + (r - l &gt;&gt; 1);
+    if (mid &gt;= p &amp;&amp; a[k * 2].mx &gt;= m) putmod(k * 2, p, q, m);
+    if (mid + 1 &lt;= q &amp;&amp; a[k * 2 + 1].mx &gt;= m) putmod(k * 2 + 1, p, q, m);
+    push_up(k);
+}
+
+public:
+
+seg_t(vector&lt;ll&gt; &amp;q) { n = q.size(); a.resize(n * 4); build(q, root, 1, n); }
+ll sum(int l, int r) { return query(root, l, r); }
+void mod(int l, int r, ll x) { putmod(root, l, r, x); }
+void change(int k, ll x) { modify(root, k, x); }
+
+};</code></pre> </details> <h3 id=gss>例题四：最大字段和 GSS 系列<a class=headerlink href=#gss title="Permanent link">&para;</a></h3> <p>SP1043 GSS1 &amp; SP1716 GSS3 &amp; SP2916 GSS5。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>class seg_t {
+
+private:
+
+struct v_t {
+    int prefix, suffix; int sum, res;
+    void set(const int x) { prefix = suffix = sum = res = x; }
+    friend v_t operator+ (const v_t &amp;a, const v_t &amp;b) {
+        v_t res; res.sum = a.sum + b.sum;
+        res.prefix = max(a.prefix, a.sum + b.prefix);
+        res.suffix = max(b.suffix, b.sum + a.suffix);
+        res.res = max(max(a.res, b.res), a.suffix + b.prefix);
+        return res;
+    }
+};
+
+struct emm { int l, r; v_t v; };
+
+int n; vector&lt;emm&gt; a;
+
+void push_up(int k) {
+    a[k].v = a[k * 2].v + a[k * 2 + 1].v;
+}
+
+void build(vector&lt;int&gt; &amp;q, int k, int l, int r) {
+    a[k].l = l, a[k].r = r;
+    if (l == r) { a[k].v.set(q[l]); return; }
+    int mid = l + (r - l &gt;&gt; 1);
+    build(q, k * 2, l, mid);
+    build(q, k * 2 + 1, mid + 1, r);
+    push_up(k);
+}
+
+void modify(int k, int x, int v) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l == r) { a[k].v.set(v); return; }
+    int mid = l + (r - l &gt;&gt; 1);
+    if (x &lt;= mid) modify(k * 2, x, v);
+    else modify(k * 2 + 1, x, v);
+    push_up(k);
+}
+
+v_t query(int k, int p, int q) {
+    auto &amp;l = a[k].l, &amp;r = a[k].r;
+    if (l &gt;= p &amp;&amp; r &lt;= q) return a[k].v;
+    int mid = l + (r - l &gt;&gt; 1);
+    if (mid &lt; p) return query(k * 2 + 1, p, q);
+    if (mid + 1 &gt; q) return query(k * 2, p, q);
+    return query(k * 2, p, q) + query(k * 2 + 1, p, q);
+}
+
+public:
+
+seg_t(vector&lt;int&gt; &amp;q) { n = q.size(); a.resize(4 * n); build(q, root, 1, n); }
+int mis(int l, int r) { return query(root, l, r).res; }
+int sum(int l, int r) { return query(root, l, r).sum; }
+int pre(int l, int r) { return query(root, l, r).prefix; }
+int suf(int l, int r) { return query(root, l, r).suffix; }
+void change(int x, int v) { modify(root, x, v); }
+
+};
+
+void solve(int n) {
+    vector&lt;int&gt; a(n + 1);
+    rep(i, n) a[i + 1] = rr;
+    int m = ur; seg_t seg(a);
+    auto query = [&amp;] (int l1, int r1, int l2, int r2) {
+        if (l1 == r1 &amp;&amp; r1 == r2) return seg.mis(l1, r2);
+        if (r1 &lt; l2) return seg.sum(r1 + 1, l2 - 1) + seg.suf(l1, r1) +
+                                                    seg.pre(l2, r2);
+        int ans = seg.mis(l2, r1);
+        if(l1 &lt; l2) ans = max(ans, seg.suf(l1, l2) + seg.pre(l2, r2) - a[l2]);
+        if(r2 &gt; r1) ans = max(ans, seg.suf(l1, r1) + seg.pre(r1, r2) - a[r1]);
+        return ans;
+    }; while (m--) {
+        int l1 = ur, r1 = ur, l2 = ur, r2 = ur;
+        printf("%d\n", query(l1, r1, l2, r2));
+    }
+}</code></pre> </details> <h3 id=p1253>例题五：P1253 扶苏的问题<a class=headerlink href=#p1253 title="Permanent link">&para;</a></h3> <p>曾经写的代码。和现在的线段树风格不一样。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>template&lt;typename tp, tp INIT&gt;
+class segment {
+#define mid ((l + r) &gt;&gt; 1)
+#define vp vector&lt;tp&gt;
+private:
+    int n; vp s, mad, mre;
+    void _build(int k, int l, int r, vp &amp;a) {
+        if (l == r) { s[k] = a[l]; return; }
+        _build(k * 2, l, mid, a), _build(k * 2 + 1, mid + 1, r, a);
+        s[k] = max(s[k * 2], s[k * 2 + 1]);
+    } void _addmad(int k, tp x) {
+        s[k] += x;
+        if (mad[k] == -INIT) mad[k] = x;
+        else mad[k] += x;
+    } void _addmre(int k, tp x) {
+        s[k] = mre[k] = x, mad[k] = -INIT;
+    } void _pushdown(int k) {
+        if (mre[k] != -INIT) _addmre(k * 2, mre[k]), _addmre(k * 2 + 1, mre[k]), mre[k] = -INIT;
+        if (mad[k] != -INIT) _addmad(k * 2, mad[k]), _addmad(k * 2 + 1, mad[k]), mad[k] = -INIT;
+    } void _add(int k, int l, int r, int p, int q, tp x) {
+        if (r &lt; p || l &gt; q) return;
+        if (l &gt;= p &amp;&amp; r &lt;= q) { _addmad(k, x); return; }
+        _pushdown(k); _add(k * 2, l, mid, p, q, x), _add(k * 2 + 1, mid + 1, r, p, q, x);
+        s[k] = max(s[k * 2], s[k * 2 + 1]);
+    } void _modify(int k, int l, int r, int p, int q, tp x) {
+        if (r &lt; p || l &gt; q) return;
+        if (l &gt;= p &amp;&amp; r &lt;= q) { _addmre(k, x); return; }
+        _pushdown(k); _modify(k * 2, l, mid, p, q, x), _modify(k * 2 + 1, mid + 1, r, p, q, x);
+        s[k] = max(s[k * 2], s[k * 2 + 1]);
+    } tp _query(int k, int l, int r, int p, int q) {
+        if (l &gt;= p &amp;&amp; r &lt;= q) return s[k];
+        _pushdown(k);
+        if (mid &lt; p) return _query(k * 2 + 1, mid + 1, r, p, q);
+        if (mid &gt;= q) return _query(k * 2, l, mid, p, q);
+        return max(_query(k * 2 + 1, mid + 1, r, p, q), _query(k * 2, l, mid, p, q));
+    }
+public:
+    void build(vp &amp;a) {
+        n = (int)a.size() - 1, s = mad = mre = vp(3 * n, -INIT), _build(1, 1, n, a);
+    } void add(int l, int r, tp x) {
+        _add(1, 1, n, l, r, x);
+    } void modify(int l, int r, tp x) {
+        _modify(1, 1, n, l, r, x);
+    } tp query(int l, int r) {
+        return _query(1, 1, n, l, r);
+    }
+#undef mid
+#undef vp
+};</code></pre> </details> <hr><blockquote class=page-copyright> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4Z"/></svg></i>本页面最近更新：</span><span class=facts_modified>正在加载中</span>，<a class=edit_history>更新历史</a>。<br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg></i>编辑页面：<a href=https://github.com/raineblog/blog/edit/main/docs/ds/seg/seg1.md title=edit.link.title class=page_edit_url>在 GitHub 上编辑此页</a>！</span><br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M16 17v2H2v-2s0-4 7-4 7 4 7 4m-3.5-9.5A3.5 3.5 0 1 0 9 11a3.5 3.5 0 0 0 3.5-3.5m3.44 5.5A5.32 5.32 0 0 1 18 17v2h4v-2s0-3.63-6.06-4M15 4a3.39 3.39 0 0 0-1.93.59 5 5 0 0 1 0 5.82A3.39 3.39 0 0 0 15 11a3.5 3.5 0 0 0 0-7Z"/></svg></i>本页面贡献者：</span><span class=page_contributors>raine</span>。<br> </blockquote> <div id=__comments class="giscus no-print" data-no-instant></div> <script src=https://giscus.app/client.js data-repo=raineblog/blog-giscus data-repo-id=R_kgDOMhpKmw data-category=Announcements data-category-id=DIC_kwDOMhpKm84ChhZ7 data-mapping=pathname data-strict=1 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=preferred_color_scheme data-lang=zh-CN data-loading=lazy crossorigin=anonymous async>
+</script> </article> </div> <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script> </div> </main> <footer class=md-footer> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> by raineblog </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs <div id=miitbeian></div> </a> </div> <div style=float:right class=build_date_utc> <br> <a href=javascript:void(0); id=m_updtime> 最近更新：2025-02-02 d1e2f96 </a> </div> </div> </div> </footer> <div class=no-print id=scroll-page-top style="
+display: block;
+position: fixed;
+bottom: 20px;
+right: 20px;
+padding: 6px;
+color: #FFF;
+background-color: #AAA;
+opacity: 0.7;
+border-radius: 20px;
+cursor: pointer;
+z-index: 999;"> <i class="fa-solid fa-angle-up"></i> Page Top </div> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "navigation.prune", "navigation.path", "search.suggest", "search.highlight", "search.share", "announce.dismiss", "content.action.edit", "content.code.copy", "content.code.select", "content.footnote.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script> <script src=../../../assets/javascripts/bundle.fe8b6f2b.min.js></script> <script src=../../../assets/javascripts/extra.js></script> <script src=../../../assets/javascripts/jquery.min.js></script> <script src=../../../assets/highlight/highlight.min.js></script> <script src=../../../assets/katex/katex.min.js></script> <script src=../../../assets/katex/contrib/mhchem.min.js></script> <script src=../../../assets/katex/contrib/auto-render.min.js></script> <script src=../../../assets/katex/contrib/copy-tex.min.js></script> <script src=../../../assets/javascripts/custom.js></script> <script id=init-glightbox>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body> </html>

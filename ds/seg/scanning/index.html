@@ -1,0 +1,363 @@
+<!doctype html><html lang=zh class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="by raine"><meta name=author content=raine><link href=https://raineblog.github.io/blog/ds/seg/scanning/ rel=canonical><link href=../seg2/ rel=prev><link href=../seg_opt/ rel=next><link rel=icon href=../../..><meta name=generator content="mkdocs-1.6.1, mkdocs-material-9.5.31"><title>扫描线算法 - raine's Blog</title><link rel=stylesheet href=../../../assets/stylesheets/main.3cba04c6.min.css><link rel=stylesheet href=../../../assets/stylesheets/palette.06af60db.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Segoe+UI:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback"><style>:root{--md-text-font:"Segoe UI";--md-code-font:"Fira Code"}</style><link rel=stylesheet href=../../../assets/stylesheets/extra.css><link rel=stylesheet href=../../../assets/stylesheets/all.min.css><link rel=stylesheet href=../../../assets/katex/katex.min.css><link rel=stylesheet href=../../../assets/highlight/styles/stackoverflow-light.min.css><link rel=stylesheet href=../../../assets/stylesheets/custom.css><script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><link href=../../../assets/stylesheets/glightbox.min.css rel=stylesheet><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style><script src=../../../assets/javascripts/glightbox.min.js></script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary=white data-md-color-accent=red> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#_1 class=md-skip> 跳转至 </a> </div> <div data-md-component=announce> </div> <header class="md-header md-header--shadow md-header--lifted" data-md-component=header> <nav class="md-header__inner md-grid" aria-label=页眉> <a href=../../.. title="raine's Blog" class="md-header__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> raine's Blog </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> 扫描线算法 </span> </div> </div> </div> <div class=md-header__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> </nav> <nav class=md-tabs aria-label=标签 data-md-component=tabs> <div class=md-grid> <ul class=md-tabs__list> <li class=md-tabs__item> <a href=../../.. class=md-tabs__link> 简介 </a> </li> <li class=md-tabs__item> <a href=../../../contest/pre/ class=md-tabs__link> 比赛相关 </a> </li> <li class=md-tabs__item> <a href=../../../basic/prefix/ class=md-tabs__link> 基础算法 </a> </li> <li class=md-tabs__item> <a href=../../../dp/basic/ class=md-tabs__link> 动态规划 </a> </li> <li class="md-tabs__item md-tabs__item--active"> <a href=../../ds/ class=md-tabs__link> 数据结构 </a> </li> <li class=md-tabs__item> <a href=../../../math/linear-algebra/vector/ class=md-tabs__link> 数学 </a> </li> <li class=md-tabs__item> <a href=../../../graph/shortest-path/ class=md-tabs__link> 图论 </a> </li> </ul> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--lifted" aria-label=导航栏 data-md-level=0> <label class=md-nav__title for=__drawer> <a href=../../.. title="raine's Blog" class="md-nav__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> raine's Blog </label> <div class=md-nav__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../.. class=md-nav__link> <span class=md-ellipsis> 简介 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../contest/pre/ class=md-nav__link> <span class=md-ellipsis> 比赛相关 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../basic/prefix/ class=md-nav__link> <span class=md-ellipsis> 基础算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../dp/basic/ class=md-nav__link> <span class=md-ellipsis> 动态规划 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_5 checked> <label class=md-nav__link for=__nav_5 id=__nav_5_label tabindex> <span class=md-ellipsis> 数据结构 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=1 aria-labelledby=__nav_5_label aria-expanded=true> <label class=md-nav__title for=__nav_5> <span class="md-nav__icon md-icon"></span> 数据结构 </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../../ds/ class=md-nav__link> <span class=md-ellipsis> 数据结构 </span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../dsu/dsu1/ class=md-nav__link> <span class=md-ellipsis> 并查集 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../rmq/rmq/ class=md-nav__link> <span class=md-ellipsis> RMQ 问题 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../fenwick/fenwick1/ class=md-nav__link> <span class=md-ellipsis> 树状数组 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_5_5 checked> <label class=md-nav__link for=__nav_5_5 id=__nav_5_5_label tabindex=0> <span class=md-ellipsis> 线段树 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=2 aria-labelledby=__nav_5_5_label aria-expanded=true> <label class=md-nav__title for=__nav_5_5> <span class="md-nav__icon md-icon"></span> 线段树 </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../seg1/ class=md-nav__link> <span class=md-ellipsis> 线段树基础 </span> </a> </li> <li class=md-nav__item> <a href=../seg2/ class=md-nav__link> <span class=md-ellipsis> 线段树提高 </span> </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> <span class=md-ellipsis> 扫描线算法 </span> <span class="md-nav__icon md-icon"></span> </label> <a href=./ class="md-nav__link md-nav__link--active"> <span class=md-ellipsis> 扫描线算法 </span> </a> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 前言 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 引入——会议室问题 </span> </a> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 开始——二维数点 </span> </a> </li> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 入门——二维数点 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 基础——亚特兰蒂斯问题 </span> </a> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 进阶——矩形周长问题 </span> </a> </li> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 练习题 </span> </a> </li> <li class=md-nav__item> <a href=#reference class=md-nav__link> <span class=md-ellipsis> Reference </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=../seg_opt/ class=md-nav__link> <span class=md-ellipsis> 线段树优化 </span> </a> </li> <li class=md-nav__item> <a href=../seg_lichao/ class=md-nav__link> <span class=md-ellipsis> 李超线段树 </span> </a> </li> <li class=md-nav__item> <a href=../seg_cat/ class=md-nav__link> <span class=md-ellipsis> 猫树 </span> </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../odt/odt/ class=md-nav__link> <span class=md-ellipsis> 珂朵莉树 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class=md-nav__item> <a href=../../sqrt/decomposition/ class=md-nav__link> <span class=md-ellipsis> 数列分块 </span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../offline/mo/mo_algo/ class=md-nav__link> <span class=md-ellipsis> 离线算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../math/linear-algebra/vector/ class=md-nav__link> <span class=md-ellipsis> 数学 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../graph/shortest-path/ class=md-nav__link> <span class=md-ellipsis> 图论 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </div> </div> </div> <div class="md-sidebar md-sidebar--secondary" data-md-component=sidebar data-md-type=toc> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 前言 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 引入——会议室问题 </span> </a> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 开始——二维数点 </span> </a> </li> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 入门——二维数点 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 基础——亚特兰蒂斯问题 </span> </a> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 进阶——矩形周长问题 </span> </a> </li> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 练习题 </span> </a> </li> <li class=md-nav__item> <a href=#reference class=md-nav__link> <span class=md-ellipsis> Reference </span> </a> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <a href=https://github.com/raineblog/blog/edit/main/docs/ds/seg/scanning.md title=编辑此页 class="md-content__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg> </a> <div id=m_edit_url style="display: none;">https://github.com/raineblog/blog/edit/main/docs/ds/seg/scanning.md</div> <h1 id=_1>扫描线算法<a class=headerlink href=#_1 title="Permanent link">&para;</a></h1> <p>你会发现我的笔记的顺序和很多扫描线的讲解是反着来的。</p> <p>其实是和我老师给的课件完全是逆序（谁帮我算一下逆序对啊喵）。</p> <h2 id=_2>前言<a class=headerlink href=#_2 title="Permanent link">&para;</a></h2> <p><a class=glightbox href=https://www.luogu.com.cn/fe/api/problem/downloadAttachment/foqq4de6 data-type=image data-width=auto data-height=auto data-desc-position=bottom><img align=right alt src=https://www.luogu.com.cn/fe/api/problem/downloadAttachment/foqq4de6></a></p> <p>一开始以为扫描线就是用来求二维几何图像的信息的。</p> <p>但是其实这个并不准确。个人认为，扫描线其实是一个思想，就像动态规划一样。</p> <p>具体的，其思想为，用一根（无形的）的线，去扫描一个空间。</p> <p>在扫描的过程中记录下信息，然后加以处理、应用。如图：</p> <p>当然你可以暂时忽略这个图片的内容。</p> <h2 id=_3>引入——会议室问题<a class=headerlink href=#_3 title="Permanent link">&para;</a></h2> <p>问题描述：一个饭店要接待 <span class=arithmatex>\(n\)</span> 个顾客，每个顾客会在时间 <span class=arithmatex>\([l_i,r_i]\)</span> 内就餐。求饭店里同时存在的最多的顾客数量。</p> <p>非常基础的一道题了。我们举一个例子：</p> <p>假设我们有 <span class=arithmatex>\(4\)</span> 个顾客，分别记为 <span class=arithmatex>\(ABCD\)</span>，我们画出这 <span class=arithmatex>\(4\)</span> 个顾客到访的时间段。</p> <p><center></p> <p><a class=glightbox href=https://cdn.luogu.com.cn/upload/image_hosting/bf8vqyoq.png data-type=image data-width=auto data-height=auto data-desc-position=bottom><img alt src=https://cdn.luogu.com.cn/upload/image_hosting/bf8vqyoq.png></a></p> <p></center></p> <p>考虑人是怎么思考这一个问题的。</p> <p>我们一般会从左到右（当然从右到左也是可以的）看完这个时间线，然后直接找到一个时间点，存在最多的线段。显然，这个图里最多有 <span class=arithmatex>\(3\)</span> 个顾客。</p> <p>考虑计算机是怎么实现的。好吧。一样。</p> <p>考虑一根线从左到右的扫描时间轴，我们发现，当这个线遇到一个线段的左端点（称为入点）的时候，顾客数就会加一，当遇到一个线段的右端点（称为出点）的时候，顾客数就会减一。</p> <p>于是，我们可以在数轴上标记一个值，记为 <span class=arithmatex>\(p_i\)</span>，表示如果扫描线经过这个点，会增加多少。</p> <p>显然，对于一个顾客 <span class=arithmatex>\([l,r]\)</span>，<span class=arithmatex>\(p_l=p_l+1,p_r=p_r-1\)</span>。</p> <p>但是这个算法会有一个问题，就是如果时间轴过于长？</p> <p>考虑离散化。把数轴压缩。因为我们发现实际上对于这个答案，仅有存在的最多的人数是有用的，区间长度实际上没有用。</p> <p>于是我们就得到了一个 <span class=arithmatex>\(\mathcal O(n)\)</span> 的算法，由于他过于简单，就不写了。</p> <h2 id=_4>开始——二维数点<a class=headerlink href=#_4 title="Permanent link">&para;</a></h2> <p>先看一道例题：<a href=https://www.luogu.com.cn/problem/P1972>P1972 [SDOI2009] HH的项链</a>。</p> <p>题目描述：给定长度为 <span class=arithmatex>\(n\)</span> 的序列，多组询问，每次询问一个区间 <span class=arithmatex>\([l_i,r_i]\)</span>，求这个区间内的不同的数的个数。</p> <p>显然有莫队和分块的做法。这里讲二维数点的算法。</p> <p>我们发现，当区间的右端点固定的时候，对于一个数字，其最后一次出现可以作用的范围更大，因此我们贪心的考虑：</p> <p>记 <span class=arithmatex>\(F_i\)</span> 表示为，当前状态下，<span class=arithmatex>\(i\)</span> 这个数是否为最后一次出现，</p> <p>即是否计入贡献，记 <span class=arithmatex>\(S_i\)</span> 为其前缀和。</p> <p>固定右端点，考虑每个数最后一次出现的位置所存在的贡献，</p> <p>那么可以知道，区间 <span class=arithmatex>\([l,r]\)</span> 内不同的数的个数为 <span class=arithmatex>\(\sum_{i=l}^rF_i=S_r-S_{l-1}\)</span>。</p> <p>然后考虑右端点不固定的情况，我们发现这个右端点向右扩展，是非常容易的。</p> <p>于是考虑将所有区间离线下来，然后按照右端点排序，从头开始，一个一个扩展右端点。</p> <p>同时记录下每一个问题的答案。然后考虑这个过程需要怎么维护。</p> <p>首先，我们需要快速的知道 <span class=arithmatex>\(S_x\)</span> 的值，还需要快速的修改任意一个 <span class=arithmatex>\(F\)</span> 的值，这就是树状数组！</p> <p>然后（用扫描线）去扫右端点，就没啥难度了。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+#define range(x) x.begin(), x.end()
+
+struct query {
+    int id;
+    int l, r;
+    query() = default;
+    query(int id, int l, int r): id(id), l(l), r(r) {}
+    friend bool operator &lt;(const query &amp;a, const query &amp;b) { return a.r &lt; b.r; }
+};
+
+#define lowbit(x) ((x) &amp; -(x))
+
+constexpr int N = 1e6 + 10;
+
+int n, m;
+
+int s[N];
+
+void add(int x, int v) {
+    for (; x &lt;= n; x += lowbit(x)) s[x] += v;
+} int sum(int x) {
+    int r = 0;
+    for (; x; x -= lowbit(x)) r += s[x];
+    return r;
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
+    cin &gt;&gt; n; vector&lt;int&gt; a(n + 1);
+    for (int i = 1; i &lt;= n; ++i) cin &gt;&gt; a[i];
+    cin &gt;&gt; m; vector&lt;query&gt; q(m);
+    for (int i = 0; i &lt; m; ++i) cin &gt;&gt; q[i].l &gt;&gt; q[i].r, q[i].id = i;
+    sort(range(q)); int now = 0;
+    vector&lt;int&gt; pos(N), e(m);
+    for (query &amp;_ : q) {
+        int l = _.l, r = _.r;
+        for (int i = now + 1; i &lt;= r; ++i) {
+            if (pos[a[i]]) add(pos[a[i]], -1);
+            add(i, 1), pos[a[i]] = i;
+        } now = r; e[_.id] = sum(r) - sum(l - 1);
+    } for (int i : e) cout &lt;&lt; i &lt;&lt; '\n';
+    return 0;
+}</code></pre> </details> <h2 id=_5>入门——二维数点<a class=headerlink href=#_5 title="Permanent link">&para;</a></h2> <p>没错，这个就是真真正正的「二维数点」了。</p> <p>例题：<a href=https://www.luogu.com.cn/problem/P2163>P2163 [SHOI2007] 园丁的烦恼</a>。</p> <p>题目描述：给定平面内 <span class=arithmatex>\(n\)</span> 个点 <span class=arithmatex>\((x_i,y_2)\)</span>，询问一个矩形，求这个矩形内有多少个点。</p> <p>这道题其实一眼离线、二维查分加离散化（当然这道题数据范围比较小，不需要离散化）。</p> <p>设 <span class=arithmatex>\(S_{a,b}\)</span> 表示 <span class=arithmatex>\(\sum_{i=0}^a \sum_{j=0}^b Q_{i,j}\)</span>，其中 <span class=arithmatex>\(Q_{i,j}\)</span> 表示 <span class=arithmatex>\((i,j)\)</span> 是否有点。</p> <p>注意到询问 <span class=arithmatex>\([x_1,y_1,x_2,y_2]\)</span> 的答案即为 <span class=arithmatex>\(S_{x_2,y_2}-S_{x_2,y_1-1}-S_{x_1-1,y_2}+S_{x_1-1,y_1-1}\)</span>。</p> <p>然后考虑离线怎么处理。</p> <p>可以将这些分别来看，然后再乘上系数（<span class=arithmatex>\(\pm1\)</span>）加到对应的询问里。</p> <p>因此转化为怎么求所有存在的点 <span class=arithmatex>\(S_{a,b}\)</span> 了。</p> <p>延伸上一题的思路：</p> <p>按照 <span class=arithmatex>\(x\)</span> 左边排序，然后用树状数组维护 <span class=arithmatex>\(y\)</span> 轴上是否有点，以及快速前缀求和。</p> <p>然后扫描，并更新即可。也不难，代码：</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+#define endl '\n'
+
+using ll = long long;
+
+#define range(x) x.begin(), x.end()
+
+struct point {
+    int x, y;
+    point() = default;
+    point(int x, int y): x(x), y(y) {}
+    friend bool operator &lt;(const point &amp;a, const point &amp;b) { return a.x &lt; b.x; }
+};
+
+struct query {
+    int x, y, v, id;
+    query() = default;
+    query(int x, int y, int v, int id): x(x), y(y), v(v), id(id) {}
+    friend bool operator &lt;(const point &amp;a, const point &amp;b) { return a.x &lt; b.x; }
+};
+
+constexpr int N = 1e7 + 10;
+
+int s[N];
+
+#define lowbit(x) ((x) &amp; -(x))
+
+void add(int x, int v) {
+    for (; x &lt; N; x += lowbit(x)) s[x] += v;
+}
+
+int sum(int x) {
+    int r = 0;
+    for (; x; x -= lowbit(x)) r += s[x];
+    return r;
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
+    int n, m; cin &gt;&gt; n &gt;&gt; m; vector&lt;point&gt; a(n);
+    for (int i = 0; i &lt; n; ++i) cin &gt;&gt; a[i].x &gt;&gt; a[i].y, ++a[i].x, ++a[i].y;
+    sort(range(a)); vector&lt;query&gt; q(m &lt;&lt; 2);
+    for (int i = 0; i &lt; m; ++i) {
+        int x1, y1, x2, y2; cin &gt;&gt; x1 &gt;&gt; y1 &gt;&gt; x2 &gt;&gt; y2;
+        ++x1, ++y1, ++x2, ++y2;
+        q[i] = query(x2, y2, 1, i);
+        q[i + m] = query(x1 - 1, y2, -1, i);
+        q[i + 2 * m] = query(x2, y1 - 1, -1, i);
+        q[i + 3 * 2] = query(x1 - 1, y1 - 1, 1, i);
+    } sort(range(q)); vector&lt;int&gt; ans(m);
+    int cur = 0; for (int i = m; i &lt; (m &lt;&lt; 2); ++i) {
+        int x = q[i].x, y = q[i].y, v = q[i].v;
+        for (; cur &lt; n &amp;&amp; a[cur].x &lt;= x; ++cur) add(a[cur].y, 1);
+        ans[q[i].id] += v * sum(y);
+    } for (int i : ans) cout &lt;&lt; i &lt;&lt; endl;
+    return 0;
+}</code></pre> </details> <h2 id=_6>基础——亚特兰蒂斯问题<a class=headerlink href=#_6 title="Permanent link">&para;</a></h2> <p>最经典的扫描线喵：<a href=https://www.luogu.com.cn/problem/P5490>P5490 【模板】扫描线</a>。</p> <p>题目描述：给出平面内 <span class=arithmatex>\(n\)</span> 个矩形的左下以及右上坐标，求出所有矩形构成的图形的面积。</p> <p>现在假设一根线从下往上扫：</p> <p><a class=glightbox href=https://oi-wiki.org/geometry/images/scanning.svg data-type=image data-width=auto data-height=auto data-desc-position=bottom><img alt src=https://oi-wiki.org/geometry/images/scanning.svg></a></p> <p>我们可以把整个矩形分成 <span class=arithmatex>\(5\)</span>个颜色不同的小矩形。</p> <p>每个矩形的面积该如何求呢？我们按照 <span class=arithmatex>\(y\)</span> 坐标从下往上遍历每个矩形，高也就是相邻的矩形的 <span class=arithmatex>\(y\)</span> 坐标的差值，矩形的长度是若干条线段的交集，并且在不断发生变化。</p> <p>我们使用线段树维护矩形的长度：对于每个矩形，记下面的边为「入边」，上面的边为「出边」。</p> <p>按照 <span class=arithmatex>\(y\)</span> 坐标从下往上遍历每个矩形，入边先被扫描到，将入边加入到线段树，出边后被扫描到，将出边从线段树中删除。对于每一条入边和出边，可以标记为 <span class=arithmatex>\(\pm1\)</span>，代表加入和删除。</p> <p>线段树维护的东西都是点，但是我们需要维护的是区间，那么我们可以把区间下放到点上，也就是每一个叶子节点维护的是一个线段。</p> <p>维护一个 <span class=arithmatex>\(\mathit{cov}\)</span> 为当前区间被几个矩形覆盖，以及一个 <span class=arithmatex>\(\mathit{len}\)</span> 表示当前区间被覆盖的区间长度。</p> <p>我们扫描到一条线，将该条线段加入到线段树维护，修改对应区间的 <span class=arithmatex>\(\mathit{cov}\)</span>。</p> <p>向上更新表示当前区间被覆盖的区间长度，当 <span class=arithmatex>\(\mathit{cov}\)</span> 非 <span class=arithmatex>\(0\)</span>，则代表整个区间被覆盖；<span class=arithmatex>\(\mathit{cov}\)</span> 为 <span class=arithmatex>\(0\)</span>，则统计子区间被覆盖的长度</p> <p>注意到维护的线段，一定是成对出现的，因此不需要标记下传，最后一定会被减回去。</p> <p>我们根据代码来解释一些细节问题：</p> <details class=note> <summary>点击查看代码</summary> <ul> <li>下文代码表示的是在标准平面直角坐标系，<span class=arithmatex>\(x\)</span> 轴水平向右、<span class=arithmatex>\(y\)</span> 轴数值向上，扫描线从下往上扫的。</li> </ul> <pre class=highlight><code class=language-cpp>#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+using ll = long long;
+
+#define range(x) x.begin(), x.end()</code></pre> <ul> <li>头文件等。</li> </ul> <pre class=highlight><code class=language-cpp>struct line {
+    int y, x1, x2, v;
+    line() = default;
+    line(int y, int x1, int x2, int v): y(y), x1(x1), x2(x2), v(v) {}
+    friend bool operator &lt;(const line &amp;a, const line &amp;b) { return a.y &lt; b.y; }
+};</code></pre> <ul> <li>定义了线段，包括其纵坐标，横坐标上延伸的起始和终止，以及权值。</li> </ul> <pre class=highlight><code class=language-cpp>class segment {
+
+private:
+
+struct emm {
+    int l, r;
+    int cnt, len;
+};
+
+vector&lt;emm&gt; a;</code></pre> <ul> <li>个人习惯，使用 <code>class + struct</code> 定义线段树，标记左端点 <span class=arithmatex>\(l\)</span> 及右端点 <span class=arithmatex>\(r\)</span>（表示的是原坐标，即未经离散化的，而且注意此处的端点也与普通线段树有区别，是左闭右开的区间，而非闭区间）。</li> </ul> <pre class=highlight><code class=language-cpp>void push_up(int k) {
+    if (a[k].cnt) a[k].len = a[k].r - a[k].l;
+    else a[k].len = a[k * 2].len + a[k * 2 + 1].len;
+}</code></pre> <ul> <li>标记上传，不能全用 <code>else</code> 里的语句的原因是，没有标记下传，只能根据这个区间当前有没有被覆盖来考虑。而如果其两个子区间都被完全覆盖，而其未被标记为完全覆盖，会调用子节点的信息，加起来也是其区间总长度。</li> </ul> <pre class=highlight><code class=language-cpp>void build(vector&lt;int&gt; &amp;p, int k, int l, int r) {
+    a[k].l = p[l], a[k].r = p[r];
+    a[k].len = a[k].cnt = 0;
+    if (r - l == 1) return;
+    int mid = l + r &gt;&gt; 1;
+    build(p, k * 2, l, mid);
+    build(p, k * 2 + 1, mid, r);
+}</code></pre> <ul> <li>建树，传入的 <span class=arithmatex>\(l\)</span> 和 <span class=arithmatex>\(r\)</span> 并不是区间的端点，而是区间端点的离散化的 <span class=arithmatex>\(\mathit{rank}\)</span>，需要调用 <span class=arithmatex>\(p_i\)</span> 来寻找原坐标，用来标记给线段树维护的区间。而终止条件 <code>r - l == 1</code> 是因为线段树的叶子结点维护的是区间，而非单一的节点，需要两个端点。不需要在这里标记上次的原因是还没有任何有意义的值赋给它。</li> </ul> <pre class=highlight><code class=language-cpp>void modify(int k, int p, int q, int v) {
+    int l = a[k].l, r = a[k].r;
+    if (l &gt;= p &amp;&amp; r &lt;= q) return void((a[k].cnt += v, push_up(k)));
+    if (a[k * 2].r &gt; p) modify(k * 2, p, q, v);
+    if (a[k * 2 + 1].l &lt; q) modify(k * 2 + 1, p, q, v);
+    push_up(k);
+}</code></pre> <ul> <li>修改操作，与普通线段树唯一的区别是，修改一个区间仅仅是标记它被完全覆盖，然后标记上传，也就是重新计算这个区间的 <span class=arithmatex>\(\mathit{len}\)</span> 值。</li> </ul> <pre class=highlight><code class=language-cpp>public:
+
+segment(vector&lt;int&gt; &amp;p, int n) { a.resize(n &lt;&lt; 3); build(p, 1, 1, n); }
+void change(int l, int r, int v) { modify(1, l, r, v); }
+int xht() { return a[1].len; }
+
+};</code></pre> <ul> <li>没什么意义，只是简化下面调用的代码。</li> </ul> <pre class=highlight><code class=language-cpp>signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
+    int n; cin &gt;&gt; n;
+    vector&lt;line&gt; a(n * 2);
+    vector&lt;int&gt; p(n * 2);
+    p.push_back(-1);
+    for (int i = 0; i &lt; n; ++i) {
+        int x1, y1, x2, y2;
+        cin &gt;&gt; x1 &gt;&gt; y1 &gt;&gt; x2 &gt;&gt; y2;
+        p[i] = x1, p[i + n] = x2;
+        a[i] = line(y1, x1, x2, 1);
+        a[i + n] = line(y2, x1, x2, -1);
+    }
+    sort(range(a)), sort(range(p));
+    int tot = unique(range(p)) - p.begin();</code></pre> <ul> <li>输入和离散化，注意 <span class=arithmatex>\(p\)</span> 要加一个极小值（根据题目不同，要比最小坐标值还要小，这道题左边都是非负，因此取 <span class=arithmatex>\(-1\)</span> 是可以的，有的还要取更小的值）。</li> </ul> <pre class=highlight><code class=language-cpp>    segment seg(p, tot - 1); ll ans = 0;
+    for (int i = 0; i &lt; 2 * n - 1; ++i) {
+        seg.change(a[i].x1, a[i].x2, a[i].v);
+        ans += 1ll * seg.xht() * (a[i + 1].y - a[i].y);
+    } cout &lt;&lt; ans &lt;&lt; endl;
+    return 0;
+}</code></pre> <ul> <li>建树和询问。具体的看上面对于小矩阵面积计算的解释。</li> </ul> <p>UPD：更新一个新码风的板子。</p> <pre class=highlight><code class=language-cpp>constexpr int N = 1e5 + 10;
+
+struct query {
+    double x1, x2, y;
+    int v;
+    query() = default;
+    query(double a, double b, double c, int v): x1(a), x2(b), y(c), v(v) {}
+    friend bool operator &lt;(const query &amp;a, const query &amp;b) {
+        return a.y &lt; b.y;
+    }
+};
+
+template&lt;typename T&gt;
+void owap(T &amp;a, T &amp;b) {
+    if (a &gt; b) swap(a, b);
+}
+
+namespace seg {
+    int n;
+    vector&lt;double&gt; q;
+
+    struct node {
+        double l, r, len;
+        int cnt;
+    } a[N &lt;&lt; 2];
+
+    void push_up(int k) {
+        if (a[k].cnt) a[k].len = a[k].r - a[k].l;
+        else a[k].len = a[k &lt;&lt; 1].len + a[k &lt;&lt; 1 | 1].len;
+    }
+
+    void build(int k, int l, int r) {
+        a[k].l = q[l], a[k].r = q[r];
+        a[k].cnt = a[k].len = 0;
+        if (r - l == 1) return;
+        int mid = (l + r) &gt;&gt; 1;
+        build(k &lt;&lt; 1, l, mid);
+        build(k &lt;&lt; 1 | 1, mid, r);
+    }
+
+    void modify(int k, double p, double q, int v) {
+        double l = a[k].l, r = a[k].r;
+        if (l &gt;= p &amp;&amp; r &lt;= q) {
+            a[k].cnt += v;
+            push_up(k);
+            return;
+        }
+        if (a[k &lt;&lt; 1].r &gt; p) modify(k &lt;&lt; 1, p, q, v);
+        if (a[k &lt;&lt; 1 | 1].l &lt; q) modify(k &lt;&lt; 1 | 1, p, q, v);
+        push_up(k);
+    }
+
+    void init(int m, vector&lt;double&gt; &amp;p) {
+        n = m, q = p;
+        build(1, 0, n - 1);
+    }
+
+    void change(double x1, double x2, int v) {
+        modify(1, x1, x2, v);
+    }
+
+    double calc() {
+        return a[1].len;
+    }
+}
+
+double Main(int n) {
+    vector&lt;double&gt; s;
+    vector&lt;query&gt; q;
+    for (int i = 0; i &lt; n; ++i) {
+        double x1, y1, x2, y2;
+        cin &gt;&gt; x1 &gt;&gt; y1 &gt;&gt; x2 &gt;&gt; y2;
+        owap(x1, x2), owap(y1, y2);
+        s.push_back(x1), s.push_back(x2);
+        q.emplace_back(x1, x2, y1, 1);
+        q.emplace_back(x1, x2, y2, -1);
+    }
+    sort(q.begin(), q.end());
+    sort(s.begin(), s.end());
+    s.erase(unique(s.begin(), s.end()), s.end());
+    #define getid(x) ({ lower_bound(s.begin(), s.end(), x) - s.begin() + 1; })
+    seg::init((int)s.size(), s);
+    double ans = 0;
+    for (int i = 0; i + 1 &lt; (int)q.size(); ++i) {
+        seg::change(q[i].x1, q[i].x2, q[i].v);
+        ans += seg::calc() * (q[i + 1].y - q[i].y);
+    }
+    return ans;
+}</code></pre> </details> <h2 id=_7>进阶——矩形周长问题<a class=headerlink href=#_7 title="Permanent link">&para;</a></h2> <p>例题：<a href=https://www.luogu.com.cn/problem/P1856>P1856 [IOI1998] [USACO5.5] 矩形周长Picture</a>。</p> <p>题目描述：给出平面内 <span class=arithmatex>\(n\)</span> 个矩形的左下以及右上坐标，求出所有矩形构成的图形的周长。</p> <p>首先计算横线，不难发现，在扫描线向上平移的时候，增加或者减少的长度就是周长的共线，因为我们的线段是一条一条加的，所以就保证了，加上去，一定是加了一个表面；减去，也一定是减去了一个表面。</p> <p><a class=glightbox href=https://cdn.luogu.com.cn/upload/image_hosting/x13f1leu.png data-type=image data-width=auto data-height=auto data-desc-position=bottom><img alt src=https://cdn.luogu.com.cn/upload/image_hosting/x13f1leu.png></a></p> <p>因此对答案的贡献就是上一次获得的长度与这一次的长度的差的绝对值。再解释一下绝对值，因为周长一定是正的，而每次长度变化量就是新增的表面。</p> <p>所以我们需要加个绝对值。而竖线的长度有两种方法：</p> <ol> <li>从左到右再扫描一遍。</li> <li>扫描横线的过程中，同步记录没有重合的矩形个数，再乘上二就是新增的纵边数，在乘上这个矩形的高度就是新增的竖线的长度了。</li> </ol> <p>作者太菜，只会第一个。</p> <ul> <li>然后我们根据代码再详解一下：</li> </ul> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+#define range(x) x.begin(), x.end()
+
+using ll = long long;
+
+struct line {
+    int y, x1, x2, v;
+    line() = default;
+    line(int y, int x1, int x2, int v): y(y), x1(x1), x2(x2), v(v) {}
+    friend bool operator &lt;(const line &amp;a, const line &amp;b) { return a.y &lt; b.y; }
+};
+
+class segment {
+
+private:
+
+struct emm {
+    int l, r;
+    int cov, len;
+};
+
+vector&lt;emm&gt; a;
+
+void push_up(int k) {
+    if (a[k].cov) a[k].len = a[k].r - a[k].l;
+    else a[k].len = a[k * 2].len + a[k * 2 + 1].len;
+}
+
+void build(vector&lt;int&gt; &amp;p, int k, int l, int r) {
+    a[k].l = p[l], a[k].r = p[r];
+    a[k].cov = a[k].len = 0;
+    if (r - l == 1) return;
+    int mid = r + l &gt;&gt; 1;
+    build(p, k * 2, l, mid);
+    build(p, k * 2 + 1, mid, r);
+}
+
+void modify(int k, int p, int q, int v) {
+    int l = a[k].l, r = a[k].r;
+    if (l &gt;= p &amp;&amp; r &lt;= q) return void((a[k].cov += v, push_up(k)));
+    if (a[k * 2].r &gt; p) modify(k * 2, p, q, v);
+    if (a[k * 2 + 1].l &lt; q) modify(k * 2 + 1, p, q, v);
+    push_up(k);
+}
+
+public:
+
+segment(vector&lt;int&gt; &amp;p, int n) { a.resize(n &lt;&lt; 3); build(p, 1, 1, n); }
+int xht() { return a[1].len; }
+void change(int l, int r, int v) { modify(1, l, r, v); }
+
+};
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
+    int n, lt; cin &gt;&gt; n;</code></pre> <ul> <li>从这下面开始才和上一个有本质不同，也就是建了两个扫描线，其中标号 <span class=arithmatex>\(1\)</span> 的是向上扫描的，标号 <span class=arithmatex>\(2\)</span> 的是向右扫描的。</li> </ul> <pre class=highlight><code class=language-cpp>    vector&lt;line&gt; a1(n * 2), a2(n * 2);
+    vector&lt;int&gt; p1(n * 2); vector&lt;int&gt; p2(n * 2);
+    p1.push_back(-1e5); p2.push_back(-1e5);
+    for (int i = 0; i &lt; n; ++i) {
+        int x1, y1, x2, y2; cin &gt;&gt; x1 &gt;&gt; y1 &gt;&gt; x2 &gt;&gt; y2;
+        p1[i] = x1, p1[i + n] = x2;
+        p2[i] = y1, p2[i + n] = y2;
+        a1[i] = line(y1, x1, x2, 1);
+        a1[i + n] = line(y2, x1, x2, -1);
+        a2[i] = line(x1, y1, y2, 1);
+        a2[i + n] = line(x2, y1, y2, -1);
+    }
+    sort(range(a1)), sort(range(p1));
+    sort(range(a2)), sort(range(p2));
+    int tot1 = unique(range(p1)) - p1.begin();
+    int tot2 = unique(range(p2)) - p2.begin();
+    segment seg1(p1, tot1 - 1);
+    segment seg2(p2, tot2 - 1);
+    ll res = 0; int lt1 = 0, lt2 = 0;
+    for (int i = 0; i &lt; 2 * n; ++i) {
+        seg1.change(a1[i].x1, a1[i].x2, a1[i].v);
+        seg2.change(a2[i].x1, a2[i].x2, a2[i].v);
+        int rt1 = seg1.xht(); res += abs(rt1 - lt1);
+        int rt2 = seg2.xht(); res += abs(rt2 - lt2);
+        lt1 = rt1, lt2 = rt2;
+    } cout &lt;&lt; res &lt;&lt; endl;
+    return 0;
+}</code></pre> </details> <h2 id=_8>练习题<a class=headerlink href=#_8 title="Permanent link">&para;</a></h2> <p>题单：<a href=https://www.luogu.com.cn/training/479926>https://www.luogu.com.cn/training/479926</a>。</p> <h2 id=reference>Reference<a class=headerlink href=#reference title="Permanent link">&para;</a></h2> <p>[1] <a href=https://oi-wiki.org/geometry/scanning/ >https://oi-wiki.org/geometry/scanning/</a></p> <p>[2] <a href=https://blog.csdn.net/qq_30320171/article/details/129787418>https://blog.csdn.net/qq_30320171/article/details/129787418</a></p> <p>[3] <a href=https://www.luogu.com.cn/article/iilru8ad>https://www.luogu.com.cn/article/iilru8ad</a></p> <p>[4] <a href=https://www.luogu.com.cn/article/9cuyuf44>https://www.luogu.com.cn/article/9cuyuf44</a></p> <p>[5] <a href="https://www.youtube.com/watch?v=YnIxejYW7cE">https://www.youtube.com/watch?v=YnIxejYW7cE</a></p> <hr><blockquote class=page-copyright> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4Z"/></svg></i>本页面最近更新：</span><span class=facts_modified>正在加载中</span>，<a class=edit_history>更新历史</a>。<br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg></i>编辑页面：<a href=https://github.com/raineblog/blog/edit/main/docs/ds/seg/scanning.md title=edit.link.title class=page_edit_url>在 GitHub 上编辑此页</a>！</span><br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M16 17v2H2v-2s0-4 7-4 7 4 7 4m-3.5-9.5A3.5 3.5 0 1 0 9 11a3.5 3.5 0 0 0 3.5-3.5m3.44 5.5A5.32 5.32 0 0 1 18 17v2h4v-2s0-3.63-6.06-4M15 4a3.39 3.39 0 0 0-1.93.59 5 5 0 0 1 0 5.82A3.39 3.39 0 0 0 15 11a3.5 3.5 0 0 0 0-7Z"/></svg></i>本页面贡献者：</span><span class=page_contributors>raine</span>。<br> </blockquote> <div id=__comments class="giscus no-print" data-no-instant></div> <script src=https://giscus.app/client.js data-repo=raineblog/blog-giscus data-repo-id=R_kgDOMhpKmw data-category=Announcements data-category-id=DIC_kwDOMhpKm84ChhZ7 data-mapping=pathname data-strict=1 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=preferred_color_scheme data-lang=zh-CN data-loading=lazy crossorigin=anonymous async>
+</script> </article> </div> <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script> </div> </main> <footer class=md-footer> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> by raineblog </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs <div id=miitbeian></div> </a> </div> <div style=float:right class=build_date_utc> <br> <a href=javascript:void(0); id=m_updtime> 最近更新：2025-02-02 d1e2f96 </a> </div> </div> </div> </footer> <div class=no-print id=scroll-page-top style="
+display: block;
+position: fixed;
+bottom: 20px;
+right: 20px;
+padding: 6px;
+color: #FFF;
+background-color: #AAA;
+opacity: 0.7;
+border-radius: 20px;
+cursor: pointer;
+z-index: 999;"> <i class="fa-solid fa-angle-up"></i> Page Top </div> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "navigation.prune", "navigation.path", "search.suggest", "search.highlight", "search.share", "announce.dismiss", "content.action.edit", "content.code.copy", "content.code.select", "content.footnote.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script> <script src=../../../assets/javascripts/bundle.fe8b6f2b.min.js></script> <script src=../../../assets/javascripts/extra.js></script> <script src=../../../assets/javascripts/jquery.min.js></script> <script src=../../../assets/highlight/highlight.min.js></script> <script src=../../../assets/katex/katex.min.js></script> <script src=../../../assets/katex/contrib/mhchem.min.js></script> <script src=../../../assets/katex/contrib/auto-render.min.js></script> <script src=../../../assets/katex/contrib/copy-tex.min.js></script> <script src=../../../assets/javascripts/custom.js></script> <script id=init-glightbox>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body> </html>

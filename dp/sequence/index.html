@@ -1,0 +1,650 @@
+<!doctype html><html lang=zh class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="by raine"><meta name=author content=raine><link href=https://raineblog.github.io/blog/dp/sequence/ rel=canonical><link href=../basic/ rel=prev><link href=../interval/ rel=next><link rel=icon href=../..><meta name=generator content="mkdocs-1.6.1, mkdocs-material-9.5.31"><title>线性 DP - raine's Blog</title><link rel=stylesheet href=../../assets/stylesheets/main.3cba04c6.min.css><link rel=stylesheet href=../../assets/stylesheets/palette.06af60db.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Segoe+UI:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback"><style>:root{--md-text-font:"Segoe UI";--md-code-font:"Fira Code"}</style><link rel=stylesheet href=../../assets/stylesheets/extra.css><link rel=stylesheet href=../../assets/stylesheets/all.min.css><link rel=stylesheet href=../../assets/katex/katex.min.css><link rel=stylesheet href=../../assets/highlight/styles/stackoverflow-light.min.css><link rel=stylesheet href=../../assets/stylesheets/custom.css><script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><link href=../../assets/stylesheets/glightbox.min.css rel=stylesheet><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style><script src=../../assets/javascripts/glightbox.min.js></script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary=white data-md-color-accent=red> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#dp class=md-skip> 跳转至 </a> </div> <div data-md-component=announce> </div> <header class="md-header md-header--shadow md-header--lifted" data-md-component=header> <nav class="md-header__inner md-grid" aria-label=页眉> <a href=../.. title="raine's Blog" class="md-header__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> raine's Blog </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> 线性 DP </span> </div> </div> </div> <div class=md-header__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> </nav> <nav class=md-tabs aria-label=标签 data-md-component=tabs> <div class=md-grid> <ul class=md-tabs__list> <li class=md-tabs__item> <a href=../.. class=md-tabs__link> 简介 </a> </li> <li class=md-tabs__item> <a href=../../contest/pre/ class=md-tabs__link> 比赛相关 </a> </li> <li class=md-tabs__item> <a href=../../basic/prefix/ class=md-tabs__link> 基础算法 </a> </li> <li class="md-tabs__item md-tabs__item--active"> <a href=../basic/ class=md-tabs__link> 动态规划 </a> </li> <li class=md-tabs__item> <a href=../../ds/ds/ class=md-tabs__link> 数据结构 </a> </li> <li class=md-tabs__item> <a href=../../math/linear-algebra/vector/ class=md-tabs__link> 数学 </a> </li> <li class=md-tabs__item> <a href=../../graph/shortest-path/ class=md-tabs__link> 图论 </a> </li> </ul> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--lifted" aria-label=导航栏 data-md-level=0> <label class=md-nav__title for=__drawer> <a href=../.. title="raine's Blog" class="md-nav__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> raine's Blog </label> <div class=md-nav__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../.. class=md-nav__link> <span class=md-ellipsis> 简介 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../contest/pre/ class=md-nav__link> <span class=md-ellipsis> 比赛相关 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../basic/prefix/ class=md-nav__link> <span class=md-ellipsis> 基础算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_4 checked> <label class=md-nav__link for=__nav_4 id=__nav_4_label tabindex> <span class=md-ellipsis> 动态规划 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=1 aria-labelledby=__nav_4_label aria-expanded=true> <label class=md-nav__title for=__nav_4> <span class="md-nav__icon md-icon"></span> 动态规划 </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../basic/ class=md-nav__link> <span class=md-ellipsis> 动态规划基础 </span> </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> <span class=md-ellipsis> 线性 DP </span> <span class="md-nav__icon md-icon"></span> </label> <a href=./ class="md-nav__link md-nav__link--active"> <span class=md-ellipsis> 线性 DP </span> </a> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_1 class=md-nav__link> <span class=md-ellipsis> 概念 </span> </a> </li> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 序列模型 </span> </a> <nav class=md-nav aria-label=序列模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 经典例题 </span> </a> <nav class=md-nav aria-label=经典例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#b3637 class=md-nav__link> <span class=md-ellipsis> B3637 最长上升子序列 </span> </a> </li> <li class=md-nav__item> <a href=#p1439 class=md-nav__link> <span class=md-ellipsis> P1439 最长公共子序列 </span> </a> </li> <li class=md-nav__item> <a href=#p2758 class=md-nav__link> <span class=md-ellipsis> P2758 编辑距离 </span> </a> </li> <li class=md-nav__item> <a href=#p1115 class=md-nav__link> <span class=md-ellipsis> P1115 最大子段和 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 其他例题 </span> </a> <nav class=md-nav aria-label=其他例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#51nod-1050 class=md-nav__link> <span class=md-ellipsis> 51Nod-1050 环状最大子段和 </span> </a> </li> <li class=md-nav__item> <a href=#p2642 class=md-nav__link> <span class=md-ellipsis> P2642 最大双子段和 </span> </a> </li> <li class=md-nav__item> <a href=#p1121 class=md-nav__link> <span class=md-ellipsis> P1121 环状最大双子段和 </span> </a> </li> <li class=md-nav__item> <a href=#cses-1644 class=md-nav__link> <span class=md-ellipsis> CSES-1644 有长度限制 </span> </a> </li> <li class=md-nav__item> <a href=#p1020-noip1999 class=md-nav__link> <span class=md-ellipsis> P1020 [NOIP1999 提高组] 导弹拦截 </span> </a> </li> <li class=md-nav__item> <a href=#p1091-noip2004 class=md-nav__link> <span class=md-ellipsis> P1091 [NOIP2004 提高组] 合唱队形 </span> </a> </li> <li class=md-nav__item> <a href=#p8020-ontak2015-badania-naukowe class=md-nav__link> <span class=md-ellipsis> P8020 [ONTAK2015] Badania naukowe </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 路径模型 </span> </a> <nav class=md-nav aria-label=路径模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 一维模型 </span> </a> <nav class=md-nav aria-label=一维模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p1541-noip2010 class=md-nav__link> <span class=md-ellipsis> P1541 [NOIP2010 提高组] 乌龟棋 </span> </a> </li> <li class=md-nav__item> <a href=#p2285-hnoi2004 class=md-nav__link> <span class=md-ellipsis> P2285 [HNOI2004] 打鼹鼠 </span> </a> </li> <li class=md-nav__item> <a href=#p4933 class=md-nav__link> <span class=md-ellipsis> P4933 大师 </span> </a> </li> <li class=md-nav__item> <a href=#p2340-usaco03fall-cow-exhibition-g class=md-nav__link> <span class=md-ellipsis> P2340 [USACO03FALL] Cow Exhibition G </span> </a> </li> <li class=md-nav__item> <a href=#p4310 class=md-nav__link> <span class=md-ellipsis> P4310 绝世好题 </span> </a> </li> <li class=md-nav__item> <a href=#p1854 class=md-nav__link> <span class=md-ellipsis> P1854 花店橱窗布置 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 二维模型 </span> </a> <nav class=md-nav aria-label=二维模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p1216-ioi1994 class=md-nav__link> <span class=md-ellipsis> P1216 [IOI1994] 数字三角形 </span> </a> </li> <li class=md-nav__item> <a href=#p1002-noip2002 class=md-nav__link> <span class=md-ellipsis> P1002 [NOIP2002 普及组] 过河卒 </span> </a> </li> <li class=md-nav__item> <a href=#p1004-noip2000 class=md-nav__link> <span class=md-ellipsis> P1004 [NOIP2000 提高组] 方格取数 </span> </a> </li> <li class=md-nav__item> <a href=#p1006-noip2008 class=md-nav__link> <span class=md-ellipsis> P1006 [NOIP2008 提高组] 传纸条 </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 分组模型 </span> </a> <nav class=md-nav aria-label=分组模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_9 class=md-nav__link> <span class=md-ellipsis> 合并模型 </span> </a> <nav class=md-nav aria-label=合并模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p3147-usaco16open-262144-p class=md-nav__link> <span class=md-ellipsis> P3147 [USACO16OPEN] 262144 P </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_10 class=md-nav__link> <span class=md-ellipsis> 分割模型 </span> </a> <nav class=md-nav aria-label=分割模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p1868 class=md-nav__link> <span class=md-ellipsis> P1868 饥饿的奶牛 </span> </a> </li> <li class=md-nav__item> <a href=#p1874 class=md-nav__link> <span class=md-ellipsis> P1874 快速求和 </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_11 class=md-nav__link> <span class=md-ellipsis> 其他例题 </span> </a> <nav class=md-nav aria-label=其他例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_12 class=md-nav__link> <span class=md-ellipsis> 简单题 </span> </a> <nav class=md-nav aria-label=简单题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p1095-noip2007 class=md-nav__link> <span class=md-ellipsis> P1095 [NOIP2007 普及组] 守望者的逃离 </span> </a> </li> <li class=md-nav__item> <a href=#p1650 class=md-nav__link> <span class=md-ellipsis> P1650 田忌赛马 </span> </a> </li> <li class=md-nav__item> <a href=#p1435-ioi2000 class=md-nav__link> <span class=md-ellipsis> P1435 [IOI2000] 回文字串 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_13 class=md-nav__link> <span class=md-ellipsis> 中档题 </span> </a> <nav class=md-nav aria-label=中档题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#cf1446b-catching-cheaters class=md-nav__link> <span class=md-ellipsis> CF1446B Catching Cheaters </span> </a> </li> <li class=md-nav__item> <a href=#p3558-poi2013-baj-bytecomputer class=md-nav__link> <span class=md-ellipsis> P3558 [POI2013] BAJ-Bytecomputer </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=../interval/ class=md-nav__link> <span class=md-ellipsis> 区间 DP </span> </a> </li> <li class=md-nav__item> <a href=../opt/mono/ class=md-nav__link> <span class=md-ellipsis> 单调数据结构优化 </span> </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../ds/ds/ class=md-nav__link> <span class=md-ellipsis> 数据结构 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../math/linear-algebra/vector/ class=md-nav__link> <span class=md-ellipsis> 数学 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../graph/shortest-path/ class=md-nav__link> <span class=md-ellipsis> 图论 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </div> </div> </div> <div class="md-sidebar md-sidebar--secondary" data-md-component=sidebar data-md-type=toc> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_1 class=md-nav__link> <span class=md-ellipsis> 概念 </span> </a> </li> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 序列模型 </span> </a> <nav class=md-nav aria-label=序列模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 经典例题 </span> </a> <nav class=md-nav aria-label=经典例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#b3637 class=md-nav__link> <span class=md-ellipsis> B3637 最长上升子序列 </span> </a> </li> <li class=md-nav__item> <a href=#p1439 class=md-nav__link> <span class=md-ellipsis> P1439 最长公共子序列 </span> </a> </li> <li class=md-nav__item> <a href=#p2758 class=md-nav__link> <span class=md-ellipsis> P2758 编辑距离 </span> </a> </li> <li class=md-nav__item> <a href=#p1115 class=md-nav__link> <span class=md-ellipsis> P1115 最大子段和 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 其他例题 </span> </a> <nav class=md-nav aria-label=其他例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#51nod-1050 class=md-nav__link> <span class=md-ellipsis> 51Nod-1050 环状最大子段和 </span> </a> </li> <li class=md-nav__item> <a href=#p2642 class=md-nav__link> <span class=md-ellipsis> P2642 最大双子段和 </span> </a> </li> <li class=md-nav__item> <a href=#p1121 class=md-nav__link> <span class=md-ellipsis> P1121 环状最大双子段和 </span> </a> </li> <li class=md-nav__item> <a href=#cses-1644 class=md-nav__link> <span class=md-ellipsis> CSES-1644 有长度限制 </span> </a> </li> <li class=md-nav__item> <a href=#p1020-noip1999 class=md-nav__link> <span class=md-ellipsis> P1020 [NOIP1999 提高组] 导弹拦截 </span> </a> </li> <li class=md-nav__item> <a href=#p1091-noip2004 class=md-nav__link> <span class=md-ellipsis> P1091 [NOIP2004 提高组] 合唱队形 </span> </a> </li> <li class=md-nav__item> <a href=#p8020-ontak2015-badania-naukowe class=md-nav__link> <span class=md-ellipsis> P8020 [ONTAK2015] Badania naukowe </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 路径模型 </span> </a> <nav class=md-nav aria-label=路径模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 一维模型 </span> </a> <nav class=md-nav aria-label=一维模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p1541-noip2010 class=md-nav__link> <span class=md-ellipsis> P1541 [NOIP2010 提高组] 乌龟棋 </span> </a> </li> <li class=md-nav__item> <a href=#p2285-hnoi2004 class=md-nav__link> <span class=md-ellipsis> P2285 [HNOI2004] 打鼹鼠 </span> </a> </li> <li class=md-nav__item> <a href=#p4933 class=md-nav__link> <span class=md-ellipsis> P4933 大师 </span> </a> </li> <li class=md-nav__item> <a href=#p2340-usaco03fall-cow-exhibition-g class=md-nav__link> <span class=md-ellipsis> P2340 [USACO03FALL] Cow Exhibition G </span> </a> </li> <li class=md-nav__item> <a href=#p4310 class=md-nav__link> <span class=md-ellipsis> P4310 绝世好题 </span> </a> </li> <li class=md-nav__item> <a href=#p1854 class=md-nav__link> <span class=md-ellipsis> P1854 花店橱窗布置 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 二维模型 </span> </a> <nav class=md-nav aria-label=二维模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p1216-ioi1994 class=md-nav__link> <span class=md-ellipsis> P1216 [IOI1994] 数字三角形 </span> </a> </li> <li class=md-nav__item> <a href=#p1002-noip2002 class=md-nav__link> <span class=md-ellipsis> P1002 [NOIP2002 普及组] 过河卒 </span> </a> </li> <li class=md-nav__item> <a href=#p1004-noip2000 class=md-nav__link> <span class=md-ellipsis> P1004 [NOIP2000 提高组] 方格取数 </span> </a> </li> <li class=md-nav__item> <a href=#p1006-noip2008 class=md-nav__link> <span class=md-ellipsis> P1006 [NOIP2008 提高组] 传纸条 </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 分组模型 </span> </a> <nav class=md-nav aria-label=分组模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_9 class=md-nav__link> <span class=md-ellipsis> 合并模型 </span> </a> <nav class=md-nav aria-label=合并模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p3147-usaco16open-262144-p class=md-nav__link> <span class=md-ellipsis> P3147 [USACO16OPEN] 262144 P </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_10 class=md-nav__link> <span class=md-ellipsis> 分割模型 </span> </a> <nav class=md-nav aria-label=分割模型> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p1868 class=md-nav__link> <span class=md-ellipsis> P1868 饥饿的奶牛 </span> </a> </li> <li class=md-nav__item> <a href=#p1874 class=md-nav__link> <span class=md-ellipsis> P1874 快速求和 </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_11 class=md-nav__link> <span class=md-ellipsis> 其他例题 </span> </a> <nav class=md-nav aria-label=其他例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_12 class=md-nav__link> <span class=md-ellipsis> 简单题 </span> </a> <nav class=md-nav aria-label=简单题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p1095-noip2007 class=md-nav__link> <span class=md-ellipsis> P1095 [NOIP2007 普及组] 守望者的逃离 </span> </a> </li> <li class=md-nav__item> <a href=#p1650 class=md-nav__link> <span class=md-ellipsis> P1650 田忌赛马 </span> </a> </li> <li class=md-nav__item> <a href=#p1435-ioi2000 class=md-nav__link> <span class=md-ellipsis> P1435 [IOI2000] 回文字串 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_13 class=md-nav__link> <span class=md-ellipsis> 中档题 </span> </a> <nav class=md-nav aria-label=中档题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#cf1446b-catching-cheaters class=md-nav__link> <span class=md-ellipsis> CF1446B Catching Cheaters </span> </a> </li> <li class=md-nav__item> <a href=#p3558-poi2013-baj-bytecomputer class=md-nav__link> <span class=md-ellipsis> P3558 [POI2013] BAJ-Bytecomputer </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <a href=https://github.com/raineblog/blog/edit/main/docs/dp/sequence.md title=编辑此页 class="md-content__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg> </a> <div id=m_edit_url style="display: none;">https://github.com/raineblog/blog/edit/main/docs/dp/sequence.md</div> <h1 id=dp>线性 DP<a class=headerlink href=#dp title="Permanent link">&para;</a></h1> <h2 id=_1>概念<a class=headerlink href=#_1 title="Permanent link">&para;</a></h2> <p>序列 DP 可以说时最常见的 DP 模型。</p> <p>可以将在序列上 DP 的，都称为序列 DP，例如线性 DP 和区间 DP。</p> <p>线性 DP 有很多维度，大部分都是一维的。</p> <p>即用 <span class=arithmatex>\(f(i,\dots)\)</span> 表示考虑序列的 <span class=arithmatex>\(i\)</span> 个元素，满足 <span class=arithmatex>\(\dots\)</span> 限制的答案。</p> <p>也有二维的，用 <span class=arithmatex>\(f(i,j,\dots)\)</span> 表示两个序列前 <span class=arithmatex>\(i,j\)</span> 个元素的答案。</p> <h2 id=_2>序列模型<a class=headerlink href=#_2 title="Permanent link">&para;</a></h2> <h3 id=_3>经典例题<a class=headerlink href=#_3 title="Permanent link">&para;</a></h3> <h4 id=b3637><a href=https://www.luogu.com.cn/problem/B3637>B3637 最长上升子序列</a><a class=headerlink href=#b3637 title="Permanent link">&para;</a></h4> <p>设 <span class=arithmatex>\(f(i)\)</span> 表示以 <span class=arithmatex>\(A(i)\)</span> 结尾的最长上升子序列 LIS 长度，考虑转移。</p> <div class=arithmatex>\[ f(i)=\max_{j&lt;i}\{[f(j)+1][A_j&lt;A_i]\} \]</div> <p>即找到上一个元素，接在这个以后的最大的长度。</p> <p>直接转移，时间复杂度是 <span class=arithmatex>\(\mathcal O(N^2)\)</span> 的，</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int Ans = 0;
+for (int i = 1; i &lt;= n; ++i) {
+    F[i] = 1;
+    for (int j = 1; j &lt; i; ++j)
+        if (A[j] &lt; A[i])
+            F[i] = max(F[i], F[j] + 1);
+    Ans = max(Ans, F[i]);
+}</code></pre> </details> <p>考虑优化。</p> <p>显然我们可以对值域建立数据结构，但是这样很复杂。</p> <p>注意到一个数字会导致答案增加，一定是它大于了前面的某一个数。</p> <p>否则，那么这个数的贡献就是对于后面比它大的数可以加上这一个。</p> <p>因此，我们考虑维护，</p> <ul> <li> <p>如果这个数大于前面所有的，那么加入数列末尾。</p> </li> <li> <p>否则用这个数替换大于等于它的第一个，表示后面可以用。</p> </li> </ul> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>memset(F, 0x3f, sizeof F);
+for (int i = 1; i &lt;= n; ++i)
+    *lower_bound(F + 1, F + n + 1, A[i]) = A[i];
+int Ans = 0;
+while (F[Ans + 1] != 0x3f3f3f3f)
+    ++Ans;</code></pre> </details> <p>使用二分查找，时间复杂度是 <span class=arithmatex>\(\mathcal O(N\log N)\)</span> 的。</p> <h4 id=p1439><a href=https://www.luogu.com.cn/problem/P1439>P1439 最长公共子序列</a><a class=headerlink href=#p1439 title="Permanent link">&para;</a></h4> <p>设 <span class=arithmatex>\(f(i,j)\)</span> 表示 <span class=arithmatex>\(A[1,i]\)</span> 和 <span class=arithmatex>\(B[1,j]\)</span> 的 LCS。</p> <p>有，</p> <div class=arithmatex>\[ f(i,j)=\begin{cases} f(i-1,j-1)+1&amp;A_i=B_j\\ \max\{f(i,j-1),f(i-1,j)\}&amp;A_i\neq B_j \end{cases} \]</div> <p>时间复杂度为 <span class=arithmatex>\(\mathcal O(N^2)\)</span> 的，可以优化到 <span class=arithmatex>\(1/\omega\)</span> 但是不存在更优。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>for (int i = 1; i &lt;= n; ++i)
+    for (int j = 1; j &lt;= m; ++j)
+        if (a[i] == b[j])
+            f[i][j] = f[i - 1][j - 1] + 1;
+        else
+            f[i][j] = max(f[i - 1][j], f[i][j - 1]);</code></pre> </details> <p>三串 LCS：设 <span class=arithmatex>\(F(i,j,k)\)</span> 表示 <span class=arithmatex>\(A[1,i],B[1,j],C[1,k]\)</span> 的 LCS，转移分讨即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int F[N][N][N];
+
+int Main(string A, string B, string C) {
+    for (int i = 1; i &lt;= A.size(); ++i) {
+        char a = A[i - 1];
+        for (int j = 1; j &lt;= B.size(); ++j) {
+            int b = B[j - 1];
+            for (int k = 1; k &lt;= C.size(); ++k) {
+                char c = C[k - 1];
+                F[i][j][k] = max({F[i][j][k - 1], F[i][j - 1][k], F[i - 1][j][k]});
+                if (a == b &amp;&amp; b == c)
+                    F[i][j][k] = max(F[i][j][k], F[i - 1][j - 1][k - 1] + 1);
+            }
+        }
+    }
+    return F[A.size()][B.size()][C.size()];
+}</code></pre> </details> <p>如果 <span class=arithmatex>\(A,B\)</span> 是排列，那么存在更优的做法。</p> <p>我们令 <span class=arithmatex>\(C\)</span> 为 <span class=arithmatex>\(A_i\)</span> 在 <span class=arithmatex>\(B\)</span> 中的出现位置，那么 LCS 一定是 <span class=arithmatex>\(C\)</span> 的 LIS。</p> <p>那么就可以 <span class=arithmatex>\(\mathcal O(N\log N)\)</span> 做了。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>for (int i = 1; i &lt;= n; ++i)
+    P[B[i]] = i;
+memset(F, 0x3f, sizeof F);
+for (int i = 1; i &lt;= n; ++i)
+    *upper_bound(F + 1, F + n + 1, P[A[i]][i]) = P[A[i]][i];
+int Ans = 0;
+while (F[Ans + 1] != 0x3f3f3f3f)
+    ++Ans;</code></pre> </details> <h4 id=p2758><a href=https://www.luogu.com.cn/problem/P2758>P2758 编辑距离</a><a class=headerlink href=#p2758 title="Permanent link">&para;</a></h4> <p>每次操作可以删除、插入、修改一个字符，</p> <p>定义字符串 <span class=arithmatex>\(A,B\)</span> 的编辑距离为最少的操作次数，使 <span class=arithmatex>\(A\)</span> 变成 <span class=arithmatex>\(B\)</span> 字符串。</p> <p>设 <span class=arithmatex>\(f(i,j)\)</span> 表示 <span class=arithmatex>\(A[1,i]\)</span> 和 <span class=arithmatex>\(B[1,j]\)</span> 的编辑距离，那么有转移方程，</p> <div class=arithmatex>\[ f(i,j)=\min\{f(i-1,j)+1,f(i,j-1)+1,f(i-1,j-1)+[A_i\neq B_j]\} \]</div> <p>直接转移就是 <span class=arithmatex>\(\mathcal O(N^3)\)</span> 的。</p> <h4 id=p1115><a href=https://www.luogu.com.cn/problem/P1115>P1115 最大子段和</a><a class=headerlink href=#p1115 title="Permanent link">&para;</a></h4> <p>设 <span class=arithmatex>\(F(x)\)</span> 表示以 <span class=arithmatex>\(x\)</span> 结尾的最大字段和，设 <span class=arithmatex>\(S(x)\)</span> 表示原数组的前缀和。</p> <p>思路一：</p> <div class=arithmatex>\[ F(x)=\max_{y&lt;x}\{S(x)-S(y)\}=S(x)-\min_{y&lt;x}S(y) \]</div> <p>注意到维护前缀最小值即可。</p> <p>思路二：</p> <div class=arithmatex>\[ F(x)=\max\{A(x),F(x)-1+A(x)\}=A(x)+\max\{F(x-1),0\} \]</div> <p>一个元素只可能加入前面的或者自己单独。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int F[N];
+
+int MSS(int *A, int n, function&lt;int(int, int)&gt; cmp) {
+    for (int i = 1; i &lt;= n; ++i)
+        F[i] = cmp(F[i - 1], 0ll) + A[i];
+    int Ans = F[1];
+    for (int i = 2; i &lt;= n; ++i)
+        Ans = cmp(Ans, F[i]);
+    return Ans;
+}</code></pre> </details> <h3 id=_4>其他例题<a class=headerlink href=#_4 title="Permanent link">&para;</a></h3> <h4 id=51nod-1050><a href=https://vjudge.net/problem/51Nod-1050>51Nod-1050 环状最大子段和</a><a class=headerlink href=#51nod-1050 title="Permanent link">&para;</a></h4> <p>容易发现，环形只是在序列的基础上加了一种情况：跨过某个端点到了另一边。</p> <p>因此，我们将最大字段和转化为，序列的总和减去一个最小字段和（作为不选的一段）。</p> <p>注意到这样有可能将整个序列删去，因此只需要用 <span class=arithmatex>\([1,n),(1,n]\)</span> 的最小值即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>// 上文的 MSS 函数
+
+int n, Sum, A[N];
+
+void Main() {
+    cin &gt;&gt; n, Sum = 0;
+    if (n == 1) {
+        int x;
+        cin &gt;&gt; x;
+        cout &lt;&lt; x &lt;&lt; endl;
+        return;
+    }
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; A[i], Sum += A[i];
+    auto Max = [] (int a, int b) {
+        return max(a, b);
+    };
+    auto Min = [] (int a, int b) {
+        return min(a, b);
+    };
+    int Ans = MSS(A, n, Max);
+    Ans = max(Ans, Sum - MSS(A, n - 1, Min));
+    Ans = max(Ans, Sum - MSS(A + 1, n - 1, Min));
+    cout &lt;&lt; Ans &lt;&lt; endl;
+}</code></pre> </details> <p>同时也可以断环成链，转化为长度限制的最大字段和问题。</p> <h4 id=p2642><a href=https://www.luogu.com.cn/problem/P2642>P2642 最大双子段和</a><a class=headerlink href=#p2642 title="Permanent link">&para;</a></h4> <p>注意到一定存在一个分割点，将两个段分开，因此考虑枚举这个位置。</p> <p>我们预处理出来，一个位置之前、之后分别的最大字段和，加起来即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n, A[N];
+
+void init_MSS(int *F) {
+    F[0] = -1e9;
+    for (int i = 1; i &lt;= n; ++i)
+        F[i] = max(F[i - 1], 0ll) + A[i];
+    for (int i = 1; i &lt;= n; ++i)
+        F[i] = max(F[i - 1], F[i]);
+}
+
+void init_rMSS(int *F) {
+    F[n + 1] = -1e9;
+    for (int i = n; i &gt;= 1; --i)
+        F[i] = max(F[i + 1], 0ll) + A[i];
+    for (int i = n; i &gt;= 1; --i)
+        F[i] = max(F[i + 1], F[i]);
+}
+
+int F[N], G[N];
+
+void Main() {
+    cin &gt;&gt; n;
+    copy_n(istream_iterator&lt;int&gt;(cin), n, A + 1);
+    init_MSS(F), init_rMSS(G);
+    int Ans = -1e9;
+    for (int i = 2; i &lt; n; ++i)
+        Ans = max(Ans, F[i - 1] + G[i + 1]);
+    cout &lt;&lt; Ans &lt;&lt; endl;
+}</code></pre> </details> <p>注意此时这道题要求序列两边非空。</p> <h4 id=p1121><a href=https://www.luogu.com.cn/problem/P1121>P1121 环状最大双子段和</a><a class=headerlink href=#p1121 title="Permanent link">&para;</a></h4> <p>容易推广，我们跑一次最大双字段和，两次最小双字段和即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>template&lt;int emp&gt;
+int calc(int n, int *A, function&lt;int(int, int)&gt; cmp) {
+    static int F[N], G[N];
+    F[0] = G[n + 1] = emp;
+    int Ans = emp;
+    for (int i = 1; i &lt;= n; ++i)
+        F[i] = cmp(F[i - 1], 0) + A[i];
+    for (int i = 1; i &lt;= n; ++i)
+        F[i] = cmp(F[i], F[i - 1]);
+    for (int i = n; i &gt;= 1; --i)
+        G[i] = cmp(G[i + 1], 0) + A[i];
+    for (int i = n; i &gt;= 1; --i)
+        G[i] = cmp(G[i], G[i + 1]);
+    for (int i = 2; i &lt; n; ++i)
+        Ans = cmp(Ans, F[i - 1] + G[i + 1]);
+    return Ans;
+}
+
+int n, Sum, A[N];
+
+void Main() {
+    cin &gt;&gt; n, Sum = 0;
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; A[i], Sum += A[i];
+    auto Max = [] (int a, int b) {
+        return max(a, b);
+    };
+    auto Min = [] (int a, int b) {
+        return min(a, b);
+    };
+    int Ans = calc &lt; (int) -1e9 &gt; (n, A, Max);
+    Ans = max(Ans, Sum - calc &lt; 0 &gt; (n - 1, A, Min));
+    Ans = max(Ans, Sum - calc &lt; 0 &gt; (n - 1, A + 1, Min));
+    cout &lt;&lt; Ans &lt;&lt; endl;
+}</code></pre> </details> <p>需要注意每个题可能会是否可以相邻、是否可以为空做出要求，不过很好改。</p> <h4 id=cses-1644><a href=https://vjudge.net/problem/CSES-1644>CSES-1644 有长度限制</a><a class=headerlink href=#cses-1644 title="Permanent link">&para;</a></h4> <p>我们要求长度在区间 <span class=arithmatex>\([L,R]\)</span> 内的最大字段和。</p> <p>具体内容见单调队列优化 DP 文章。</p> <h4 id=p1020-noip1999><a href=https://www.luogu.com.cn/problem/P1020>P1020 [NOIP1999 提高组] 导弹拦截</a><a class=headerlink href=#p1020-noip1999 title="Permanent link">&para;</a></h4> <p>第一个显然就是最长不上升子序列，令 <span class=arithmatex>\(x\gets-x\)</span> 跑 LIS 即可。</p> <p>第二个也是经典东西：狄尔沃斯（Dilworth）定理，其指出：</p> <p>有限偏序集合中，包含元素最多反链的元素数等于包含链数最少的链分解的链数。</p> <p>这个量被定义为该偏序集的宽度；而在此题中：</p> <p>将一个序列剖成若干个单调不升子序列的最小个数等于该序列最长上升子序列的长度。</p> <p>跑两次 LIS 解决即可。</p> <h4 id=p1091-noip2004><a href=https://www.luogu.com.cn/problem/P1091>P1091 [NOIP2004 提高组] 合唱队形</a><a class=headerlink href=#p1091-noip2004 title="Permanent link">&para;</a></h4> <p>我们发现就是正反两次 LIS 即可。</p> <p>但是这道题要记录以 <span class=arithmatex>\(i\)</span> 结尾的 LIS，也直接记录即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>void Main() {
+    cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; A[i];
+    memset(F, 0x3f, sizeof F);
+    memset(G, 0x3f, sizeof G);
+    for (int i = 1; i &lt;= n; ++i) {
+        int j = lower_bound(F + 1, F + n + 1, A[i]) - F;
+        P[i] = j, F[j] = A[i];
+    }
+    for (int i = n; i &gt;= 1; --i) {
+        int j = lower_bound(G + 1, G + n + 1, A[i]) - G;
+        Q[i] = j, G[j] = A[i];
+    }
+    int ans = 0;
+    for (int i = 1; i &lt;= n; ++i)
+        ans = max(ans, P[i] + Q[i] - 1);
+    cout &lt;&lt; n - ans &lt;&lt; endl;
+}</code></pre> </details> <h4 id=p8020-ontak2015-badania-naukowe><a href=https://www.luogu.com.cn/problem/P8020>P8020 [ONTAK2015] Badania naukowe</a><a class=headerlink href=#p8020-ontak2015-badania-naukowe title="Permanent link">&para;</a></h4> <p>有意思的题，完整版看我题解：<a href=https://www.luogu.com.cn/article/6n2rn1mf>https://www.luogu.com.cn/article/6n2rn1mf</a>。</p> <p>我们使用 <span class=arithmatex>\(P(i)\)</span> 表示从 <span class=arithmatex>\(A_i\)</span> 开始匹配 <span class=arithmatex>\(C\)</span>，到最后一个字符的下标 <span class=arithmatex>\(j\)</span>。</p> <p>同理，使用 <span class=arithmatex>\(Q(i)\)</span> 表示从 <span class=arithmatex>\(B_i\)</span> 开始匹配 <span class=arithmatex>\(C\)</span>，最后一个字符的下标 <span class=arithmatex>\(j\)</span>。</p> <p>设 <span class=arithmatex>\(F(i,j)\)</span> 表示 <span class=arithmatex>\(A[1,i]\)</span> 和 <span class=arithmatex>\(B[1,j]\)</span> 的 LCS（最长公共子序列）。</p> <p>设 <span class=arithmatex>\(G(i,j)\)</span> 表示 <span class=arithmatex>\(A[i,n]\)</span> 和 <span class=arithmatex>\(B[j,m]\)</span> 的 LCS（最长公共子序列）。</p> <p>那么，答案可以表示为，</p> <div class=arithmatex>\[ \max_{i,j}\{ F(i-1,j-1)+G(P(i)+1,Q(j)+1)+\lvert C\rvert, \text{if $\langle i,j\rangle$ is valid.} \} \]</div> <p>也就是前面的和后面的 LCS 可以直接计入答案，再加上子串 <span class=arithmatex>\(C\)</span> 的长度。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>constexpr int N = 3e3 + 10;
+
+void init_matching(int n, int *A, int k, int *C, int *P) {
+    for (int i = 1; i + k - 1 &lt;= n; ++i) {
+        int p = i, q = 1;
+        while (p &lt;= n &amp;&amp; q &lt;= k) {
+            q += (A[p] == C[q]);
+            ++p;
+        }
+        P[i] = (q &gt; k) ? p - 1 : 0;
+    }
+}
+
+int n, A[N], P[N];
+int m, B[N], Q[N];
+int k, C[N];
+int F[N][N], G[N][N];
+
+void init_LCS() {
+    for (int i = 1; i &lt;= n; ++i)
+        for (int j = 1; j &lt;= m; ++j)
+            if (A[i] == B[j])
+                F[i][j] = F[i - 1][j - 1] + 1;
+            else
+                F[i][j] = max(F[i][j - 1], F[i - 1][j]);
+}
+
+void init_rLCS() {
+    for (int i = n; i &gt;= 1; --i)
+        for (int j = m; j &gt;= 1; --j)
+            if (A[i] == B[j])
+                G[i][j] = G[i + 1][j + 1] + 1;
+            else
+                G[i][j] = max(G[i][j + 1], G[i + 1][j]);
+}
+
+int get_ans() {
+    int Ans = -1;
+    for (int i = 1; i + k - 1 &lt;= n; ++i)
+        for (int j = 1; j + k - 1 &lt;= m; ++j)
+            if (P[i] &amp;&amp; Q[j])
+                Ans = max(Ans, F[i - 1][j - 1] + G[P[i] + 1][Q[j] + 1] + k);
+    return Ans;
+}
+
+void Main() {
+    cin &gt;&gt; n;
+    copy_n(istream_iterator&lt;int&gt;(cin), n, A + 1);
+    cin &gt;&gt; m;
+    copy_n(istream_iterator&lt;int&gt;(cin), m, B + 1);
+    cin &gt;&gt; k;
+    copy_n(istream_iterator&lt;int&gt;(cin), k, C + 1);
+    init_matching(n, A, k, C, P);
+    init_matching(m, B, k, C, Q);
+    init_LCS(), init_rLCS();
+    cout &lt;&lt; get_ans() &lt;&lt; endl;
+}</code></pre> </details> <h2 id=_5>路径模型<a class=headerlink href=#_5 title="Permanent link">&para;</a></h2> <h3 id=_6>一维模型<a class=headerlink href=#_6 title="Permanent link">&para;</a></h3> <h4 id=p1541-noip2010><a href=https://www.luogu.com.cn/problem/P1541>P1541 [NOIP2010 提高组] 乌龟棋</a><a class=headerlink href=#p1541-noip2010 title="Permanent link">&para;</a></h4> <p>看题解区第一篇的思路，是很简单的，但是我们使用记忆化搜索可以更简单的做。</p> <p>设，</p> <div class=arithmatex>\[ F(x,a_1,a_2,a_3,a_4) \]</div> <p>表示走到 <span class=arithmatex>\(x\)</span> 位置，剩余 <span class=arithmatex>\(a_k\)</span> 张走 <span class=arithmatex>\(k\)</span> 的卡片（<span class=arithmatex>\(1\le k\le4\)</span>）的最大得分。</p> <p>首先这么做空间都不够，但是我们是记忆化搜索！</p> <p>我们知道一个确定的状态 <span class=arithmatex>\((a_1,a_2,a_3,a_4)\)</span> 一定对应着一个唯一的 <span class=arithmatex>\(x\)</span>。</p> <p>也就是说第一维度其实在 <span class=arithmatex>\(k^4\)</span> 的空间中只有一个是有效的，我们直接令数组表示这个即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n, m;
+
+int A[400], mem[40][40][40][40];
+
+int dfs(int x, int a, int b, int c, int d) {
+    if (a &lt; 0 || b &lt; 0 || c &lt; 0 || d &lt; 0)
+        return -1e9;
+    if (x &gt; n)
+        return -1e9;
+    if (x == n)
+        return A[n];
+    if (mem[a][b][c][d] != -1)
+        return mem[a][b][c][d];
+    return mem[a][b][c][d] = max({
+        mem[a][b][c][d],
+        dfs(x + 1, a - 1, b, c, d),
+        dfs(x + 2, a, b - 1, c, d),
+        dfs(x + 3, a, b, c - 1, d),
+        dfs(x + 4, a, b, c, d - 1)
+    }) + A[x];
+}
+
+void Main() {
+    cin &gt;&gt; n &gt;&gt; m;
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; A[i];
+    int C[5] = {0};
+    for (int i = 1; i &lt;= m; ++i) {
+        int x;
+        cin &gt;&gt; x;
+        ++C[x];
+    }
+    memset(mem, -1, sizeof mem);
+    cout &lt;&lt; dfs(1, C[1], C[2], C[3], C[4]) &lt;&lt; endl;
+}</code></pre> </details> <h4 id=p2285-hnoi2004><a href=https://www.luogu.com.cn/problem/P2285>P2285 [HNOI2004] 打鼹鼠</a><a class=headerlink href=#p2285-hnoi2004 title="Permanent link">&para;</a></h4> <p>简单题，设 <span class=arithmatex>\(F(i)\)</span> 表示达到第 <span class=arithmatex>\(i\)</span> 个，钦定 <span class=arithmatex>\(i\)</span> 必须打的最大个数。</p> <p>注意到我们一定是从一个移到另一个，打完再继续移动，因此这么设计是正确的。</p> <p>考虑转移，</p> <div class=arithmatex>\[ F(i)=\max\{F(j)+1,\operatorname{if}j\to i\text{ is valid.}\} \]</div> <p>直接做是 <span class=arithmatex>\(\mathcal O(N^2)\)</span> 的，但是似乎可以过。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n, m;
+
+struct node {
+    int t, x, y;
+} a[N];
+
+int F[N];
+
+int dis(int i, int j) {
+    return abs(a[i].x - a[j].x) + abs(a[i].y - a[j].y);
+}
+
+bool check(int j, int i) {
+    return dis(i, j) &lt;= abs(a[i].t - a[j].t);
+}
+
+void Main() {
+    cin &gt;&gt; n &gt;&gt; m;
+    for (int i = 1; i &lt;= m; ++i)
+        cin &gt;&gt; a[i].t &gt;&gt; a[i].x &gt;&gt; a[i].y;
+    for (int i = 1; i &lt;= m; ++i) {
+        F[i] = 1;
+        for (int j = 1; j &lt; i; ++j)
+            if (check(j, i))
+                F[i] = max(F[i], F[j] + 1);
+    }
+    int ans = F[1];
+    for (int i = 2; i &lt;= m; ++i)
+        ans = max(ans, F[i]);
+    cout &lt;&lt; ans &lt;&lt; endl;
+}</code></pre> </details> <h4 id=p4933><a href=https://www.luogu.com.cn/problem/P4933>P4933 大师</a><a class=headerlink href=#p4933 title="Permanent link">&para;</a></h4> <p>好题。</p> <p>设 <span class=arithmatex>\(F(i,v)\)</span> 表示以 <span class=arithmatex>\(i\)</span> 结尾长度至少为 <span class=arithmatex>\(2\)</span> 的公差为 <span class=arithmatex>\(v\)</span> 的等差数列个数。</p> <p>那么，虽然 <span class=arithmatex>\(v\)</span> 最大可能是 <span class=arithmatex>\(2\times10^4\)</span> 级别的，但是最多只有 <span class=arithmatex>\(\mathcal O(N)\)</span> 个是有效的。</p> <p>因此，我们对于每个 <span class=arithmatex>\(i\)</span> 枚举前一个 <span class=arithmatex>\(j\)</span>，进行转移：</p> <div class=arithmatex>\[ F(i,v)=\sum_{j&lt;i}(F(j,v)+1),\text{if $A_i-A_j=v$}. \]</div> <p>那么，答案就是，</p> <div class=arithmatex>\[ \text{Ans}=n+\sum_{i=1}^n\sum_vF(i,v) \]</div> <p>这么做时间复杂度是 <span class=arithmatex>\(\mathcal O(n^2)\)</span> 的，可以使用 <code>std::unordered_map</code> 达到这个复杂度。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n, A[N];
+
+ll S[N];
+
+unordered_map&lt;int, ll&gt; F[N];
+
+void Main() {
+    cin &gt;&gt; n;
+    copy_n(istream_iterator&lt;int&gt;(cin), n, A + 1);
+    for (int i = 1; i &lt;= n; ++i)
+        for (int j = 1; j &lt; i; ++j)
+            F[i][A[i] - A[j]] = (F[i][A[i] - A[j]] + F[j][A[i] - A[j]] + 1) % MOD;
+    ll ans = n;
+    for (int i = 1; i &lt;= n; ++i)
+        for (auto t : F[i])
+            ans = (ans + t.second) % MOD;
+    cout &lt;&lt; ans &lt;&lt; endl;
+}</code></pre> </details> <h4 id=p2340-usaco03fall-cow-exhibition-g><a href=https://www.luogu.com.cn/problem/P2340>P2340 [USACO03FALL] Cow Exhibition G</a><a class=headerlink href=#p2340-usaco03fall-cow-exhibition-g title="Permanent link">&para;</a></h4> <p>考虑经典状态设计，设 <span class=arithmatex>\(F(i,x)\)</span> 表示前 <span class=arithmatex>\(i\)</span> 头牛，智商为 <span class=arithmatex>\(x\)</span> 时的最大情商。</p> <p>转移直接转移即可，可以使用 <code>unordered_map</code> 更方便的实现，那么就是，</p> <p>设 <span class=arithmatex>\(F(i)\)</span> 表示前 <span class=arithmatex>\(i\)</span> 头牛的决策集合，一个二元组第一维为智商，第二维为对于的最大情商。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n, A[N], B[N];
+unordered_map&lt;int, int&gt; F[N];
+
+void update(int i, int x, int y) {
+    if (F[i].count(x))
+        F[i][x] = max(F[i][x], y);
+    else
+        F[i][x] = y;
+}
+
+void Main() {
+    cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; A[i] &gt;&gt; B[i];
+    update(1, 0, 0);
+    for (int i = 1; i &lt;= n; ++i) {
+        for (auto t : F[i]) {
+            update(i + 1, t.first + A[i], t.second + B[i]);
+            update(i + 1, t.first, t.second);
+        }
+    }
+    int Ans = -1e9;
+    for (auto t : F[n + 1])
+        if (t.first &gt;= 0 &amp;&amp; t.second &gt;= 0)
+            Ans = max(Ans, t.first + t.second);
+    cout &lt;&lt; Ans &lt;&lt; endl;
+}</code></pre> </details> <h4 id=p4310><a href=https://www.luogu.com.cn/problem/P4310>P4310 绝世好题</a><a class=headerlink href=#p4310 title="Permanent link">&para;</a></h4> <p>注意到只需要相邻与不为零，那么容易想到，</p> <p>设 <span class=arithmatex>\(F(i)\)</span> 表示以 <span class=arithmatex>\(i\)</span> 结尾的最大长度，转移，</p> <div class=arithmatex>\[ F(i)=\max\{F(j)+1,\text{if $(A_i$ bitand $B_j)\neq0$}\} \]</div> <p>超时了，我们考虑拆位，注意到一个数会联通所有其中 <span class=arithmatex>\(1\)</span> 的位。</p> <p>那么我们只需要把这个数的所有位统一考虑即可，即用这个数更新所有的联通的位的答案。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n, A[N], F[40];
+
+void Main() {
+    int n;
+    cin &gt;&gt; n;
+    int ans = 1;
+    for (int i = 1; i &lt;= n; ++i) {
+        int x;
+        cin &gt;&gt; x;
+        for (int k = 0; k &lt; 40; ++k)
+            if ((x &gt;&gt; k) &amp; 1)
+                ans = max(ans, ++F[k]);
+        for (int k = 0; k &lt; 40; ++k)
+            if ((x &gt;&gt; k) &amp; 1)
+                F[k] = max(F[k], ans);
+    }
+    cout &lt;&lt; ans &lt;&lt; endl;
+}</code></pre> </details> <h4 id=p1854><a href=https://www.luogu.com.cn/problem/P1854>P1854 花店橱窗布置</a><a class=headerlink href=#p1854 title="Permanent link">&para;</a></h4> <p>题面复杂实际简单。</p> <p>设 <span class=arithmatex>\(F(i,j)\)</span> 表示前 <span class=arithmatex>\(i\)</span> 支花插在前 <span class=arithmatex>\(j\)</span> 个花瓶中，其中钦定第 <span class=arithmatex>\(i\)</span> 支花放在 <span class=arithmatex>\(j\)</span> 花瓶中的最大得分。</p> <p>考虑转移，枚举第 <span class=arithmatex>\(i-1\)</span> 支花插在哪里即可，</p> <div class=arithmatex>\[ F(i,j)=A(i,j)+\max_{k&lt;j}\{F(i-1,k\} \]</div> <p>复杂度是 <span class=arithmatex>\(\mathcal O(N^3)\)</span> 的，可以接受。</p> <p>注意到要记录方案，那么设 <span class=arithmatex>\(G(i,j)\)</span> 表示 <span class=arithmatex>\(F(i,j)\)</span> 是从哪个 <span class=arithmatex>\(k\)</span> 转移来的，直接倒序记录即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n, m;
+
+int A[N][N];
+int F[N][N], G[N][N];
+
+void Main() {
+    cin &gt;&gt; n &gt;&gt; m;
+    for (int i = 1; i &lt;= n; ++i)
+        for (int j = 1; j &lt;= m; ++j)
+            cin &gt;&gt; A[i][j];
+    memset(F, -0x3f, sizeof F);
+    F[0][0] = 0;
+    for (int i = 1; i &lt;= n; ++i)
+        for (int j = 1; j &lt;= m; ++j)
+            for (int k = 0; k &lt; j; ++k)
+                if (F[i - 1][k] + A[i][j] &gt; F[i][j])
+                    F[i][j] = F[i - 1][k] + A[i][j], G[i][j] = k;
+    int Ans = -1e9, Pos = 0;
+    for (int i = 1; i &lt;= m; ++i)
+        if (F[n][i] &gt; Ans)
+            Ans = F[n][i], Pos = i;
+    cout &lt;&lt; Ans &lt;&lt; endl;
+    vector&lt;int&gt; Res;
+    for (int i = n; i &gt;= 1; --i) {
+        Res.push_back(Pos);
+        Pos = G[i][Pos];
+    }
+    for (auto it = Res.rbegin(); it != Res.rend(); ++it)
+        cout &lt;&lt; *it &lt;&lt; " ";
+    cout &lt;&lt; endl;
+}</code></pre> </details> <h3 id=_7>二维模型<a class=headerlink href=#_7 title="Permanent link">&para;</a></h3> <h4 id=p1216-ioi1994><a href=https://www.luogu.com.cn/problem/P1216>P1216 [IOI1994] 数字三角形</a><a class=headerlink href=#p1216-ioi1994 title="Permanent link">&para;</a></h4> <p>设 <span class=arithmatex>\(F(i,j)\)</span> 表示走到第 <span class=arithmatex>\(i\)</span> 行第 <span class=arithmatex>\(j\)</span> 列的最大价值。</p> <div class=arithmatex>\[ F(i,j)=A(i,j)+\max\{F(i-1,j),F(i-1,j-1)\} \]</div> <p>表示从上一行的这一个、上一个转移。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>dp[0][0] = 0;
+for (int i = 1; i &lt;= n; ++i)
+    for (int j = 1; j &lt;= i; ++j)
+        dp[i][j] = a[i][j] + max(dp[i - 1][j], dp[i - 1][j - 1]);
+int ans = -1;
+for (int i = 1; i &lt;= n; ++i)
+    ans = max(ans, dp[n][i]);</code></pre> </details> <h4 id=p1002-noip2002><a href=https://www.luogu.com.cn/problem/P1002>P1002 [NOIP2002 普及组] 过河卒</a><a class=headerlink href=#p1002-noip2002 title="Permanent link">&para;</a></h4> <p>经典的地图上 DP 的问题。</p> <p>设 <span class=arithmatex>\(F(x,y)\)</span> 表示到 <span class=arithmatex>\((x,y)\)</span> 的方案数，那么显然，</p> <div class=arithmatex>\[ F(x,y)=\begin{cases} 0&amp;\text{if $x,y$ is not valid}\\ 1&amp;\text{if $x=1$ or $y=1$}\\ F(x-1,y)+F(x,y-1)&amp;\text{otherwise.} \end{cases} \]</div> <p>时间复杂度是 <span class=arithmatex>\(\mathcal O(N^2)\)</span> 的，注意开 <code>long long</code>。</p> <h4 id=p1004-noip2000><a href=https://www.luogu.com.cn/problem/P1004>P1004 [NOIP2000 提高组] 方格取数</a><a class=headerlink href=#p1004-noip2000 title="Permanent link">&para;</a></h4> <p>经典双进程 DP 思路，首先容易想到四方 DP 的思路。</p> <p>设 <span class=arithmatex>\(F(x_1,y_1,x_2,y_2)\)</span> 表示第一、二个进程分别走到的位置，最大得分。</p> <p>每次转移一起走一个即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>
+int n;
+
+int A[11][11];
+int F[11][11][11][11];
+
+int w(int x1, int y1, int x2, int y2) {
+    if (x1 == x2 and y1 == y2)
+        return A[x1][y1];
+    return A[x1][y1] + A[x2][y2];
+}
+
+void Main() {
+    cin &gt;&gt; n;
+    int x, y, t;
+    while (cin &gt;&gt; x &gt;&gt; y &gt;&gt; t)
+        A[x][y] = t;
+    for (int x1 = 1; x1 &lt;= n; ++x1)
+        for (int y1 = 1; y1 &lt;= n; ++y1)
+            for (int x2 = 1; x2 &lt;= n; ++x2)
+                for (int y2 = 1; y2 &lt;= n; ++y2)
+                    F[x1][y1][x2][y2] = max({
+                    F[x1 - 1][y1][x2][y2 - 1],
+                    F[x1 - 1][y1][x2 - 1][y2],
+                    F[x1][y1 - 1][x2][y2 - 1],
+                    F[x1][y1 - 1][x2 - 1][y2]
+                }) + w(x1, y1, x2, y2);
+    cout &lt;&lt; F[n][n][n][n] &lt;&lt; endl;
+}</code></pre> </details> <p>还可以优化到三方。</p> <p>设 <span class=arithmatex>\(F(k,x_1,x_2)\)</span> 表示各自走了 <span class=arithmatex>\(k\)</span> 步，分别到了两个行数的最大得分。</p> <p>转移也是直接一起走一步即可，代码略。</p> <h4 id=p1006-noip2008><a href=https://www.luogu.com.cn/problem/P1006>P1006 [NOIP2008 提高组] 传纸条</a><a class=headerlink href=#p1006-noip2008 title="Permanent link">&para;</a></h4> <p>和上一题类似，但是要求路径不交。</p> <p>我们令 <span class=arithmatex>\(F(i,j,k,l)\)</span> 表示两个人的位置，并钦定 <span class=arithmatex>\((i,j)\)</span> 靠左下、<span class=arithmatex>\((k,l)\)</span> 靠右上。</p> <p>那么路径不交的充要条件就是始终 <span class=arithmatex>\(l&gt;j\)</span>，这是显然的。</p> <p>那么直接转移即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n, m;
+int A[N][N];
+int F[N][N][N][N];
+
+void Main() {
+    cin &gt;&gt; n &gt;&gt; m;
+    for (int i = 1; i &lt;= n; ++i)
+        for (int j = 1; j &lt;= m; ++j)
+            cin &gt;&gt; A[i][j];
+    for (int i = 1; i &lt;= n; ++i)
+        for (int j = 1; j &lt;= m; ++j)
+            for (int k = 1; k &lt;= n; ++k)
+                for (int l = j + 1; l &lt;= m; ++l)
+                    F[i][j][k][l] = max({
+                    F[i - 1][j][k][l - 1],
+                    F[i - 1][j][k - 1][l],
+                    F[i][j - 1][k][l - 1],
+                    F[i][j - 1][k - 1][l]
+                }) + A[i][j] + A[k][l];
+    cout &lt;&lt; F[n][m - 1][n - 1][m] &lt;&lt; endl;
+}</code></pre> </details> <h2 id=_8>分组模型<a class=headerlink href=#_8 title="Permanent link">&para;</a></h2> <h3 id=_9>合并模型<a class=headerlink href=#_9 title="Permanent link">&para;</a></h3> <h4 id=p3147-usaco16open-262144-p><a href=https://www.luogu.com.cn/problem/P3147>P3147 [USACO16OPEN] 262144 P</a><a class=headerlink href=#p3147-usaco16open-262144-p title="Permanent link">&para;</a></h4> <p>设 <span class=arithmatex>\(F(i,x)\)</span> 表示左端点为 <span class=arithmatex>\(x\)</span>，最近可能在哪里合并出来 <span class=arithmatex>\(i\)</span>。</p> <p>转移显然，</p> <div class=arithmatex>\[ F(i,x)=F(i-1,F(i-1,x)+1) \]</div> <p>考虑初始状态，</p> <div class=arithmatex>\[ F(A_i,i)=i \]</div> <p>注意到合并出来的数字一定是递增的，那么直接转移即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>void Main() {
+    cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; ++i) {
+        int x;
+        cin &gt;&gt; x;
+        F[x][i] = i;
+    }
+    int ans = 0;
+    for (int i = 2; i &lt; 60; ++i)
+        for (int x = 1; x &lt;= n; ++x) {
+            if (!F[i][x] &amp;&amp; F[i - 1][x])
+                F[i][x] = F[i - 1][F[i - 1][x] + 1];
+            if (F[i][x])
+                ans = i;
+        }
+    cout &lt;&lt; ans &lt;&lt; endl;
+}</code></pre> </details> <h3 id=_10>分割模型<a class=headerlink href=#_10 title="Permanent link">&para;</a></h3> <h4 id=p1868><a href=https://www.luogu.com.cn/problem/P1868>P1868 饥饿的奶牛</a><a class=headerlink href=#p1868 title="Permanent link">&para;</a></h4> <p>这个也是经典转移思想的应用：</p> <p>每次只考虑最后一次选的（类似 P9871 [NOIP2023] 天天爱打卡的方法）！</p> <p>设 <span class=arithmatex>\(F(x)\)</span> 表示 <span class=arithmatex>\([1,x]\)</span> 的答案，如何转移？</p> <p>我们钦定选择区间 <span class=arithmatex>\([L,R]\)</span> 其中 <span class=arithmatex>\(R=x\)</span>，那么，</p> <div class=arithmatex>\[ F(x)=F(L-1)+(R-L+1) \]</div> <p>但是这样会从转移的间隙中漏掉答案，怎么办？</p> <p>考虑每一时刻对 <span class=arithmatex>\(F(x)\)</span> 做前缀最大值，即把前面的答案加到这上面即可。</p> <p>即，</p> <div class=arithmatex>\[ F(x)=\max_{j&lt;L}F(j)+(R-L+1) \]</div> <p>暴力转移的复杂度是 <span class=arithmatex>\(\mathcal O(N+V)\)</span> 的，其中 <span class=arithmatex>\(V=\max R\)</span>。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n;
+
+vector&lt;int&gt; g[N];
+
+int F[N];
+
+void Main() {
+    cin &gt;&gt; n;
+    int mx = 0;
+    for (int i = 1; i &lt;= n; ++i) {
+        int x, y;
+        cin &gt;&gt; x &gt;&gt; y;
+        ++x, ++y;
+        g[y].push_back(x);
+        mx = max(mx, y);
+    }
+    int Ans = 0;
+    for (int i = 1; i &lt;= mx; ++i) {
+        F[i] = F[i - 1];
+        for (int j : g[i])
+            F[i] = max(F[i], F[j - 1] + i - j + 1);
+        Ans = max(Ans, F[i]);
+    }
+    cout &lt;&lt; Ans &lt;&lt; endl;
+}</code></pre> </details> <p>考虑如果我们把 <span class=arithmatex>\(R_i\)</span> 放大到 <span class=arithmatex>\(10^9\)</span> 或者更大怎么做？</p> <p>还是类似，天天爱打卡卡，不过是简化版。</p> <p>注意到真正有用的状态只有 <span class=arithmatex>\(F(L_i-1),F(R_i)\)</span> 这大约 <span class=arithmatex>\(2N\)</span> 个。</p> <p>那么我们类似离散化的，将所有的的这些有用的值处理，其他的直接复制前面的即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n;
+
+int L[N], R[N];
+
+vector&lt;int&gt; g[2 * N];
+
+int F[2 * N];
+
+void Main() {
+    cin &gt;&gt; n;
+    int mx = 0;
+    vector&lt;int&gt; S{-1};
+    for (int i = 1; i &lt;= n; ++i) {
+        cin &gt;&gt; L[i] &gt;&gt; R[i];
+        ++L[i], ++R[i];
+        S.push_back(L[i] - 1);
+        S.push_back(R[i]);
+    }
+    sort(S.begin(), S.end());
+    S.erase(unique(S.begin(), S.end()), S.end());
+#define get_id(x) (lower_bound(S.begin(), S.end(), x) - S.begin())
+    for (int i = 1; i &lt;= n; ++i)
+        g[get_id(R[i])].push_back(get_id(L[i] - 1));
+    int Ans = 0;
+    for (int i = 1; i &lt; S.size(); ++i) {
+        F[i] = F[i - 1];
+        for (int j : g[i])
+            F[i] = max(F[i], F[j] + S[i] - S[j]);
+        Ans = max(Ans, F[i]);
+    }
+    cout &lt;&lt; Ans &lt;&lt; endl;
+}</code></pre> </details> <h4 id=p1874><a href=https://www.luogu.com.cn/problem/P1874>P1874 快速求和</a><a class=headerlink href=#p1874 title="Permanent link">&para;</a></h4> <p>有一些有意思的技巧。</p> <p>首先我们设 <span class=arithmatex>\(S(i,j)\)</span> 表示 <span class=arithmatex>\([i,j]\)</span> 的数位组成的数字。</p> <p>考虑这个东西如何计算，首先注意到我们要组成的数最大是 <span class=arithmatex>\(10^5\)</span>，那么超过的都没意义。</p> <p>因此，我们考虑取模（？）。</p> <p>具体的，我们令 <span class=arithmatex>\(S(i,j)\)</span> 表示 <span class=arithmatex>\([i,j]\)</span> 的数字模一个大数 <span class=arithmatex>\(P\)</span>（比 <span class=arithmatex>\(10^5\)</span> 大即可）。</p> <p>那么，我们只需要类似字符串哈希的，求出 <span class=arithmatex>\(S(i)\)</span> 表示前 <span class=arithmatex>\(i\)</span> 个数码的数字，然后，</p> <div class=arithmatex>\[ S(i,j)=S(j)-S(i-1)\times P^{j-i+1} \]</div> <p>即可，这是很有意思的。</p> <p>然后考虑求解答案，设 <span class=arithmatex>\(F(i,j)\)</span> 表示考虑前 <span class=arithmatex>\(i\)</span> 个数位，组成 <span class=arithmatex>\(j\)</span> 的最小花费。</p> <p>那么转移只需要枚举这个加号的位置即可，</p> <div class=arithmatex>\[ F(i,j)=\min_{k&lt;i}\{F(k,j-S(k+1,i))+1\} \]</div> <p>直接转移即可，注意到还是 <span class=arithmatex>\(S(k+1,i)&gt;j\)</span> 之后就没意义了。</p> <p>因此反着枚举超过就 <code>break</code> 即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>constexpr int MOD = 1e9 + 7;
+
+int n, tar;
+
+string str;
+
+int R[50], S[50];
+
+void init() {
+    R[0] = 1, S[0] = 0;
+    for (int i = 1; i &lt;= n; ++i) {
+        R[i] = R[i - 1] * 10ll % MOD;
+        S[i] = (S[i - 1] * 10ll % MOD + str[i - 1] - '0') % MOD;
+    }
+}
+
+int get(int l, int r) {
+    return (S[r] - 1ll * S[l - 1] * R[r - l + 1] % MOD + MOD) % MOD;
+}
+
+int F[50][(int)1e5 + 10];
+
+void Main() {
+    cin &gt;&gt; str &gt;&gt; tar;
+    n = str.size(), init();
+    memset(F, 0x3f, sizeof F);
+    F[0][0] = -1;
+    for (int i = 1; i &lt;= n; ++i)
+        for (int j = 1; j &lt;= tar; ++j) {
+            for (int k = i - 1; k &gt;= 0; --k) {
+                int t = get(k + 1, i);
+                if (t &gt; j)
+                    break;
+                F[i][j] = min(F[i][j], F[k][j - t] + 1);
+            }
+        }
+    int Ans = F[n][tar];
+    if (Ans + 1 &gt;= 0x3f3f3f3f)
+        Ans = -1;
+    cout &lt;&lt; Ans &lt;&lt; endl;
+}</code></pre> </details> <h2 id=_11>其他例题<a class=headerlink href=#_11 title="Permanent link">&para;</a></h2> <h3 id=_12>简单题<a class=headerlink href=#_12 title="Permanent link">&para;</a></h3> <h4 id=p1095-noip2007><a href=https://www.luogu.com.cn/problem/P1095>P1095 [NOIP2007 普及组] 守望者的逃离</a><a class=headerlink href=#p1095-noip2007 title="Permanent link">&para;</a></h4> <p>注意到，如果我们一直使用魔法、等着恢复的话，平均的每秒移动是不优于直接走的。</p> <p>因此，答案一定可以表示为，花光魔法，然后等一定时间后一直走到终点的路径。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>void Main() {
+    cin &gt;&gt; M &gt;&gt; S &gt;&gt; T;
+    for (int i = 1; i &lt;= T; ++i) {
+        if (M &gt;= 10)
+            F[i] = F[i - 1] + 60, M -= 10;
+        else
+            F[i] = F[i - 1], M += 4;
+    }
+    for (int i = 1; i &lt;= T; ++i) {
+        if (F[i] &lt; F[i - 1] + 17)
+            F[i] = F[i - 1] + 17;
+        if (F[i] &gt;= S) {
+            cout &lt;&lt; "Yes" &lt;&lt; endl;
+            cout &lt;&lt; i &lt;&lt; endl;
+            return;
+        }
+    }
+    cout &lt;&lt; "No" &lt;&lt; endl;
+    cout &lt;&lt; F[T] &lt;&lt; endl;
+}</code></pre> </details> <p>下面的 <code>F[i] &lt; F[i - 1] + 17</code> 一定会从某一个点开始一直执行，因此正确性是显然的。</p> <h4 id=p1650><a href=https://www.luogu.com.cn/problem/P1650>P1650 田忌赛马</a><a class=headerlink href=#p1650 title="Permanent link">&para;</a></h4> <p>注意到田忌出马，一定是最强的几个加上最弱的几个。</p> <p>其中强的用于获胜得分，弱的用于摸鱼混轮数让强的得分。</p> <p>因此，我们考虑 DP，令 <span class=arithmatex>\(F(i,j)\)</span> 表示：</p> <p>进行了 <span class=arithmatex>\(i\)</span> 轮，田忌从强的出了 <span class=arithmatex>\(j\)</span> 个的最大分数。</p> <p>考虑第 <span class=arithmatex>\(i\)</span> 个田忌出什么，讨论即可，转移：</p> <div class=arithmatex>\[ F(i,j)=\max\{F(i-1,j)+w(i,n-(i-j)+1),F(i-1,j-1)+w(i,j)\} \]</div> <p>其中 <span class=arithmatex>\(w(i,j)\)</span> 表示齐王的第 <span class=arithmatex>\(i\)</span> 匹马对田忌的第 <span class=arithmatex>\(j\)</span> 匹马的得分。</p> <p>直接转移即可，时间复杂度 <span class=arithmatex>\(\mathcal O(N^2)\)</span>。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>void Main() {
+    cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; A[i];
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; B[i];
+    sort(A + 1, A + n + 1);
+    sort(B + 1, B + n + 1);
+    for (int i = 1; i &lt;= n; ++i) {
+        F[i][0] = F[i - 1][0] + G(i, n - i + 1);
+        F[i][i] = F[i - 1][i - 1] + G(i, i);
+        for (int j = 1; j &lt; i; ++j)
+            F[i][j] = max(F[i - 1][j] + G(i, n - (i - j) + 1), F[i - 1][j - 1] + G(i, j));
+    }
+    int Ans = -1e9;
+    for (int i = 0; i &lt;= n; ++i)
+        Ans = max(Ans, F[n][i]);
+    cout &lt;&lt; Ans &lt;&lt; endl;
+}</code></pre> </details> <h4 id=p1435-ioi2000><a href=https://www.luogu.com.cn/problem/P1435>P1435 [IOI2000] 回文字串</a><a class=headerlink href=#p1435-ioi2000 title="Permanent link">&para;</a></h4> <p>这题也有区间 DP 做法。</p> <p>注意到答案一定是字符串长度减去最长回文子串。</p> <p>考虑如何求最长回文子串，容易想到是将字符串逆序后求 LCS 即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int F[1010][1010];
+
+// LCS: a.size() == b.size()
+int Main(string a, string b) {
+    int n = a.size();
+    memset(F, 0, sizeof F);
+    for (int i = 1; i &lt;= n; ++i)
+        for (int j = 1; j &lt;= n; ++j)
+            if (a[i - 1] == b[j - 1])
+                F[i][j] = F[i - 1][j - 1] + 1;
+            else
+                F[i][j] = max(F[i][j - 1], F[i - 1][j]);
+    return F[n][n];
+}
+
+int Main(string a) {
+    string b(a);
+    reverse(begin(b), end(b));
+    return a.size() - Main(a, b);
+}
+
+void Main() {
+    string str;
+    cin &gt;&gt; str;
+    cout &lt;&lt; Main(str) &lt;&lt; endl;
+}</code></pre> </details> <h3 id=_13>中档题<a class=headerlink href=#_13 title="Permanent link">&para;</a></h3> <h4 id=cf1446b-catching-cheaters><a href=https://www.luogu.com.cn/problem/CF1446B>CF1446B Catching Cheaters</a><a class=headerlink href=#cf1446b-catching-cheaters title="Permanent link">&para;</a></h4> <p>注意到类似于双序列模型，我们记 <span class=arithmatex>\(F(i,j)\)</span> 表示 <span class=arithmatex>\(A[1\dots i]\)</span> 和 <span class=arithmatex>\(B[1\dots j]\)</span> 的最大价值，钦定 <span class=arithmatex>\(A(i)\)</span> 和 <span class=arithmatex>\(B(j)\)</span> 必须选择。容易写出：</p> <div class=arithmatex>\[ F(i,j)= \begin{cases} F(i-1,j-1)+2&amp;\text{if $A_i=B_j$}\\ \max\{0,F(i-1,j)-1,F(i,j-1)-1\}&amp;\text{otherwise.} \end{cases} \]</div> <p>直接实现即可。</p> <h4 id=p3558-poi2013-baj-bytecomputer><a href=https://www.luogu.com.cn/problem/P3558>P3558 [POI2013] BAJ-Bytecomputer</a><a class=headerlink href=#p3558-poi2013-baj-bytecomputer title="Permanent link">&para;</a></h4> <p>首先注意到只需要单调不降，因此让序列出现 <span class=arithmatex>\(-2,2\)</span> 等一定不优。</p> <p>因此考虑设 <span class=arithmatex>\(F(i,-1/0/1)\)</span> 表示考虑前 <span class=arithmatex>\(i\)</span> 个字符，</p> <p>让第 <span class=arithmatex>\(i\)</span> 个变为 <span class=arithmatex>\(-1/0/1\)</span> 且前面单调不降的最小次数。</p> <p>转移，若 <span class=arithmatex>\(A_i=-1\)</span>，</p> <div class=arithmatex>\[ \begin{aligned} F(i,-1)&amp;=F(i-1,-1)\\ F(i,0)&amp;=\inf\\ F(i,1)&amp;=F(i-1,1)+2 \end{aligned} \]</div> <p>若 <span class=arithmatex>\(A_i=0\)</span>，</p> <div class=arithmatex>\[ \begin{aligned} F(i,-1)&amp;=F(i-1,-1)+1\\ F(i,0)&amp;=\min\{F(i-1,0),F(i-1,-1)\}\\ F(i,1)&amp;=F(i-1,1)+1 \end{aligned} \]</div> <p>若 <span class=arithmatex>\(A_i=1\)</span>，</p> <div class=arithmatex>\[ \begin{aligned} F(i,-1)&amp;=F(i-1,-1)+2\\ F(i,0)&amp;=F(i-1,-1)+1\\ F(i,1)&amp;=\min\{F(i-1,-1),F(i-1,0),F(i-1,1)\} \end{aligned} \]</div> <p>这比较好理解，注意特判 <span class=arithmatex>\(i=1\)</span> 即可。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int n;
+
+struct node {
+    int a[3];
+    int &amp;operator [](int x) {
+        return a[x + 1];
+    }
+} F[N];
+
+void Main() {
+    cin &gt;&gt; n;
+    F[1][-1] = 1e9;
+    F[1][0] = 1e9;
+    F[1][1] = 1e9;
+    int x;
+    cin &gt;&gt; x;
+    F[1][x] = 0;
+    for (int i = 2; i &lt;= n; ++i) {
+        cin &gt;&gt; x;
+        if (x == -1) {
+            F[i][-1] = F[i - 1][-1];
+            F[i][0] = 1e9;
+            F[i][1] = F[i - 1][1] + 2;
+        }
+        if (x == 0) {
+            F[i][-1] = F[i - 1][-1] + 1;
+            F[i][0] = min(F[i - 1][0], F[i - 1][-1]);
+            F[i][1] = F[i - 1][1] + 1;
+        }
+        if (x == 1) {
+            F[i][-1] = F[i - 1][-1] + 2;
+            F[i][0] = F[i - 1][-1] + 1;
+            F[i][1] = min({F[i - 1][-1], F[i - 1][0], F[i - 1][1]});
+        }
+    }
+    int ans = min({F[n][-1], F[n][0], F[n][1]});
+    if (ans &gt;= 1e9) {
+        puts("BRAK");
+        return;
+    }
+    cout &lt;&lt; ans &lt;&lt; endl;
+}</code></pre> </details> <hr><blockquote class=page-copyright> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4Z"/></svg></i>本页面最近更新：</span><span class=facts_modified>正在加载中</span>，<a class=edit_history>更新历史</a>。<br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg></i>编辑页面：<a href=https://github.com/raineblog/blog/edit/main/docs/dp/sequence.md title=edit.link.title class=page_edit_url>在 GitHub 上编辑此页</a>！</span><br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M16 17v2H2v-2s0-4 7-4 7 4 7 4m-3.5-9.5A3.5 3.5 0 1 0 9 11a3.5 3.5 0 0 0 3.5-3.5m3.44 5.5A5.32 5.32 0 0 1 18 17v2h4v-2s0-3.63-6.06-4M15 4a3.39 3.39 0 0 0-1.93.59 5 5 0 0 1 0 5.82A3.39 3.39 0 0 0 15 11a3.5 3.5 0 0 0 0-7Z"/></svg></i>本页面贡献者：</span><span class=page_contributors>raine</span>。<br> </blockquote> <div id=__comments class="giscus no-print" data-no-instant></div> <script src=https://giscus.app/client.js data-repo=raineblog/blog-giscus data-repo-id=R_kgDOMhpKmw data-category=Announcements data-category-id=DIC_kwDOMhpKm84ChhZ7 data-mapping=pathname data-strict=1 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=preferred_color_scheme data-lang=zh-CN data-loading=lazy crossorigin=anonymous async>
+</script> </article> </div> <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script> </div> </main> <footer class=md-footer> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> by raineblog </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs <div id=miitbeian></div> </a> </div> <div style=float:right class=build_date_utc> <br> <a href=javascript:void(0); id=m_updtime> 最近更新：2025-02-02 d1e2f96 </a> </div> </div> </div> </footer> <div class=no-print id=scroll-page-top style="
+display: block;
+position: fixed;
+bottom: 20px;
+right: 20px;
+padding: 6px;
+color: #FFF;
+background-color: #AAA;
+opacity: 0.7;
+border-radius: 20px;
+cursor: pointer;
+z-index: 999;"> <i class="fa-solid fa-angle-up"></i> Page Top </div> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "../..", "features": ["navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "navigation.prune", "navigation.path", "search.suggest", "search.highlight", "search.share", "announce.dismiss", "content.action.edit", "content.code.copy", "content.code.select", "content.footnote.tooltips"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script> <script src=../../assets/javascripts/bundle.fe8b6f2b.min.js></script> <script src=../../assets/javascripts/extra.js></script> <script src=../../assets/javascripts/jquery.min.js></script> <script src=../../assets/highlight/highlight.min.js></script> <script src=../../assets/katex/katex.min.js></script> <script src=../../assets/katex/contrib/mhchem.min.js></script> <script src=../../assets/katex/contrib/auto-render.min.js></script> <script src=../../assets/katex/contrib/copy-tex.min.js></script> <script src=../../assets/javascripts/custom.js></script> <script id=init-glightbox>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body> </html>

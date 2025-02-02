@@ -1,0 +1,305 @@
+<!doctype html><html lang=zh class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="by raine"><meta name=author content=raine><link href=https://raineblog.github.io/blog/graph/divide/point/ rel=canonical><link href=../../dsu-on-tree/ rel=prev><link href=../../lca/ rel=next><link rel=icon href=../../..><meta name=generator content="mkdocs-1.6.1, mkdocs-material-9.5.31"><title>点分治 - raine's Blog</title><link rel=stylesheet href=../../../assets/stylesheets/main.3cba04c6.min.css><link rel=stylesheet href=../../../assets/stylesheets/palette.06af60db.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Segoe+UI:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback"><style>:root{--md-text-font:"Segoe UI";--md-code-font:"Fira Code"}</style><link rel=stylesheet href=../../../assets/stylesheets/extra.css><link rel=stylesheet href=../../../assets/stylesheets/all.min.css><link rel=stylesheet href=../../../assets/katex/katex.min.css><link rel=stylesheet href=../../../assets/highlight/styles/stackoverflow-light.min.css><link rel=stylesheet href=../../../assets/stylesheets/custom.css><script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><link href=../../../assets/stylesheets/glightbox.min.css rel=stylesheet><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style><script src=../../../assets/javascripts/glightbox.min.js></script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary=white data-md-color-accent=red> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#_1 class=md-skip> 跳转至 </a> </div> <div data-md-component=announce> </div> <header class="md-header md-header--shadow md-header--lifted" data-md-component=header> <nav class="md-header__inner md-grid" aria-label=页眉> <a href=../../.. title="raine's Blog" class="md-header__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> raine's Blog </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> 点分治 </span> </div> </div> </div> <div class=md-header__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> </nav> <nav class=md-tabs aria-label=标签 data-md-component=tabs> <div class=md-grid> <ul class=md-tabs__list> <li class=md-tabs__item> <a href=../../.. class=md-tabs__link> 简介 </a> </li> <li class=md-tabs__item> <a href=../../../contest/pre/ class=md-tabs__link> 比赛相关 </a> </li> <li class=md-tabs__item> <a href=../../../basic/prefix/ class=md-tabs__link> 基础算法 </a> </li> <li class=md-tabs__item> <a href=../../../dp/basic/ class=md-tabs__link> 动态规划 </a> </li> <li class=md-tabs__item> <a href=../../../ds/ds/ class=md-tabs__link> 数据结构 </a> </li> <li class=md-tabs__item> <a href=../../../math/linear-algebra/vector/ class=md-tabs__link> 数学 </a> </li> <li class="md-tabs__item md-tabs__item--active"> <a href=../../shortest-path/ class=md-tabs__link> 图论 </a> </li> </ul> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--lifted" aria-label=导航栏 data-md-level=0> <label class=md-nav__title for=__drawer> <a href=../../.. title="raine's Blog" class="md-nav__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> raine's Blog </label> <div class=md-nav__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../.. class=md-nav__link> <span class=md-ellipsis> 简介 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../contest/pre/ class=md-nav__link> <span class=md-ellipsis> 比赛相关 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../basic/prefix/ class=md-nav__link> <span class=md-ellipsis> 基础算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../dp/basic/ class=md-nav__link> <span class=md-ellipsis> 动态规划 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../ds/ds/ class=md-nav__link> <span class=md-ellipsis> 数据结构 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../math/linear-algebra/vector/ class=md-nav__link> <span class=md-ellipsis> 数学 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_7 checked> <label class=md-nav__link for=__nav_7 id=__nav_7_label tabindex> <span class=md-ellipsis> 图论 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=1 aria-labelledby=__nav_7_label aria-expanded=true> <label class=md-nav__title for=__nav_7> <span class="md-nav__icon md-icon"></span> 图论 </label> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../shortest-path/ class=md-nav__link> <span class=md-ellipsis> 最短路 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../spanning-tree/mst/ class=md-nav__link> <span class=md-ellipsis> 生成树 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class=md-nav__item> <a href=../../tree/ class=md-nav__link> <span class=md-ellipsis> 树论基础 </span> </a> </li> <li class=md-nav__item> <a href=../../dsu-on-tree/ class=md-nav__link> <span class=md-ellipsis> 树上启发式合并 </span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_7_5 checked> <label class=md-nav__link for=__nav_7_5 id=__nav_7_5_label tabindex=0> <span class=md-ellipsis> 树分治 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=2 aria-labelledby=__nav_7_5_label aria-expanded=true> <label class=md-nav__title for=__nav_7_5> <span class="md-nav__icon md-icon"></span> 树分治 </label> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> <span class=md-ellipsis> 点分治 </span> <span class="md-nav__icon md-icon"></span> </label> <a href=./ class="md-nav__link md-nav__link--active"> <span class=md-ellipsis> 点分治 </span> </a> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 流程 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 实现 </span> </a> <nav class=md-nav aria-label=实现> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 树的重心 </span> </a> </li> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 点分治 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 计算答案 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 例题 </span> </a> <nav class=md-nav aria-label=例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p3806-1 class=md-nav__link> <span class=md-ellipsis> P3806 【模板】点分治 1 </span> </a> </li> <li class=md-nav__item> <a href=#cf161d-distance-in-tree class=md-nav__link> <span class=md-ellipsis> CF161D Distance in Tree </span> </a> </li> <li class=md-nav__item> <a href=#p4178-tree class=md-nav__link> <span class=md-ellipsis> P4178 Tree </span> </a> </li> <li class=md-nav__item> <a href=#p4149-ioi2011-race class=md-nav__link> <span class=md-ellipsis> P4149 [IOI2011] Race </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../lca/ class=md-nav__link> <span class=md-ellipsis> 最近公共祖先 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class="md-sidebar md-sidebar--secondary" data-md-component=sidebar data-md-type=toc> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 流程 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 实现 </span> </a> <nav class=md-nav aria-label=实现> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 树的重心 </span> </a> </li> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 点分治 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 计算答案 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 例题 </span> </a> <nav class=md-nav aria-label=例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p3806-1 class=md-nav__link> <span class=md-ellipsis> P3806 【模板】点分治 1 </span> </a> </li> <li class=md-nav__item> <a href=#cf161d-distance-in-tree class=md-nav__link> <span class=md-ellipsis> CF161D Distance in Tree </span> </a> </li> <li class=md-nav__item> <a href=#p4178-tree class=md-nav__link> <span class=md-ellipsis> P4178 Tree </span> </a> </li> <li class=md-nav__item> <a href=#p4149-ioi2011-race class=md-nav__link> <span class=md-ellipsis> P4149 [IOI2011] Race </span> </a> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <a href=https://github.com/raineblog/blog/edit/main/docs/graph/divide/point.md title=编辑此页 class="md-content__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg> </a> <div id=m_edit_url style="display: none;">https://github.com/raineblog/blog/edit/main/docs/graph/divide/point.md</div> <h1 id=_1>点分治<a class=headerlink href=#_1 title="Permanent link">&para;</a></h1> <p>点分治适合处理大规模的树上路径信息问题。</p> <h2 id=_2>流程<a class=headerlink href=#_2 title="Permanent link">&para;</a></h2> <p>我们将一棵有根树上的路径分为两种：</p> <ol> <li> <p>经过根节点的路径（以根节点作为 LCA 的）；</p> </li> <li> <p>不经过根节点的（完全在子树内的）。</p> </li> </ol> <p>我们根据这两个，对树进行分治：</p> <ol> <li> <p>统计经过根的路径的答案；</p> </li> <li> <p>删去根节点，分治子树。</p> </li> </ol> <p>考虑复杂度，显然是能被链卡死的，我们希望每次划分的子树尽可能平衡，</p> <ol> <li> <p>于是，我们可以递归一个树，钦定这个子树的重心为根；</p> </li> <li> <p>假设我们处理经过根的答案存在 <span class=arithmatex>\(\mathcal O(T(n))\)</span> 的做法。</p> </li> <li> <p>重心可以把树分为两个不超过一半的子树，复杂度为 <span class=arithmatex>\(\mathcal O(T(n)\log n)\)</span>。</p> </li> </ol> <p>问题转化为：如何处理经过根的路径？这是点分治的核心，一般也是最难的点。</p> <h2 id=_3>实现<a class=headerlink href=#_3 title="Permanent link">&para;</a></h2> <ol> <li> <p>找出树的中心做根 <code>getroot();</code></p> </li> <li> <p>对当前树统计答案 <code>calc();</code></p> </li> <li> <p>分治各个子树递归 <code>divide();</code></p> </li> </ol> <p>细节：</p> <ul> <li> <p>我们用 <code>vis</code> 表示一个点是否被删掉（标记根的删除）；</p> </li> <li> <p>通常将问题离线下来统一计算。</p> </li> </ul> <h3 id=_4>树的重心<a class=headerlink href=#_4 title="Permanent link">&para;</a></h3> <p>有性质：</p> <ul> <li> <p>重心的所有子树大小不超过整棵树的一半；</p> </li> <li> <p>重心的最大子树最小。</p> </li> </ul> <p>根据上面任意一个都可以 <span class=arithmatex>\(\mathcal O(n)\)</span> 的找重心。</p> <p>我一般用第二个：</p> <pre class=highlight><code class=language-cpp>int tot, siz[N];
+
+int root, max_son[N];
+
+void dfs(int u, int fa) {
+    siz[u] = 1;
+    max_son[u] = -1;
+    for (auto t : g[u]) {
+        int v = t.v;
+        if (v == fa)
+            continue;
+        if (vis[v])
+            continue;
+        dfs(v, u);
+        max_son[u] = max(max_son[u], siz[v]);
+        siz[u] += siz[v];
+    }
+    max_son[u] = max(max_son[u], tot - siz[u]);
+    if (root == -1 || max_son[u] &lt; max_son[root])
+        root = u;
+}
+
+int get_root(int u) {
+    tot = u == 1 ? n : siz[u];
+    root = -1;
+    dfs(u, -1);
+    return root;
+}</code></pre> <h3 id=_5>点分治<a class=headerlink href=#_5 title="Permanent link">&para;</a></h3> <p>很简单。</p> <pre class=highlight><code class=language-cpp>void divide(int u) {
+    vis[u] = true;
+    calc(u);
+    for (auto t : g[u]) {
+        int v = t.v;
+        if (vis[v])
+            continue;
+        divide(get_root(v));
+    }
+}</code></pre> <h3 id=_6>计算答案<a class=headerlink href=#_6 title="Permanent link">&para;</a></h3> <p>最难的部分。</p> <p>具体问题具体分析。</p> <p>下面我们给几道例题。</p> <h2 id=_7>例题<a class=headerlink href=#_7 title="Permanent link">&para;</a></h2> <h3 id=p3806-1>P3806 【模板】点分治 1<a class=headerlink href=#p3806-1 title="Permanent link">&para;</a></h3> <p>推荐使用 QOJ 的题目：<a href=https://qoj.ac/problem/329>QOJ #329. 点分治</a>。</p> <p>其中 <code>calc</code> 函数如下：</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>bool ans[N];
+
+int dis[N], cnt;
+
+void get_dis(int u, int fa, int val) {
+    if (val &gt; (int)1e7) // 超过了最大长度，无意义
+        return;
+    dis[++cnt] = val; // 将长度记录下来
+    for (auto t : g[u]) {
+        int v = t.v;
+        if (v == fa)
+            continue;
+        if (vis[v])
+            continue;
+        get_dis(v, u, val + t.w);
+    }
+}
+
+int mp[M];
+
+void calc(int u) {
+    mp[0] = 1;
+    int mx = 0;
+    for (auto t : g[u]) {
+        int v = t.v;
+        if (vis[v])
+            continue;
+        cnt = 0;
+        get_dis(v, u, t.w); // 遍历子树，统计长度
+        for (int i = 1; i &lt;= cnt; ++i)
+            for (int j = 0; j &lt; m; ++j)
+                if (q[j] &gt;= dis[i])
+                    ans[j] |= mp[q[j] - dis[i]]; // 更新答案
+        for (int i = 1; i &lt;= cnt; ++i)
+            mp[dis[i]] = true, mx = max(mx, dis[i]); // 加入子树的贡献
+    }
+    memset(mp, 0, sizeof(int) * (mx + 1)); // 清除操作，注意最大是值域
+}</code></pre> </details> <p>我们用 <span class=arithmatex>\(\text{map}\)</span> 表示在一棵树的前面的子树中出现的路径长度。</p> <p>每次加入一个子树，先更新答案，再加入这个子树的贡献。</p> <p>这样做可以避免出现同一颗子树用同一颗子树的信息的情况。</p> <p>时间复杂度为 <span class=arithmatex>\(\mathcal O(nm\log n)\)</span>。</p> <h3 id=cf161d-distance-in-tree>CF161D Distance in Tree<a class=headerlink href=#cf161d-distance-in-tree title="Permanent link">&para;</a></h3> <p>和上面一样，只是计数。</p> <p>这道题数据范围小，所以朴素树上 DP 似乎也可以解决。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>ll ans;
+
+int dis[N], cnt;
+
+void get_dis(int u, int fa, int dep) {
+    if (dep &gt; 500)
+        return;
+    dis[++cnt] = dep;
+    for (int v : g[u]) {
+        if (v == fa)
+            continue;
+        if (vis[v])
+            continue;
+        get_dis(v, u, dep + 1);
+    }
+}
+
+int mp[1010];
+
+void calc(int u) {
+    mp[0] = 1;
+    cnt = 0;
+    for (int v : g[u]) {
+        if (vis[v])
+            continue;
+        int st = cnt + 1;
+        get_dis(v, u, 1);
+        for (int i = st; i &lt;= cnt; ++i)
+            if (k &gt;= dis[i])
+                ans += mp[k - dis[i]]; // 这里计数
+        for (int i = st; i &lt;= cnt; ++i)
+            ++mp[dis[i]];
+    }
+    for (int i = 1; i &lt;= cnt; ++i)
+        --mp[dis[i]];
+}</code></pre> </details> <h3 id=p4178-tree>P4178 Tree<a class=headerlink href=#p4178-tree title="Permanent link">&para;</a></h3> <p>注意到要求 <span class=arithmatex>\(\le K\)</span> 而不是 <span class=arithmatex>\(=K\)</span>，观察点分树板子题，</p> <p>我们发现 <code>mp</code> 数组的前缀和就是 <span class=arithmatex>\(\le K\)</span> 的答案，因此树状数组维护。</p> <p>因为只需要维护单点修改前缀查询，所以树状数组很快。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>namespace ds {
+    inline constexpr int hole(int k) {
+        return k + (k &gt;&gt; 10);
+    }
+
+    ll s[hole(V)];
+    uint64_t Tag, tag[hole(V)];
+
+    void modify(int x, int v) {
+        for (++x; x &lt; V; x += x &amp; -x) {
+            if (tag[hole(x)] != Tag)
+                s[hole(x)] = 0;
+            s[hole(x)] += v;
+            tag[hole(x)] = Tag;
+        }
+    }
+
+    ll sum(int x) {
+        ll r = 0;
+        for (++x; x; x &amp;= x - 1)
+            if (tag[hole(x)] == Tag)
+                r += s[hole(x)];
+        return r;
+    }
+
+    void clear() {
+        ++Tag;
+    }
+}
+
+ll ans;
+
+int dis[N], cnt;
+
+void get_dis(int u, int fa, int val) {
+    if (val &gt; k)
+        return;
+    dis[++cnt] = val;
+    for (auto t : g[u]) {
+        int v = t.v;
+        if (v == fa)
+            continue;
+        if (vis[v])
+            continue;
+        get_dis(v, u, val + t.w);
+    }
+}
+
+void calc(int u) {
+    ds::modify(0, 1);
+    cnt = 0;
+    for (auto t : g[u]) {
+        int v = t.v;
+        if (vis[v])
+            continue;
+        int st = cnt + 1;
+        get_dis(v, u, t.w);
+        for (int i = st; i &lt;= cnt; ++i)
+            if (k &gt;= dis[i])
+                ans += ds::sum(k - dis[i]);
+        for (int i = st; i &lt;= cnt; ++i)
+            ds::modify(dis[i], 1);
+    }
+    ds::clear();
+}</code></pre> </details> <h3 id=p4149-ioi2011-race>P4149 [IOI2011] Race<a class=headerlink href=#p4149-ioi2011-race title="Permanent link">&para;</a></h3> <p>维护 <span class=arithmatex>\(\operatorname{dis}u+\operatorname{dis}v=k\)</span> 中，<span class=arithmatex>\(\operatorname{dep}u+\operatorname{dep}v\)</span> 最小值。</p> <p>维护一个 <span class=arithmatex>\(\text{map}\)</span>，记录映射，</p> <div class=arithmatex>\[ \text{map}:\operatorname{dis}u\to\operatorname{dep}v \]</div> <p>每次加入，</p> <div class=arithmatex>\[ \def\dis{\operatorname{dis}} \def\dep{\operatorname{dep}} \begin{aligned} \text{map}(\dis v)&amp;\overset{\min}{\longleftarrow}\dep v\\ ans&amp;\longleftarrow\dep v+\text{map}(k-\dis v) \end{aligned} \]</div> <p>代码：</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+#define endl "\n"
+
+constexpr int N = 2e5 + 10;
+constexpr int M = 1e6 + 10;
+
+constexpr int INF = 1e9;
+
+// -----------------------------------------------------------------------------
+
+int n, k;
+
+struct edge {
+    int v, w;
+    edge() = default;
+    edge(int v, int w): v(v), w(w) {}
+};
+
+vector&lt;edge&gt; g[N];
+
+void add(int u, int v, int w) {
+    g[u].emplace_back(v, w);
+}
+
+void Add(int u, int v, int w) {
+    add(u, v, w), add(v, u, w);
+}
+
+int get_root(int);
+
+// -----------------------------------------------------------------------------
+
+int mp[M];
+
+int vis[N], dis[N], dep[N];
+
+int cnt, ans = INF;
+
+void init(int u, int fa, int is, int ep) {
+    if (is &gt; k) return;
+    ++cnt;
+    dis[cnt] = is, dep[cnt] = ep;
+    for (auto t : g[u]) {
+        if (t.v == fa || vis[t.v]) continue;
+        init(t.v, u, is + t.w, ep + 1);
+    }
+}
+
+void calc(int u) {
+    mp[0] = cnt = 0;
+    for (auto t : g[u]) {
+        int v = t.v, w = t.w;
+        if (vis[v]) continue;
+        int st = cnt + 1;
+        init(v, u, w, 1);
+        for (int i = st; i &lt;= cnt; ++i)
+            ans = min(ans, mp[k - dis[i]] + dep[i]);
+        for (int i = st; i &lt;= cnt; ++i)
+            mp[dis[i]] = min(mp[dis[i]], dep[i]);
+    }
+    for (int i = 1; i &lt;= cnt; ++i) mp[dis[i]] = INF;
+}
+
+void solve(int u) {
+    vis[u] = 1, calc(u);
+    for (auto t : g[u]) {
+        if (vis[t.v]) continue;
+        solve(get_root(t.v));
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+int siz[N], max_son[N];
+int tot, root;
+
+void dfs(int u, int fa) {
+    siz[u] = 1, max_son[u] = 0;
+    for (auto t : g[u]) {
+        int v = t.v;
+        if (v == fa || vis[v]) continue;
+        dfs(v, u);
+        siz[u] += siz[v];
+        max_son[u] = max(max_son[u], siz[v]);
+    }
+    max_son[u] = max(max_son[u], tot - siz[u]);
+    if (max_son[u] &lt; max_son[root]) root = u;
+}
+
+int get_root(int u) {
+    tot = siz[u], root = 0;
+    return dfs(u, -1), root;
+}
+
+// -----------------------------------------------------------------------------
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
+    cin &gt;&gt; n &gt;&gt; k;
+    memset(mp, 0x3f, sizeof mp);
+    for (int i = 1; i &lt; n; ++i) {
+        int u, v, w;
+        cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+        Add(u + 1, v + 1, w);
+    }
+    max_son[0] = n + 1;
+    siz[1] = n;
+    solve(get_root(1));
+    cout &lt;&lt; (ans &gt;= n ? -1 : ans) &lt;&lt; endl;
+    return 0;
+}</code></pre> </details> <p>当然这道题还可以启发时合并来做。</p> <hr><blockquote class=page-copyright> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4Z"/></svg></i>本页面最近更新：</span><span class=facts_modified>正在加载中</span>，<a class=edit_history>更新历史</a>。<br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg></i>编辑页面：<a href=https://github.com/raineblog/blog/edit/main/docs/graph/divide/point.md title=edit.link.title class=page_edit_url>在 GitHub 上编辑此页</a>！</span><br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M16 17v2H2v-2s0-4 7-4 7 4 7 4m-3.5-9.5A3.5 3.5 0 1 0 9 11a3.5 3.5 0 0 0 3.5-3.5m3.44 5.5A5.32 5.32 0 0 1 18 17v2h4v-2s0-3.63-6.06-4M15 4a3.39 3.39 0 0 0-1.93.59 5 5 0 0 1 0 5.82A3.39 3.39 0 0 0 15 11a3.5 3.5 0 0 0 0-7Z"/></svg></i>本页面贡献者：</span><span class=page_contributors>raine</span>。<br> </blockquote> <div id=__comments class="giscus no-print" data-no-instant></div> <script src=https://giscus.app/client.js data-repo=raineblog/blog-giscus data-repo-id=R_kgDOMhpKmw data-category=Announcements data-category-id=DIC_kwDOMhpKm84ChhZ7 data-mapping=pathname data-strict=1 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=preferred_color_scheme data-lang=zh-CN data-loading=lazy crossorigin=anonymous async>
+</script> </article> </div> <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script> </div> </main> <footer class=md-footer> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> by raineblog </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs <div id=miitbeian></div> </a> </div> <div style=float:right class=build_date_utc> <br> <a href=javascript:void(0); id=m_updtime> 最近更新：2025-02-02 d1e2f96 </a> </div> </div> </div> </footer> <div class=no-print id=scroll-page-top style="
+display: block;
+position: fixed;
+bottom: 20px;
+right: 20px;
+padding: 6px;
+color: #FFF;
+background-color: #AAA;
+opacity: 0.7;
+border-radius: 20px;
+cursor: pointer;
+z-index: 999;"> <i class="fa-solid fa-angle-up"></i> Page Top </div> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "navigation.prune", "navigation.path", "search.suggest", "search.highlight", "search.share", "announce.dismiss", "content.action.edit", "content.code.copy", "content.code.select", "content.footnote.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script> <script src=../../../assets/javascripts/bundle.fe8b6f2b.min.js></script> <script src=../../../assets/javascripts/extra.js></script> <script src=../../../assets/javascripts/jquery.min.js></script> <script src=../../../assets/highlight/highlight.min.js></script> <script src=../../../assets/katex/katex.min.js></script> <script src=../../../assets/katex/contrib/mhchem.min.js></script> <script src=../../../assets/katex/contrib/auto-render.min.js></script> <script src=../../../assets/katex/contrib/copy-tex.min.js></script> <script src=../../../assets/javascripts/custom.js></script> <script id=init-glightbox>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body> </html>

@@ -1,0 +1,167 @@
+<!doctype html><html lang=zh class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="by raine"><meta name=author content=raine><link href=https://raineblog.github.io/blog/graph/shortest-path/sssp/ rel=canonical><link href=../ rel=prev><link href=../apsp/ rel=next><link rel=icon href=../../..><meta name=generator content="mkdocs-1.6.1, mkdocs-material-9.5.31"><title>单源最短路 - raine's Blog</title><link rel=stylesheet href=../../../assets/stylesheets/main.3cba04c6.min.css><link rel=stylesheet href=../../../assets/stylesheets/palette.06af60db.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Segoe+UI:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback"><style>:root{--md-text-font:"Segoe UI";--md-code-font:"Fira Code"}</style><link rel=stylesheet href=../../../assets/stylesheets/extra.css><link rel=stylesheet href=../../../assets/stylesheets/all.min.css><link rel=stylesheet href=../../../assets/katex/katex.min.css><link rel=stylesheet href=../../../assets/highlight/styles/stackoverflow-light.min.css><link rel=stylesheet href=../../../assets/stylesheets/custom.css><script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><link href=../../../assets/stylesheets/glightbox.min.css rel=stylesheet><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style><script src=../../../assets/javascripts/glightbox.min.js></script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary=white data-md-color-accent=red> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#_1 class=md-skip> 跳转至 </a> </div> <div data-md-component=announce> </div> <header class="md-header md-header--shadow md-header--lifted" data-md-component=header> <nav class="md-header__inner md-grid" aria-label=页眉> <a href=../../.. title="raine's Blog" class="md-header__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> raine's Blog </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> 单源最短路 </span> </div> </div> </div> <div class=md-header__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> </nav> <nav class=md-tabs aria-label=标签 data-md-component=tabs> <div class=md-grid> <ul class=md-tabs__list> <li class=md-tabs__item> <a href=../../.. class=md-tabs__link> 简介 </a> </li> <li class=md-tabs__item> <a href=../../../contest/pre/ class=md-tabs__link> 比赛相关 </a> </li> <li class=md-tabs__item> <a href=../../../basic/prefix/ class=md-tabs__link> 基础算法 </a> </li> <li class=md-tabs__item> <a href=../../../dp/basic/ class=md-tabs__link> 动态规划 </a> </li> <li class=md-tabs__item> <a href=../../../ds/ds/ class=md-tabs__link> 数据结构 </a> </li> <li class=md-tabs__item> <a href=../../../math/linear-algebra/vector/ class=md-tabs__link> 数学 </a> </li> <li class="md-tabs__item md-tabs__item--active"> <a href=../ class=md-tabs__link> 图论 </a> </li> </ul> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--lifted" aria-label=导航栏 data-md-level=0> <label class=md-nav__title for=__drawer> <a href=../../.. title="raine's Blog" class="md-nav__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> raine's Blog </label> <div class=md-nav__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../.. class=md-nav__link> <span class=md-ellipsis> 简介 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../contest/pre/ class=md-nav__link> <span class=md-ellipsis> 比赛相关 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../basic/prefix/ class=md-nav__link> <span class=md-ellipsis> 基础算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../dp/basic/ class=md-nav__link> <span class=md-ellipsis> 动态规划 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../ds/ds/ class=md-nav__link> <span class=md-ellipsis> 数据结构 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../math/linear-algebra/vector/ class=md-nav__link> <span class=md-ellipsis> 数学 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_7 checked> <label class=md-nav__link for=__nav_7 id=__nav_7_label tabindex> <span class=md-ellipsis> 图论 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=1 aria-labelledby=__nav_7_label aria-expanded=true> <label class=md-nav__title for=__nav_7> <span class="md-nav__icon md-icon"></span> 图论 </label> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--active md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_7_1 checked> <label class=md-nav__link for=__nav_7_1 id=__nav_7_1_label tabindex=0> <span class=md-ellipsis> 最短路 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=2 aria-labelledby=__nav_7_1_label aria-expanded=true> <label class=md-nav__title for=__nav_7_1> <span class="md-nav__icon md-icon"></span> 最短路 </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../ class=md-nav__link> <span class=md-ellipsis> 最短路简介 </span> </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> <span class=md-ellipsis> 单源最短路 </span> <span class="md-nav__icon md-icon"></span> </label> <a href=./ class="md-nav__link md-nav__link--active"> <span class=md-ellipsis> 单源最短路 </span> </a> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#dijkstra class=md-nav__link> <span class=md-ellipsis> Dijkstra </span> </a> <nav class=md-nav aria-label=Dijkstra> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 朴素算法 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 堆优化 </span> </a> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 复杂度分析 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#bellmanford class=md-nav__link> <span class=md-ellipsis> Bellman–Ford </span> </a> <nav class=md-nav aria-label=Bellman–Ford> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 思想 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 实现 </span> </a> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 优化 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#spfa class=md-nav__link> <span class=md-ellipsis> SPFA </span> </a> <nav class=md-nav aria-label=SPFA> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 队列优化 </span> </a> </li> <li class=md-nav__item> <a href=#_9 class=md-nav__link> <span class=md-ellipsis> 判断负环 </span> </a> </li> <li class=md-nav__item> <a href=#dfs-spfa class=md-nav__link> <span class=md-ellipsis> DFS 版 SPFA </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=../apsp/ class=md-nav__link> <span class=md-ellipsis> 全源最短路 </span> </a> </li> <li class=md-nav__item> <a href=../other/ class=md-nav__link> <span class=md-ellipsis> 其他最短路算法 </span> </a> </li> <li class=md-nav__item> <a href=../diff/ class=md-nav__link> <span class=md-ellipsis> 差分约束系统 </span> </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../spanning-tree/mst/ class=md-nav__link> <span class=md-ellipsis> 生成树 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class=md-nav__item> <a href=../../tree/ class=md-nav__link> <span class=md-ellipsis> 树论基础 </span> </a> </li> <li class=md-nav__item> <a href=../../dsu-on-tree/ class=md-nav__link> <span class=md-ellipsis> 树上启发式合并 </span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../divide/point/ class=md-nav__link> <span class=md-ellipsis> 树分治 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../lca/ class=md-nav__link> <span class=md-ellipsis> 最近公共祖先 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class="md-sidebar md-sidebar--secondary" data-md-component=sidebar data-md-type=toc> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#dijkstra class=md-nav__link> <span class=md-ellipsis> Dijkstra </span> </a> <nav class=md-nav aria-label=Dijkstra> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 朴素算法 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 堆优化 </span> </a> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 复杂度分析 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#bellmanford class=md-nav__link> <span class=md-ellipsis> Bellman–Ford </span> </a> <nav class=md-nav aria-label=Bellman–Ford> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 思想 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 实现 </span> </a> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 优化 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#spfa class=md-nav__link> <span class=md-ellipsis> SPFA </span> </a> <nav class=md-nav aria-label=SPFA> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 队列优化 </span> </a> </li> <li class=md-nav__item> <a href=#_9 class=md-nav__link> <span class=md-ellipsis> 判断负环 </span> </a> </li> <li class=md-nav__item> <a href=#dfs-spfa class=md-nav__link> <span class=md-ellipsis> DFS 版 SPFA </span> </a> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <a href=https://github.com/raineblog/blog/edit/main/docs/graph/shortest-path/sssp.md title=编辑此页 class="md-content__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg> </a> <div id=m_edit_url style="display: none;">https://github.com/raineblog/blog/edit/main/docs/graph/shortest-path/sssp.md</div> <h1 id=_1>单源最短路<a class=headerlink href=#_1 title="Permanent link">&para;</a></h1> <p>Single Source Shortest Path Problem (SSSP)。</p> <h2 id=dijkstra>Dijkstra<a class=headerlink href=#dijkstra title="Permanent link">&para;</a></h2> <p>该算法，Dijkstra（/ˈdikstrɑ/ 或 /ˈdɛikstrɑ/）是一种求解非负权图上单源最短路径的算法。</p> <p>朴素算法复杂度为 <span class=arithmatex>\(\mathcal O(n^2)\)</span>，堆优化为 <span class=arithmatex>\(\mathcal O(m\log m)\)</span>，使用 Fibonacci 堆（支持 <span class=arithmatex>\(\mathcal O(1)\)</span> 插入）可以做到 <span class=arithmatex>\(\mathcal O(n\log n+m)\)</span>。</p> <h3 id=_2>朴素算法<a class=headerlink href=#_2 title="Permanent link">&para;</a></h3> <p>设两个集合：「已确定最短路长度的集合 <span class=arithmatex>\(S\)</span>」和「未确定最短路长度的集合 <span class=arithmatex>\(T\)</span>」。</p> <p>每次从 <span class=arithmatex>\(T\)</span> 中选取一个最近的，加入集合 <span class=arithmatex>\(S\)</span> 并松弛，更新其他点的最短路。直到 <span class=arithmatex>\(T\)</span> 集合为空。</p> <p>代码：</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int dis[N], vis[N];
+
+int get_u() {
+    int t = -1;
+    for (int i = 1; i &lt;= n; ++i) {
+        if (vis[i])
+            continue;
+        if (t == -1 || dis[i] &lt; dis[t])
+            t = i;
+    }
+    return t;
+}
+
+void dijkstra(int s) {
+    memset(dis, 0x3f, sizeof dis);
+    dis[s] = 0;
+    for (int step = 0; step &lt; n; ++step) {
+        int u = get_u();
+        vis[u] = true;
+        for (auto t : g[u]) {
+            int v = t.v, w = t.w;
+            dis[v] = min(dis[v], dis[u] + w);
+        }
+    }
+}</code></pre> </details> <h3 id=_3>堆优化<a class=headerlink href=#_3 title="Permanent link">&para;</a></h3> <p>每成功松弛一条边 <span class=arithmatex>\((u,v)\)</span> ，就将 <span class=arithmatex>\(v\)</span> 插入堆中，</p> <p>如果 <span class=arithmatex>\(v\)</span> 已经在堆中，直接修改相应元素的权值即可，每次查找操作直接取堆顶结点即可。</p> <p>代码：</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int dis[N], vis[N];
+
+void dijkstra(int s) {
+    memset(dis, 0x3f, sizeof(int) * (n + 1));
+    pqueue&lt;pair&lt;int, int&gt;, greater&lt;pair&lt;int, int&gt;&gt;&gt; heap;
+    dis[s] = 0;
+    heap.push({0, s});
+    while (!heap.empty()) {
+        int u = heap.top().second;
+        heap.pop();
+        if (vis[u])
+            continue;
+        vis[u] = 1;
+        for (auto t : g[u]) {
+            int v = t.v, w = t.w;
+            if (dis[v] &gt; dis[u] + w) {
+                dis[v] = dis[u] + w;
+                heap.push({dis[v], v});
+            }
+        }
+    }
+}</code></pre> </details> <h3 id=_4>复杂度分析<a class=headerlink href=#_4 title="Permanent link">&para;</a></h3> <p>首先，朴素算法显然就是 <span class=arithmatex>\(\mathcal O(n^2+m)\)</span> 的。</p> <p>考虑分析堆优化版本的复杂度，有结论：优先队列中存在的元素个数在 <span class=arithmatex>\(\mathcal O(m)\)</span>，单次是单 <span class=arithmatex>\(\log\)</span> 的，因此总时间复杂度为 <span class=arithmatex>\(\mathcal O(m\log m)\)</span>。</p> <table> <thead> <tr> <th style="text-align: center;">实现</th> <th style="text-align: center;">复杂度</th> <th style="text-align: center;">适用情景</th> </tr> </thead> <tbody> <tr> <td style="text-align: center;">朴素算法</td> <td style="text-align: center;"><span class=arithmatex>\(\mathcal O(n^2+m)\)</span></td> <td style="text-align: center;">数据量小</td> </tr> <tr> <td style="text-align: center;">优先队列优化</td> <td style="text-align: center;"><span class=arithmatex>\(\mathcal O(m\log m)\)</span></td> <td style="text-align: center;">稀疏图，边数为 <span class=arithmatex>\(\mathcal O(n)\)</span> 等级的</td> </tr> <tr> <td style="text-align: center;">Fibonacci 堆优化</td> <td style="text-align: center;"><span class=arithmatex>\(\mathcal O(n\log n+m)\)</span></td> <td style="text-align: center;">稠密图，边数为 <span class=arithmatex>\(\mathcal O(n^2)\)</span> 等级的</td> </tr> </tbody> </table> <p>一般来说，最后一个严格更优，但是数据量小的时候跑得不一定快。</p> <p>说句闲话，Dijkstra 也可以魔改后用于负权图，详见 Johnson 算法。</p> <h2 id=bellmanford>Bellman–Ford<a class=headerlink href=#bellmanford title="Permanent link">&para;</a></h2> <h3 id=_5>思想<a class=headerlink href=#_5 title="Permanent link">&para;</a></h3> <p>我们称松弛为操作：</p> <div class=arithmatex>\[ \text{dis}(v)=\min\{\text{dis}(v),\text{dis}(u)+w(u,v)\} \]</div> <p>我们称对一个图中的所有边（共 <span class=arithmatex>\(m\)</span> 条）进行一遍松弛，为一轮松弛。</p> <p>有性质：进行 <span class=arithmatex>\(n\)</span> 轮松弛以后，一定能找到最短路（如果存在的话）。</p> <p>证明：一次松弛会使找到的最短路径 <span class=arithmatex>\(+1\)</span>，那么 <span class=arithmatex>\(n\)</span> 轮就可以找完了。</p> <p>有常数优化：找不到松弛了，表示一定找完了最短路，那么可以停止。</p> <p>有性质：若 <span class=arithmatex>\(n\)</span> 轮之后依然可以松弛，那么<strong>图中 <span class=arithmatex>\(s\)</span> 所在的连通块</strong>一定存在负环。</p> <p>可以用来判断负环（建超级源点向所有点连边，边权为 <span class=arithmatex>\(0\)</span>，可以判断全局）。</p> <h3 id=_6>实现<a class=headerlink href=#_6 title="Permanent link">&para;</a></h3> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>struct edge {
+    int u, v, w;
+};
+
+vector&lt;edge&gt; g;
+
+int dis[N];
+
+bool bf(int s, int k = n) {
+    memset(dis, 0x3f, sizeof dis);
+    dis[s] = 0;
+    for (int step = 1; step &lt;= n; ++step) {
+        bool flag = false;
+        for (auto t : g) {
+            int u = t.u, v = t.v;
+            if (dis[u] == 0x3f3f3f3f)
+                continue;
+            int w = t.w;
+            if (dis[v] &gt; dis[u] + w) {
+                dis[v] = dis[u] + w;
+                flag = true;
+            }
+        }
+        if (!flag)
+            return false;
+    }
+    return true;
+}</code></pre> </details> <p>通过传入函数的 <span class=arithmatex>\(k\)</span> 参数，可以实现找长度不超过 <span class=arithmatex>\(k\)</span> 的最短路。</p> <p>时间复杂度显然为 <span class=arithmatex>\(\mathcal O(nm)\)</span>。</p> <h3 id=_7>优化<a class=headerlink href=#_7 title="Permanent link">&para;</a></h3> <p>最常见的优化就是 SPFA，即 Bellman-Ford 的队列优化版。</p> <p>队列优化类似 BFS，那么我们也可以用 DFS 实现，可以用于比较快的判断负环。</p> <p>但是目前大部分 Bellman-Ford 的优化都可能会被卡，且速度也快不了多少，因此不讲。</p> <details open=open> <summary>拓展：Bellman-Ford 的其他优化（摘自 OI-Wiki）</summary> <p>除了队列优化（SPFA）之外，Bellman–Ford 还有其他形式的优化，这些优化在部分图上效果明显，但在某些特殊图上，最坏复杂度可能达到指数级。</p> <ul> <li>堆优化：将队列换成堆，与 Dijkstra 的区别是允许一个点多次入队。在有负权边的图可能被卡成指数级复杂度。</li> <li>栈优化：将队列换成栈（即将原来的 BFS 过程变成 DFS），在寻找负环时可能具有更高效率，但最坏时间复杂度仍然为指数级。</li> <li>LLL 优化：将普通队列换成双端队列，每次将入队结点距离和队内距离平均值比较，如果更大则插入至队尾，否则插入队首。</li> <li>SLF 优化：将普通队列换成双端队列，每次将入队结点距离和队首比较，如果更大则插入至队尾，否则插入队首。</li> <li>D´Esopo–Pape 算法：将普通队列换成双端队列，如果一个节点之前没有入队，则将其插入队尾，否则插入队首。</li> </ul> <p>更多优化以及针对这些优化的 Hack 方法，可以看 <a href=https://www.zhihu.com/question/292283275/answer/484871888>fstqwq 在知乎上的回答</a>。</p> </details> <h2 id=spfa>SPFA<a class=headerlink href=#spfa title="Permanent link">&para;</a></h2> <h3 id=_8>队列优化<a class=headerlink href=#_8 title="Permanent link">&para;</a></h3> <p>即 Shortest Path Faster Algorithm。</p> <p>原理是，我们不需要每次松弛那么多，只有上一次被松弛的节点所连接的边才能继续松弛。</p> <p>我们可以用各种方法来维护可能会引起松弛的节点，例如 BFS（队列优化）和 DFS。</p> <p>代码：</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int dis[N], vis[N];
+
+void spfa(int s, int k = n) {
+    memset(dis, 0x3f, sizeof dis);
+    dis[s] = 0;
+    vis[s] = 1;
+    queue&lt;int&gt; q;
+    q.push(s);
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        vis[u] = 0;
+        for (auto t : g[u]) {
+            int v = t.v, w = t.w;
+            if (dis[v] &gt; dis[u] + w)  {
+                dis[v] = dis[u] + w;
+                if (!vis[v]) {
+                    q.push(v);
+                    vis[v] = 1;
+                }
+            }
+        }
+    }
+}</code></pre> </details> <p>虽然在大多数情况下 SPFA 跑得很快，但其最坏情况下的时间复杂度为 <span class=arithmatex>\(\mathcal O(nm)\)</span> 的。</p> <p>但是，SPFA 总还是比 Bellman-Ford 快的，因此我们在存在负权边的时候可以考虑 SPFA。</p> <h3 id=_9>判断负环<a class=headerlink href=#_9 title="Permanent link">&para;</a></h3> <p>注意到我们在用队列实现松弛的时候，每条边松弛的次数不能直接知道了。</p> <p>因此，我们直接去记录最短路的长度，在松弛的时候修改，如果 <span class=arithmatex>\(\ge n\)</span> 了就存在负环。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int dis[N], vis[N];
+int len[N];
+
+bool check(int s) {
+    memset(vis, 0, sizeof(int) * (n + 1));
+    memset(dis, 0x3f, sizeof(int) * (n + 1));
+    dis[s] = 0;
+    vis[s] = 1;
+    queue&lt;int&gt; q;
+    q.push(s);
+    len[s] = 0;
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        vis[u] = 0;
+        for (auto t : g[u]) {
+            int v = t.v, w = t.w;
+            if (dis[v] &gt; dis[u] + w) {
+                dis[v] = dis[u] + w;
+                len[v] = len[u] + 1;
+                if (len[v] &gt;= n)
+                    return true;
+                if (!vis[v]) {
+                    q.push(v);
+                    vis[v] = 1;
+                }
+            }
+        }
+    }
+    return false;
+}</code></pre> </details> <h3 id=dfs-spfa>DFS 版 SPFA<a class=headerlink href=#dfs-spfa title="Permanent link">&para;</a></h3> <p>通常用于判负环，复杂度依然不对。</p> <p>此处可以直接判断一个点是否出现在最短路中两次。</p> <p>因为 DFS 栈中只有祖先，但是 BFS 队列不满足这个性质。</p> <details class=note> <summary>点击查看代码</summary> <p>PS：板子题被卡了。</p> <pre class=highlight><code class=language-cpp>int dis[N], vis[N];
+
+bool dfs(int u) {
+    if (vis[u])
+        return true;
+    vis[u] = 1;
+    for (auto t : g[u]) {
+        int v = t.v, w = t.w;
+        if (dis[v] &gt; dis[u] + w) {
+            dis[v] = dis[u] + w;
+            if (dfs(v))
+                return true;
+        }
+    }
+    vis[u] = 0;
+    return false;
+}
+
+bool check(int s) {
+    memset(vis, 0, sizeof(int) * (n + 1));
+    memset(dis, 0x3f, sizeof(int) * (n + 1));
+    dis[s] = 0;
+    return dfs(s);
+}</code></pre> </details> <hr><blockquote class=page-copyright> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4Z"/></svg></i>本页面最近更新：</span><span class=facts_modified>正在加载中</span>，<a class=edit_history>更新历史</a>。<br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg></i>编辑页面：<a href=https://github.com/raineblog/blog/edit/main/docs/graph/shortest-path/sssp.md title=edit.link.title class=page_edit_url>在 GitHub 上编辑此页</a>！</span><br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M16 17v2H2v-2s0-4 7-4 7 4 7 4m-3.5-9.5A3.5 3.5 0 1 0 9 11a3.5 3.5 0 0 0 3.5-3.5m3.44 5.5A5.32 5.32 0 0 1 18 17v2h4v-2s0-3.63-6.06-4M15 4a3.39 3.39 0 0 0-1.93.59 5 5 0 0 1 0 5.82A3.39 3.39 0 0 0 15 11a3.5 3.5 0 0 0 0-7Z"/></svg></i>本页面贡献者：</span><span class=page_contributors>raine</span>。<br> </blockquote> <div id=__comments class="giscus no-print" data-no-instant></div> <script src=https://giscus.app/client.js data-repo=raineblog/blog-giscus data-repo-id=R_kgDOMhpKmw data-category=Announcements data-category-id=DIC_kwDOMhpKm84ChhZ7 data-mapping=pathname data-strict=1 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=preferred_color_scheme data-lang=zh-CN data-loading=lazy crossorigin=anonymous async>
+</script> </article> </div> <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script> </div> </main> <footer class=md-footer> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> by raineblog </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs <div id=miitbeian></div> </a> </div> <div style=float:right class=build_date_utc> <br> <a href=javascript:void(0); id=m_updtime> 最近更新：2025-02-02 d1e2f96 </a> </div> </div> </div> </footer> <div class=no-print id=scroll-page-top style="
+display: block;
+position: fixed;
+bottom: 20px;
+right: 20px;
+padding: 6px;
+color: #FFF;
+background-color: #AAA;
+opacity: 0.7;
+border-radius: 20px;
+cursor: pointer;
+z-index: 999;"> <i class="fa-solid fa-angle-up"></i> Page Top </div> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "navigation.prune", "navigation.path", "search.suggest", "search.highlight", "search.share", "announce.dismiss", "content.action.edit", "content.code.copy", "content.code.select", "content.footnote.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script> <script src=../../../assets/javascripts/bundle.fe8b6f2b.min.js></script> <script src=../../../assets/javascripts/extra.js></script> <script src=../../../assets/javascripts/jquery.min.js></script> <script src=../../../assets/highlight/highlight.min.js></script> <script src=../../../assets/katex/katex.min.js></script> <script src=../../../assets/katex/contrib/mhchem.min.js></script> <script src=../../../assets/katex/contrib/auto-render.min.js></script> <script src=../../../assets/katex/contrib/copy-tex.min.js></script> <script src=../../../assets/javascripts/custom.js></script> <script id=init-glightbox>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body> </html>

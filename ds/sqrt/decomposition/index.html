@@ -1,0 +1,575 @@
+<!doctype html><html lang=zh class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="by raine"><meta name=author content=raine><link href=https://raineblog.github.io/blog/ds/sqrt/decomposition/ rel=canonical><link href=../../odt/odt/ rel=prev><link href=../../offline/mo/mo_algo/ rel=next><link rel=icon href=../../..><meta name=generator content="mkdocs-1.6.1, mkdocs-material-9.5.31"><title>数列分块 - raine's Blog</title><link rel=stylesheet href=../../../assets/stylesheets/main.3cba04c6.min.css><link rel=stylesheet href=../../../assets/stylesheets/palette.06af60db.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Segoe+UI:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback"><style>:root{--md-text-font:"Segoe UI";--md-code-font:"Fira Code"}</style><link rel=stylesheet href=../../../assets/stylesheets/extra.css><link rel=stylesheet href=../../../assets/stylesheets/all.min.css><link rel=stylesheet href=../../../assets/katex/katex.min.css><link rel=stylesheet href=../../../assets/highlight/styles/stackoverflow-light.min.css><link rel=stylesheet href=../../../assets/stylesheets/custom.css><script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><link href=../../../assets/stylesheets/glightbox.min.css rel=stylesheet><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style><script src=../../../assets/javascripts/glightbox.min.js></script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary=white data-md-color-accent=red> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#_1 class=md-skip> 跳转至 </a> </div> <div data-md-component=announce> </div> <header class="md-header md-header--shadow md-header--lifted" data-md-component=header> <nav class="md-header__inner md-grid" aria-label=页眉> <a href=../../.. title="raine's Blog" class="md-header__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> raine's Blog </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> 数列分块 </span> </div> </div> </div> <div class=md-header__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> </nav> <nav class=md-tabs aria-label=标签 data-md-component=tabs> <div class=md-grid> <ul class=md-tabs__list> <li class=md-tabs__item> <a href=../../.. class=md-tabs__link> 简介 </a> </li> <li class=md-tabs__item> <a href=../../../contest/pre/ class=md-tabs__link> 比赛相关 </a> </li> <li class=md-tabs__item> <a href=../../../basic/prefix/ class=md-tabs__link> 基础算法 </a> </li> <li class=md-tabs__item> <a href=../../../dp/basic/ class=md-tabs__link> 动态规划 </a> </li> <li class="md-tabs__item md-tabs__item--active"> <a href=../../ds/ class=md-tabs__link> 数据结构 </a> </li> <li class=md-tabs__item> <a href=../../../math/linear-algebra/vector/ class=md-tabs__link> 数学 </a> </li> <li class=md-tabs__item> <a href=../../../graph/shortest-path/ class=md-tabs__link> 图论 </a> </li> </ul> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--lifted" aria-label=导航栏 data-md-level=0> <label class=md-nav__title for=__drawer> <a href=../../.. title="raine's Blog" class="md-nav__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> raine's Blog </label> <div class=md-nav__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../.. class=md-nav__link> <span class=md-ellipsis> 简介 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../contest/pre/ class=md-nav__link> <span class=md-ellipsis> 比赛相关 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../basic/prefix/ class=md-nav__link> <span class=md-ellipsis> 基础算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../dp/basic/ class=md-nav__link> <span class=md-ellipsis> 动态规划 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_5 checked> <label class=md-nav__link for=__nav_5 id=__nav_5_label tabindex> <span class=md-ellipsis> 数据结构 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=1 aria-labelledby=__nav_5_label aria-expanded=true> <label class=md-nav__title for=__nav_5> <span class="md-nav__icon md-icon"></span> 数据结构 </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../../ds/ class=md-nav__link> <span class=md-ellipsis> 数据结构 </span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../dsu/dsu1/ class=md-nav__link> <span class=md-ellipsis> 并查集 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../rmq/rmq/ class=md-nav__link> <span class=md-ellipsis> RMQ 问题 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../fenwick/fenwick1/ class=md-nav__link> <span class=md-ellipsis> 树状数组 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../seg/seg1/ class=md-nav__link> <span class=md-ellipsis> 线段树 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../odt/odt/ class=md-nav__link> <span class=md-ellipsis> 珂朵莉树 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> <span class=md-ellipsis> 数列分块 </span> <span class="md-nav__icon md-icon"></span> </label> <a href=./ class="md-nav__link md-nav__link--active"> <span class=md-ellipsis> 数列分块 </span> </a> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 基础思想 </span> </a> <nav class=md-nav aria-label=基础思想> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 问题引入 </span> </a> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 基本结构 </span> </a> </li> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 复杂度证明 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 分块的应用 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 简化实现 </span> </a> <nav class=md-nav aria-label=简化实现> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 预处理 </span> </a> </li> <li class=md-nav__item> <a href=#1 class=md-nav__link> <span class=md-ellipsis> 1 区间加、单点查询 </span> </a> </li> <li class=md-nav__item> <a href=#4 class=md-nav__link> <span class=md-ellipsis> 4 区间加、区间查询 </span> </a> </li> <li class=md-nav__item> <a href=#6 class=md-nav__link> <span class=md-ellipsis> 6 单点插入、单点查询 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_9 class=md-nav__link> <span class=md-ellipsis> 数列分块入门九题 </span> </a> <nav class=md-nav aria-label=数列分块入门九题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#2 class=md-nav__link> <span class=md-ellipsis> 2 区间加，区间排名 </span> </a> </li> <li class=md-nav__item> <a href=#3 class=md-nav__link> <span class=md-ellipsis> 3 区间加，区间前驱 </span> </a> </li> <li class=md-nav__item> <a href=#5 class=md-nav__link> <span class=md-ellipsis> 5 区间开方，区间查询 </span> </a> </li> <li class=md-nav__item> <a href=#7 class=md-nav__link> <span class=md-ellipsis> 7 区间加乘，单点查询 </span> </a> </li> <li class=md-nav__item> <a href=#8 class=md-nav__link> <span class=md-ellipsis> 8 区间计数，区间覆盖 </span> </a> </li> <li class=md-nav__item> <a href=#9 class=md-nav__link> <span class=md-ellipsis> 9 区间最小众数 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_10 class=md-nav__link> <span class=md-ellipsis> 其他例题 </span> </a> <nav class=md-nav aria-label=其他例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p387001 class=md-nav__link> <span class=md-ellipsis> P3870：01 反转，区间求和 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#reference class=md-nav__link> <span class=md-ellipsis> Reference </span> </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../offline/mo/mo_algo/ class=md-nav__link> <span class=md-ellipsis> 离线算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../math/linear-algebra/vector/ class=md-nav__link> <span class=md-ellipsis> 数学 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../graph/shortest-path/ class=md-nav__link> <span class=md-ellipsis> 图论 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </div> </div> </div> <div class="md-sidebar md-sidebar--secondary" data-md-component=sidebar data-md-type=toc> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 基础思想 </span> </a> <nav class=md-nav aria-label=基础思想> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 问题引入 </span> </a> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 基本结构 </span> </a> </li> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 复杂度证明 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 分块的应用 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 简化实现 </span> </a> <nav class=md-nav aria-label=简化实现> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 预处理 </span> </a> </li> <li class=md-nav__item> <a href=#1 class=md-nav__link> <span class=md-ellipsis> 1 区间加、单点查询 </span> </a> </li> <li class=md-nav__item> <a href=#4 class=md-nav__link> <span class=md-ellipsis> 4 区间加、区间查询 </span> </a> </li> <li class=md-nav__item> <a href=#6 class=md-nav__link> <span class=md-ellipsis> 6 单点插入、单点查询 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_9 class=md-nav__link> <span class=md-ellipsis> 数列分块入门九题 </span> </a> <nav class=md-nav aria-label=数列分块入门九题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#2 class=md-nav__link> <span class=md-ellipsis> 2 区间加，区间排名 </span> </a> </li> <li class=md-nav__item> <a href=#3 class=md-nav__link> <span class=md-ellipsis> 3 区间加，区间前驱 </span> </a> </li> <li class=md-nav__item> <a href=#5 class=md-nav__link> <span class=md-ellipsis> 5 区间开方，区间查询 </span> </a> </li> <li class=md-nav__item> <a href=#7 class=md-nav__link> <span class=md-ellipsis> 7 区间加乘，单点查询 </span> </a> </li> <li class=md-nav__item> <a href=#8 class=md-nav__link> <span class=md-ellipsis> 8 区间计数，区间覆盖 </span> </a> </li> <li class=md-nav__item> <a href=#9 class=md-nav__link> <span class=md-ellipsis> 9 区间最小众数 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_10 class=md-nav__link> <span class=md-ellipsis> 其他例题 </span> </a> <nav class=md-nav aria-label=其他例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#p387001 class=md-nav__link> <span class=md-ellipsis> P3870：01 反转，区间求和 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#reference class=md-nav__link> <span class=md-ellipsis> Reference </span> </a> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <a href=https://github.com/raineblog/blog/edit/main/docs/ds/sqrt/decomposition.md title=编辑此页 class="md-content__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg> </a> <div id=m_edit_url style="display: none;">https://github.com/raineblog/blog/edit/main/docs/ds/sqrt/decomposition.md</div> <h1 id=_1>数列分块<a class=headerlink href=#_1 title="Permanent link">&para;</a></h1> <p>下面部分代码使用，</p> <pre class=highlight><code class=language-cpp>using ll = long long;
+#define int ll</code></pre> <h2 id=_2>基础思想<a class=headerlink href=#_2 title="Permanent link">&para;</a></h2> <h3 id=_3>问题引入<a class=headerlink href=#_3 title="Permanent link">&para;</a></h3> <p>问题：实现</p> <ol> <li>区间加；</li> <li>区间求和。</li> </ol> <h3 id=_4>基本结构<a class=headerlink href=#_4 title="Permanent link">&para;</a></h3> <p>引用经典东西，</p> <p><a class=glightbox href=https://cdn.luogu.com.cn/upload/image_hosting/ask2ykwx.png data-type=image data-width=auto data-height=auto data-desc-position=bottom><img alt src=https://cdn.luogu.com.cn/upload/image_hosting/ask2ykwx.png></a></p> <p>我们考虑构造一个结构，形如，</p> <p><a class=glightbox href=https://cdn.luogu.com.cn/upload/image_hosting/wiopruwl.png data-type=image data-width=auto data-height=auto data-desc-position=bottom><img alt src=https://cdn.luogu.com.cn/upload/image_hosting/wiopruwl.png></a></p> <p>那么，结论是，</p> <p><a class=glightbox href=https://cdn.luogu.com.cn/upload/image_hosting/a51ouxrc.png data-type=image data-width=auto data-height=auto data-desc-position=bottom><img alt src=https://cdn.luogu.com.cn/upload/image_hosting/a51ouxrc.png></a></p> <h3 id=_5>复杂度证明<a class=headerlink href=#_5 title="Permanent link">&para;</a></h3> <p>为什么块长一般是 <span class=arithmatex>\(\sqrt n\)</span> 呢？</p> <p>我们假设构造的块长是 <span class=arithmatex>\(B\)</span>，那么总块数为，</p> <div class=arithmatex>\[ {n\over B} \]</div> <p>我们每一次修改查询，复杂度，</p> <ul> <li>在一块内，暴力枚举，<span class=arithmatex>\(\mathcal O(B)\)</span>；</li> <li>不在一块内，枚举整块、零散块，<span class=arithmatex>\(\mathcal O(n/B+B)\)</span>。</li> </ul> <p>根据均值不等式，</p> <div class=arithmatex>\[ {n\over B}+B\ge2\sqrt n \]</div> <p>取等当且仅当 <span class=arithmatex>\(b=\sqrt n\)</span>。</p> <h3 id=_6>分块的应用<a class=headerlink href=#_6 title="Permanent link">&para;</a></h3> <p>如果在分治结构上很难快速合并某些信息，我们就可以利用分块来做。</p> <h2 id=_7>简化实现<a class=headerlink href=#_7 title="Permanent link">&para;</a></h2> <p>上面的问题，区间加，区间求和。</p> <h3 id=_8>预处理<a class=headerlink href=#_8 title="Permanent link">&para;</a></h3> <pre class=highlight><code class=language-cpp>int n, siz, cnt;
+int a[N], tag[N];
+int belong[N], L[N], R[N];
+
+void build() {
+    siz = sqrt(n), cnt = (n - 1) / siz + 1;
+    for (int i = 1; i &lt;= n; ++i)
+        belong[i] = (i - 1) / siz + 1;
+    for (int i = 1; i &lt;= cnt; ++i)
+        L[i] = (i - 1) * siz + 1,
+        R[i] = L[i] + siz - 1;
+    R[cnt] = n;
+}</code></pre> <ul> <li><code>n</code> 表示原数组（<code>a</code>）长度；</li> <li><code>siz</code> 表示块长；</li> <li><code>cnt</code> 表示总块数；</li> <li><code>belong[i]</code> 表示原数组第 <span class=arithmatex>\(i\)</span> 个被分到了第几块；</li> <li><code>tag[i]</code> 表示第 <span class=arithmatex>\(i\)</span> 块上面的附加值；</li> <li><code>L[i],R[i]</code> 分别表示第 <span class=arithmatex>\(i\)</span> 块的左、右端点。</li> </ul> <p>特判在同一块内的情况，处理左右零散块和各个整块。</p> <h3 id=1>1 区间加、单点查询<a class=headerlink href=#1 title="Permanent link">&para;</a></h3> <p>不维护整块信息（单点查询）：</p> <details> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>constexpr int N = 5e4 + 10;
+
+int n, siz, cnt;
+int belong[N], L[N], R[N];
+int a[N], tag[N];
+
+void build() {
+    siz = sqrt(n), cnt = (n - 1) / siz + 1;
+    for (int i = 1; i &lt;= n; ++i)
+        belong[i] = (i - 1) / siz + 1;
+    for (int i = 1; i &lt;= cnt; ++i)
+        L[i] = (i - 1) * siz + 1,
+        R[i] = L[i] + siz - 1;
+    R[cnt] = n;
+}
+
+void add(int l, int r, int c) {
+    int p = belong[l], q = belong[r];
+    if (p == q) {
+        for (int i = l; i &lt;= r; ++i) a[i] += c;
+        return;
+    }
+    for (int i = l; i &lt;= R[p]; ++i) a[i] += c;
+    for (int i = p + 1; i &lt;= q - 1; ++i) tag[i] += c;
+    for (int i = L[q]; i &lt;= r; ++i) a[i] += c;
+}
+
+signed main() {
+    cin &gt;&gt; n; build();
+    for (int i = 1; i &lt;= n; ++i) cin &gt;&gt; a[i];
+    for (int i = 1; i &lt;= n; ++i) {
+        int op, l, r, c;
+        cin &gt;&gt; op &gt;&gt; l &gt;&gt; r &gt;&gt; c;
+        if (op == 0) add(l, r, c);
+        else cout &lt;&lt; a[r] + tag[belong[r]] &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> </details> <h3 id=4>4 区间加、区间查询<a class=headerlink href=#4 title="Permanent link">&para;</a></h3> <p>特判在同一块内的情况，处理左右零散块和各个整块。</p> <details> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>constexpr int N = 5e4 + 10;
+
+int n, siz, cnt;
+int belong[N], L[N], R[N];
+ll a[N], sum[N], tag[N];
+
+void build() {
+    siz = sqrt(n), cnt = (n - 1) / siz + 1;
+    for (int i = 1; i &lt;= n; ++i)
+        belong[i] = (i - 1) / siz + 1;
+    for (int i = 1; i &lt;= cnt; ++i)
+        L[i] = (i - 1) * siz + 1,
+        R[i] = L[i] + siz - 1;
+    R[cnt] = n;
+}
+
+void add(int l, int r, int c) {
+    int p = belong[l], q = belong[r];
+    if (p == q) {
+        for (int i = l; i &lt;= r; ++i)
+            a[i] += c, sum[p] += c;
+        return;
+    }
+    for (int i = l; i &lt;= R[p]; ++i)
+        a[i] += c, sum[p] += c;
+    for (int i = p + 1; i &lt;= q - 1; ++i)
+        sum[i] += c * (R[i] - L[i] + 1), tag[i] += c;
+    for (int i = L[q]; i &lt;= r; ++i)
+        a[i] += c, sum[q] += c;
+}
+
+ll query(int l, int r, int m) {
+    int p = belong[l], q = belong[r];
+    ll res = 0;
+    if (p == q) {
+        for (int i = l; i &lt;= r; ++i)
+            res = (res + a[i] + tag[p]) % m;
+        return res;
+    }
+    for (int i = l; i &lt;= R[p]; ++i)
+        res = (res + a[i] + tag[p]) % m;
+    for (int i = p + 1; i &lt;= q - 1; ++i)
+        res = (res + sum[i]) % m;
+    for (int i = L[q]; i &lt;= r; ++i)
+        res = (res + a[i] + tag[q]) % m;
+    return res;
+}
+
+signed main() {
+    cin &gt;&gt; n; build();
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; a[i], sum[belong[i]] += a[i];
+    for (int i = 1; i &lt;= n; ++i) {
+        int op, l, r, c;
+        cin &gt;&gt; op &gt;&gt; l &gt;&gt; r &gt;&gt; c;
+        if (op == 0) add(l, r, c);
+        else cout &lt;&lt; query(l, r, c + 1) &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> </details> <h3 id=6>6 单点插入、单点查询<a class=headerlink href=#6 title="Permanent link">&para;</a></h3> <p>使用 STL rope。</p> <p>第零部分</p> <table> <thead> <tr> <th>构造函数</th> <th>解释</th> </tr> </thead> <tbody> <tr> <td><code>rope&lt;T&gt;</code></td> <td>构造一个类型为 <code>T</code> 的数组</td> </tr> <tr> <td><code>crope</code></td> <td>等同于 <code>rope&lt;char&gt;</code></td> </tr> <tr> <td><code>rope&lt;T&gt;(siz)</code></td> <td>构造一个长度为 <code>siz</code> 的数组</td> </tr> <tr> <td><code>rope&lt;T&gt;(siz, val)</code></td> <td>构造一个长度为 <code>siz</code> 的初始值均为 <code>val</code> 的数组</td> </tr> </tbody> </table> <p>第一部分</p> <table> <thead> <tr> <th>操作</th> <th>解释</th> </tr> </thead> <tbody> <tr> <td><code>a[p]</code> 或 <code>a.at(p)</code></td> <td>返回 <code>p</code> 处的元素（只读）</td> </tr> <tr> <td><code>a.size()</code></td> <td>返回大小</td> </tr> <tr> <td><code>a.empty()</code></td> <td>返回是否为空</td> </tr> <tr> <td><code>a.clear()</code></td> <td>清空（删除所有元素）</td> </tr> <tr> <td><code>a.begin()</code> / <code>a.end()</code></td> <td>迭代器</td> </tr> <tr> <td><code>a.rbegin()</code> / <code>a.rend()</code></td> <td>反向迭代器</td> </tr> <tr> <td><code>a.front()</code> / <code>a.back()</code></td> <td>返回首位元素</td> </tr> <tr> <td><code>a.c_str()</code></td> <td>返回 c 风格数组（只读）</td> </tr> </tbody> </table> <p>第二部分</p> <table> <thead> <tr> <th>操作</th> <th>解释</th> </tr> </thead> <tbody> <tr> <td><code>a.push_back(x)</code></td> <td>在末尾添加 <code>x</code> 元素</td> </tr> <tr> <td><code>a.pop_back()</code></td> <td>在某位删除</td> </tr> <tr> <td><code>a.push_front(x)</code></td> <td>在开头添加 <code>x</code> 元素</td> </tr> <tr> <td><code>a.pop_front()</code></td> <td>在开头删除</td> </tr> </tbody> </table> <p>第三部分</p> <table> <thead> <tr> <th>操作</th> <th>解释</th> </tr> </thead> <tbody> <tr> <td><code>a.insert(p, x)</code></td> <td>在下标 <code>p</code> 前插入 <code>x</code> 元素</td> </tr> <tr> <td><code>a.insert(p, c, x)</code></td> <td>在下标 <code>p</code> 前插入 <code>c</code> 个 <code>x</code> 元素</td> </tr> <tr> <td><code>a.erase(p)</code></td> <td>从下标 <code>p</code> 开始删除 <span class=arithmatex>\(1\)</span> 个元素</td> </tr> <tr> <td><code>a.erase(p, c)</code></td> <td>从下标 <code>p</code> 开始删除 <code>c</code> 个元素</td> </tr> <tr> <td><code>a.replace(p, x)</code></td> <td>把下标 <code>p</code> 处的元素替换为 <code>x</code> 元素</td> </tr> <tr> <td><code>a.substr(p, x)</code></td> <td>从下标 <code>p</code> 开始截取 <code>x</code> 个返回</td> </tr> </tbody> </table> <details> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>#include &lt;bits/stdc++.h&gt;
+#include &lt;ext/rope&gt;
+
+using namespace std;
+using namespace __gnu_cxx;
+
+int n;
+
+rope&lt;int&gt; a;
+
+signed main() {
+    cin &gt;&gt; n; a.push_back(0);
+    for (int i = 1, x; i &lt;= n; ++i)
+        cin &gt;&gt; x, a.push_back(x);
+    for (int i = 1; i &lt;= n; ++i) {
+        int op, l, r, c;
+        cin &gt;&gt; op &gt;&gt; l &gt;&gt; r &gt;&gt; c;
+        if (op == 0) a.insert(l, r);
+        else cout &lt;&lt; a[r] &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> </details> <h2 id=_9>数列分块入门九题<a class=headerlink href=#_9 title="Permanent link">&para;</a></h2> <h3 id=2>2 区间加，区间排名<a class=headerlink href=#2 title="Permanent link">&para;</a></h3> <ul> <li>区间加；</li> <li> <p>区间查小于某个数的数量。</p> </li> <li> <p><a href=https://www.luogu.com.cn/problem/SP3261>SP3261 RACETIME - Race Against Time</a></p> </li> <li><a href=https://www.luogu.com.cn/problem/SP18185>SP18185 GIVEAWAY - Give Away</a></li> <li><a href=https://www.luogu.com.cn/problem/UVA12003>UVA12003 Array Transformer</a></li> <li><a href=https://www.luogu.com.cn/problem/P2801>P2801 教主的魔法</a></li> </ul> <details> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>constexpr int N = 5e4 + 10;
+
+int n, siz, cnt;
+int belong[N], L[N], R[N];
+int a[N], tag[N];
+int sorted[N], is[N];
+
+void build() {
+    siz = sqrt(n), cnt = (n - 1) / siz + 1;
+    for (int i = 1; i &lt;= n; ++i)
+        belong[i] = (i - 1) / siz + 1;
+    for (int i = 1; i &lt;= cnt; ++i)
+        L[i] = (i - 1) * siz + 1, R[i] = L[i] + siz - 1;
+    R[cnt] = n;
+}
+
+void add(int l, int r, int c) {
+    int p = belong[l], q = belong[r];
+    if (p == q) {
+        for (int i = l; i &lt;= r; ++i) a[i] += c;
+        return void(is[p] = 0);
+    }
+    for (int i = l; i &lt;= R[p]; ++i)
+        a[i] += c;
+    is[p] = 0;
+    for (int i = p + 1; i &lt;= q - 1; ++i)
+        tag[i] += c;
+    for (int i = L[q]; i &lt;= r; ++i)
+        a[i] += c;
+    is[q] = 0;
+}
+
+int query(int l, int r, ll c) {
+    int p = belong[l], q = belong[r];
+    int res = 0;
+    if (p == q) {
+        for (int i = l; i &lt;= r; ++i)
+            res += (a[i] + tag[p]) &lt; c;
+        return res;
+    }
+    for (int i = l; i &lt;= R[p]; ++i)
+        res += (a[i] + tag[p]) &lt; c;
+    for (int i = p + 1; i &lt;= q - 1; ++i) {
+        if (!is[i])
+            copy_n(a + L[i], siz, sorted + L[i]),
+            sort(sorted + L[i], sorted + R[i] + 1), is[i] = 1;
+        res += lower_bound(sorted + L[i], sorted + R[i] + 1, c - tag[i]) - (sorted + L[i]);
+    }
+    for (int i = L[q]; i &lt;= r; ++i)
+        res += (a[i] + tag[q]) &lt; c;
+    return res;
+}
+
+signed main() {
+    cin &gt;&gt; n; build();
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; a[i], sorted[i] = a[i];
+    for (int i = 1; i &lt;= cnt; ++i)
+        sort(sorted + L[i], sorted + R[i] + 1), is[i] = 1;
+    for (int i = 1; i &lt;= n; ++i) {
+        int op, l, r, c;
+        cin &gt;&gt; op &gt;&gt; l &gt;&gt; r &gt;&gt; c;
+        if (op == 0) add(l, r, c);
+        else cout &lt;&lt; query(l, r, 1ll * c * c) &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> </details> <ul> <li><code>a</code> 表示原数组；</li> <li><code>tag</code> 表示区间加标记；</li> <li><code>sorted</code> 表示分块后块内排序的结果；</li> <li><code>is</code> 表示一个块是否排序完。</li> </ul> <h3 id=3>3 区间加，区间前驱<a class=headerlink href=#3 title="Permanent link">&para;</a></h3> <p>和上一题类似，</p> <details> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>int query(int l, int r, int c) {
+    int p = belong[l], q = belong[r];
+    int res = INT_MIN, flag = 0;
+    if (p == q) {
+        for (int i = l; i &lt;= r; ++i)
+            if (a[i] + tag[p] &lt; c)
+                flag = 1, res = max(res, a[i] + tag[p]);
+        return flag ? res : -1;
+    }
+    for (int i = l; i &lt;= R[p]; ++i)
+        if (a[i] + tag[p] &lt; c)
+            flag = 1, res = max(res, a[i] + tag[p]);
+    for (int i = p + 1; i &lt;= q - 1; ++i) {
+        if (!is[i])
+            copy_n(a + L[i], siz, sorted + L[i]),
+            sort(sorted + L[i], sorted + R[i] + 1), is[i] = 1;
+        auto it = lower_bound(sorted + L[i], sorted + R[i] + 1, c - tag[i]) - 1;
+        if (*it + tag[i] &lt; c)
+            flag = 1, res = max(res, *it + tag[i]);
+    }
+    for (int i = L[q]; i &lt;= r; ++i)
+        if (a[i] + tag[q] &lt; c)
+            flag = 1, res = max(res, a[i] + tag[q]);
+    return flag ? res : -1;
+}
+
+signed main() {
+    cin &gt;&gt; n; build();
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; a[i], sorted[i] = a[i];
+    for (int i = 1; i &lt;= cnt; ++i)
+        sort(sorted + L[i], sorted + R[i] + 1), is[i] = 1;
+    for (int i = 1; i &lt;= n; ++i) {
+        int op, l, r, c;
+        cin &gt;&gt; op &gt;&gt; l &gt;&gt; r &gt;&gt; c;
+        if (op == 0) add(l, r, c);
+        else cout &lt;&lt; query(l, r, c) &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> </details> <h3 id=5>5 区间开方，区间查询<a class=headerlink href=#5 title="Permanent link">&para;</a></h3> <p>注意到，开方一定次数以后，所有的数都会在 <span class=arithmatex>\(0,1\)</span> 不变。</p> <p>即 <span class=arithmatex>\(f(x)=\sqrt x\)</span> 在正数的不动点为 <span class=arithmatex>\(0,1\)</span>，因此，</p> <ul> <li>维护 <code>tag</code> 表示一个段是否已经变为了 <span class=arithmatex>\(0,1\)</span>；</li> <li>如果一个段已经变成了 <span class=arithmatex>\(0,1\)</span> 那么就不需要再开方了。</li> </ul> <p>洛谷上的题是：<a href=https://www.luogu.com.cn/problem/P4145>P4145 上帝造题的七分钟 2 / 花神游历各国</a>。</p> <details> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>constexpr int N = 5e4 + 10;
+
+int n, siz, cnt;
+int belong[N], L[N], R[N];
+int a[N], sum[N], tag[N];
+// tag: is 0 or 1
+
+void build() {
+    siz = sqrt(n), cnt = (n - 1) / siz + 1;
+    for (int i = 1; i &lt;= n; ++i)
+        belong[i] = (i - 1) / siz + 1;
+    for (int i = 1; i &lt;= cnt; ++i)
+        L[i] = (i - 1) * siz + 1, R[i] = L[i] + siz - 1;
+    R[cnt] = n;
+}
+
+void m_sqrt(int l, int r) {
+    int p = belong[l], q = belong[r];
+    if (p == q) {
+        if (tag[p]) return;
+        for (int i = l; i &lt;= r; ++i) {
+            sum[p] -= a[i];
+            a[i] = sqrt(a[i]);
+            sum[p] += a[i];
+        }
+        return;
+    }
+    if (!tag[p])
+        for (int i = l; i &lt;= R[p]; ++i) {
+            sum[p] -= a[i];
+            a[i] = sqrt(a[i]);
+            sum[p] += a[i];
+        }
+    for (int i = p + 1; i &lt;= q - 1; ++i) {
+        if (tag[i]) continue;
+        int fl = true; sum[i] = 0;
+        for (int j = L[i]; j &lt;= R[i]; ++j) {
+            a[j] = sqrt(a[j]), sum[i] += a[j];
+            if (a[j] &gt; 1) fl = false;
+        }
+        tag[i] = fl;
+    }
+    if (!tag[q])
+        for (int i = L[q]; i &lt;= r; ++i) {
+            sum[q] -= a[i];
+            a[i] = sqrt(a[i]);
+            sum[q] += a[i];
+        }
+}
+
+int query(int l, int r) {
+    int p = belong[l], q = belong[r];
+    int res = 0;
+    if (p == q) {
+        for (int i = l; i &lt;= r; ++i) res += a[i];
+        return res;
+    }
+    for (int i = l; i &lt;= R[p]; ++i) res += a[i];
+    for (int i = p + 1; i &lt;= q - 1; ++i) res += sum[i];
+    for (int i = L[q]; i &lt;= r; ++i) res += a[i];
+    return res;
+}
+
+signed main() {
+    cin &gt;&gt; n; build();
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; a[i], sum[belong[i]] += a[i];
+    for (int i = 1; i &lt;= n; ++i) {
+        int op, l, r, c;
+        cin &gt;&gt; op &gt;&gt; l &gt;&gt; r &gt;&gt; c;
+        if (op == 0) m_sqrt(l, r);
+        else cout &lt;&lt; query(l, r) &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> </details> <h3 id=7>7 区间加乘，单点查询<a class=headerlink href=#7 title="Permanent link">&para;</a></h3> <p>类似 <a href=https://www.luogu.com.cn/problem/P3373>线段树 2</a> 的 tag 处理即可。</p> <details> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>constexpr int N = 1e5 + 10;
+
+constexpr int MOD = 10007;
+
+int n, siz, cnt;
+int belong[N], L[N], R[N];
+int a[N], tagadd[N], tagmul[N];
+
+void build() {
+    siz = sqrt(n), cnt = (n - 1) / siz + 1;
+    for (int i = 1; i &lt;= n; ++i)
+        belong[i] = (i - 1) / siz + 1;
+    for (int i = 1; i &lt;= cnt; ++i)
+        L[i] = (i - 1) * siz + 1, R[i] = L[i] + siz - 1,
+        tagadd[i] = 0, tagmul[i] = 1;
+    R[cnt] = n; 
+}
+
+void rebuild(int x) {
+    for (int i = L[x]; i &lt;= R[x]; ++i)
+        a[i] = (a[i] * tagmul[x] % MOD + tagadd[x]) % MOD;
+    tagadd[x] = 0, tagmul[x] = 1;
+}
+
+void modify(int l, int r, int mul, int add) {
+    int p = belong[l], q = belong[r];
+    if (p == q) {
+        rebuild(p);
+        for (int i = l; i &lt;= r; ++i)
+            a[i] = (a[i] * mul % MOD + add) % MOD;
+        return;
+    }
+    rebuild(p);
+    for (int i = l; i &lt;= R[p]; ++i)
+        a[i] = (a[i] * mul % MOD + add) % MOD;
+    for (int i = p + 1; i &lt;= q - 1; ++i) {
+        tagmul[i] = tagmul[i] * mul % MOD;
+        tagadd[i] = (tagadd[i] * mul % MOD + add) % MOD;
+    }
+    rebuild(q);
+    for (int i = L[q]; i &lt;= r; ++i)
+        a[i] = (a[i] * mul % MOD + add) % MOD;
+}
+
+int query(int x) {
+    return (a[x] * tagmul[belong[x]] % MOD + tagadd[belong[x]]) % MOD;
+}
+
+signed main() {
+    cin &gt;&gt; n; build();
+    copy_n(istream_iterator&lt;int&gt;(cin), n, a + 1);
+    for (int i = 1; i &lt;= n; ++i) {
+        int op, l, r, c;
+        cin &gt;&gt; op &gt;&gt; l &gt;&gt; r &gt;&gt; c;
+        if (op == 0) modify(l, r, 1, c);
+        if (op == 1) modify(l, r, c, 0);
+        if (op == 2) cout &lt;&lt; query(r) &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> </details> <h3 id=8>8 区间计数，区间覆盖<a class=headerlink href=#8 title="Permanent link">&para;</a></h3> <p>哈哈哈，珂朵莉，启动！</p> <details> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>namespace odt {
+    struct emm {
+        int l, r;
+        mutable int v;
+        emm(int l): l(l) {}
+        emm(int l, int r, int v): l(l), r(r), v(v) {}
+        int len() const { return r - l + 1; }
+        friend bool operator &lt;(const emm &amp;a, const emm &amp;b) { return a.l &lt; b.l; }
+    };
+
+    set&lt;emm&gt; cute;
+
+    auto split(int x) {
+        auto it = --cute.upper_bound(emm(x));
+        if (it-&gt;l == x) return it;
+        auto t = *it; cute.erase(it);
+        cute.emplace(emm(t.l, x - 1, t.v));
+        return cute.emplace(emm(x, t.r, t.v)).first;
+    }
+
+    auto get(int l, int r) {
+        auto itr = split(r + 1), itl = split(l);
+        return make_pair(itl, itr);
+    }
+
+    int assign(int l, int r, int v) {
+        auto it = get(l, r);
+        auto itl = it.first, itr = it.second;
+        int res = 0;
+        for (; itl != itr; ++itl)
+            if (itl-&gt;v == v) res += itl-&gt;len();
+        cute.erase(it.first, itr);
+        cute.emplace(l, r, v);
+        return res;
+    }
+}
+
+signed main() {
+    int n; cin &gt;&gt; n;
+    for (int i = 1, x; i &lt;= n; ++i)
+        cin &gt;&gt; x, odt::cute.emplace(i, i, x);
+    for (int k = 1; k &lt;= n; ++k) {
+        int l, r, c;
+        cin &gt;&gt; l &gt;&gt; r &gt;&gt; c;
+        cout &lt;&lt; odt::assign(l, r, c) &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> </details> <h3 id=9>9 区间最小众数<a class=headerlink href=#9 title="Permanent link">&para;</a></h3> <ul> <li><a href=https://www.luogu.com.cn/problem/P4168>P4168 [Violet] 蒲公英</a></li> </ul> <p>记集合 <span class=arithmatex>\(S\)</span> 的众数为 <span class=arithmatex>\(\text{mode}(S)\)</span>，</p> <p>根据一些性质，</p> <div class=arithmatex>\[ \text{mode}(a\cup b)\in\text{mode}(a)\cup b \]</div> <p>证明：若 <span class=arithmatex>\(t\)</span> 既不是 <span class=arithmatex>\(\text{mode}(a)\)</span> 也不属于 <span class=arithmatex>\(b\)</span>，那么 <span class=arithmatex>\(t\)</span> 的出现次数一定小于 <span class=arithmatex>\(\text{mode}(a)\)</span>。</p> <p>先离散化，块长为 <span class=arithmatex>\(\sqrt n\)</span> 分块，</p> <ul> <li>设 <span class=arithmatex>\(\text{between}(i,j)\)</span> 表示第 <span class=arithmatex>\([i,j]\)</span> 块的最小众数。</li> <li>设 <span class=arithmatex>\(\text{prefix}(i,x)\)</span> 表示前 <span class=arithmatex>\(i\)</span> 块，数字 <span class=arithmatex>\(j\)</span> 的出现次数。</li> </ul> <p>那么，区间 <span class=arithmatex>\([l,r]\)</span> 最小众数一定是整块的最小众数，或者散块的。</p> <p>直接处理即可。</p> <ul> <li>如何预处理 <span class=arithmatex>\(\text{prefix}\)</span>？普及组重造。</li> <li>如何预处理 <span class=arithmatex>\(\text{between}\)</span>？再根据性质，加入 <span class=arithmatex>\(j\)</span> 集合即可。</li> </ul> <p>时间复杂度：<span class=arithmatex>\(\mathcal O(q\sqrt n)\)</span>。</p> <ul> <li>注意一定要加入所有的数字以后再统计；</li> <li>注意算散块的时候要加上整块的次数。</li> </ul> <details> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>constexpr int N = 1e5 + 10;
+constexpr int SN = 400;
+
+int n, a[N], siz, cnt;
+int belong[N], L[N], R[N];
+int between[SN][SN], prefix[SN][N];
+
+void build() {
+    siz = sqrt(n), cnt = (n - 1) / siz + 1;
+    for (int i = 1; i &lt;= n; ++i)
+        belong[i] = (i - 1) / siz + 1;
+    for (int i = 1; i &lt;= cnt; ++i)
+        L[i] = (i - 1) * siz + 1, R[i] = L[i] + siz - 1;
+    R[cnt] = n;
+    for (int i = 1; i &lt;= cnt; ++i) {
+        copy_n(prefix[i - 1], n, prefix[i]);
+        for (int j = L[i]; j &lt;= R[i]; ++j) ++prefix[i][a[j]];
+    }
+    for (int i = 1; i &lt;= cnt; ++i)
+        for (int j = i; j &lt;= cnt; ++j) {
+            int r = between[i][j - 1];
+            for (int k = L[j]; k &lt;= R[j]; ++k) {
+                int c = a[k];
+                int ori = prefix[j][r] - prefix[i - 1][r];
+                int now = prefix[j][c] - prefix[i - 1][c];
+                if (now &gt; ori || (now == ori &amp;&amp; c &lt; r)) r = c;
+            }
+            between[i][j] = r;
+        }
+}
+
+array&lt;int, N&gt; bucket;
+
+int query(int l, int r) {
+    fill_n(bucket.begin(), n, 0);
+    int p = belong[l], q = belong[r];
+    int id = 0;
+    if (q - p == 1) {
+        for (int i = l; i &lt;= r; ++i) ++bucket[a[i]];
+        for (int i = l; i &lt;= r; ++i) {
+            int c = a[i];
+            int ori = bucket[id];
+            int now = bucket[c];
+            if (now &gt; ori || (now == ori &amp;&amp; c &lt; id)) id = c;
+        }
+        return id;
+    }
+    id = between[p + 1][q - 1];
+    for (int i = l; i &lt;= R[p]; ++i) ++bucket[a[i]];
+    for (int i = L[q]; i &lt;= r; ++i) ++bucket[a[i]];
+    for (int i = l; i &lt;= R[p]; ++i) {
+        int c = a[i];
+        int ori = bucket[id] + prefix[q - 1][id] - prefix[p][id];
+        int now = bucket[c] + prefix[q - 1][c] - prefix[p][c];
+        if (now &gt; ori || (now == ori &amp;&amp; c &lt; id)) id = c;
+    }
+    for (int i = q[L]; i &lt;= r; ++i) {
+        int c = a[i];
+        int ori = bucket[id] + prefix[q - 1][id] - prefix[p][id];
+        int now = bucket[c] + prefix[q - 1][c] - prefix[p][c];
+        if (now &gt; ori || (now == ori &amp;&amp; c &lt; id)) id = c;
+    }
+    return id;
+}
+
+signed main() {
+    cin &gt;&gt; n; vector&lt;int&gt; s(n);
+    for (int i = 1; i &lt;= n; ++i) cin &gt;&gt; a[i], s[i - 1] = a[i];
+    sort(s.begin(), s.end()), s.erase(unique(s.begin(), s.end()), s.end());
+    for (int i = 1; i &lt;= n; ++i) a[i] = lower_bound(s.begin(), s.end(), a[i]) - s.begin();
+    build();
+    for (int i = 1; i &lt;= n; ++i) {
+        int l, r; cin &gt;&gt; l &gt;&gt; r;
+        cout &lt;&lt; s[query(l, r)] &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> </details> <h2 id=_10>其他例题<a class=headerlink href=#_10 title="Permanent link">&para;</a></h2> <h3 id=p387001>P3870：01 反转，区间求和<a class=headerlink href=#p387001 title="Permanent link">&para;</a></h3> <ul> <li><code>tag</code> 表示一块是否反转；</li> <li><code>sum</code> 表示区间和，不考虑是否反转。</li> </ul> <pre class=highlight><code class=language-cpp>constexpr int N = 1e5 + 10;
+
+int n, m, siz, cnt;
+int belong[N], L[N], R[N];
+int a[N], sum[N], tag[N];
+
+void build() {
+    siz = sqrt(n), cnt = (n - 1) / siz + 1;
+    for (int i = 1; i &lt;= n; ++i)
+        belong[i] = (i - 1) / siz + 1;
+    for (int i = 1; i &lt;= cnt; ++i)
+        L[i] = (i - 1) * siz + 1, R[i] = L[i] + siz - 1;
+    R[cnt] = n;
+}
+
+void change(int l, int r) {
+    int p = belong[l], q = belong[r];
+    if (p == q) {
+        for (int i = l; i &lt;= r; ++i) {
+            if (a[i] == 0) a[i] = 1, ++sum[p];
+            else a[i] = 0, --sum[p];
+        }
+        return;
+    }
+    for (int i = l; i &lt;= R[p]; ++i) {
+        if (a[i] == 0) a[i] = 1, ++sum[p];
+        else a[i] = 0, --sum[p];
+    }
+    for (int i = p + 1; i &lt;= q - 1; ++i)
+        tag[i] ^= 1; 
+    for (int i = L[q]; i &lt;= r; ++i) {
+        if (a[i] == 0) a[i] = 1, ++sum[q];
+        else a[i] = 0, --sum[q];
+    }
+}
+
+int query(int l, int r) {
+    int p = belong[l], q = belong[r];
+    int res = 0;
+    if (p == q) {
+        for (int i = l; i &lt;= r; ++i)
+            res += a[i] ^ tag[p];
+        return res;
+    }
+    for (int i = l; i &lt;= R[p]; ++i)
+        res += a[i] ^ tag[p];
+    for (int i = p + 1; i &lt;= q - 1; ++i) {
+        if (!tag[i]) res += sum[i];
+        else res += siz - sum[i];
+    }
+    for (int i = L[q]; i &lt;= r; ++i)
+        res += a[i] ^ tag[q];
+    return res;
+}
+
+signed main() {
+    cin &gt;&gt; n &gt;&gt; m;
+    build();
+    while (m--) {
+        int op, l, r;
+        cin &gt;&gt; op &gt;&gt; l &gt;&gt; r;
+        if (op == 0) change(l, r);
+        else cout &lt;&lt; query(l, r) &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre> <h2 id=reference>Reference<a class=headerlink href=#reference title="Permanent link">&para;</a></h2> <p>[1] <a href=https://blog.csdn.net/ZhuRanCheng/article/details/128854390>https://blog.csdn.net/ZhuRanCheng/article/details/128854390</a><br> [2] <a href=https://yuhi.xyz/post/分块学习笔记/ >https://yuhi.xyz/post/分块学习笔记/</a><br> [3] <a href=https://www.jianshu.com/p/2aba8f326052>https://www.jianshu.com/p/2aba8f326052</a><br> [4] <a href=https://www.cnblogs.com/xyzqwq/p/fenkuai.html>https://www.cnblogs.com/xyzqwq/p/fenkuai.html</a><br> [5] <a href=https://oi-wiki.org/ds/decompose/ >https://oi-wiki.org/ds/decompose/</a></p> <hr><blockquote class=page-copyright> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4Z"/></svg></i>本页面最近更新：</span><span class=facts_modified>正在加载中</span>，<a class=edit_history>更新历史</a>。<br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg></i>编辑页面：<a href=https://github.com/raineblog/blog/edit/main/docs/ds/sqrt/decomposition.md title=edit.link.title class=page_edit_url>在 GitHub 上编辑此页</a>！</span><br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M16 17v2H2v-2s0-4 7-4 7 4 7 4m-3.5-9.5A3.5 3.5 0 1 0 9 11a3.5 3.5 0 0 0 3.5-3.5m3.44 5.5A5.32 5.32 0 0 1 18 17v2h4v-2s0-3.63-6.06-4M15 4a3.39 3.39 0 0 0-1.93.59 5 5 0 0 1 0 5.82A3.39 3.39 0 0 0 15 11a3.5 3.5 0 0 0 0-7Z"/></svg></i>本页面贡献者：</span><span class=page_contributors>raine</span>。<br> </blockquote> <div id=__comments class="giscus no-print" data-no-instant></div> <script src=https://giscus.app/client.js data-repo=raineblog/blog-giscus data-repo-id=R_kgDOMhpKmw data-category=Announcements data-category-id=DIC_kwDOMhpKm84ChhZ7 data-mapping=pathname data-strict=1 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=preferred_color_scheme data-lang=zh-CN data-loading=lazy crossorigin=anonymous async>
+</script> </article> </div> <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script> </div> </main> <footer class=md-footer> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> by raineblog </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs <div id=miitbeian></div> </a> </div> <div style=float:right class=build_date_utc> <br> <a href=javascript:void(0); id=m_updtime> 最近更新：2025-02-02 d1e2f96 </a> </div> </div> </div> </footer> <div class=no-print id=scroll-page-top style="
+display: block;
+position: fixed;
+bottom: 20px;
+right: 20px;
+padding: 6px;
+color: #FFF;
+background-color: #AAA;
+opacity: 0.7;
+border-radius: 20px;
+cursor: pointer;
+z-index: 999;"> <i class="fa-solid fa-angle-up"></i> Page Top </div> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "navigation.prune", "navigation.path", "search.suggest", "search.highlight", "search.share", "announce.dismiss", "content.action.edit", "content.code.copy", "content.code.select", "content.footnote.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script> <script src=../../../assets/javascripts/bundle.fe8b6f2b.min.js></script> <script src=../../../assets/javascripts/extra.js></script> <script src=../../../assets/javascripts/jquery.min.js></script> <script src=../../../assets/highlight/highlight.min.js></script> <script src=../../../assets/katex/katex.min.js></script> <script src=../../../assets/katex/contrib/mhchem.min.js></script> <script src=../../../assets/katex/contrib/auto-render.min.js></script> <script src=../../../assets/katex/contrib/copy-tex.min.js></script> <script src=../../../assets/javascripts/custom.js></script> <script id=init-glightbox>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body> </html>

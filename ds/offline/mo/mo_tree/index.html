@@ -1,0 +1,689 @@
+<!doctype html><html lang=zh class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="by raine"><meta name=author content=raine><link href=https://raineblog.github.io/blog/ds/offline/mo/mo_tree/ rel=canonical><link href=../mo/ rel=prev><link href=../../../../math/linear-algebra/vector/ rel=next><link rel=icon href=../../../..><meta name=generator content="mkdocs-1.6.1, mkdocs-material-9.5.31"><title>树上莫队 - raine's Blog</title><link rel=stylesheet href=../../../../assets/stylesheets/main.3cba04c6.min.css><link rel=stylesheet href=../../../../assets/stylesheets/palette.06af60db.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Segoe+UI:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback"><style>:root{--md-text-font:"Segoe UI";--md-code-font:"Fira Code"}</style><link rel=stylesheet href=../../../../assets/stylesheets/extra.css><link rel=stylesheet href=../../../../assets/stylesheets/all.min.css><link rel=stylesheet href=../../../../assets/katex/katex.min.css><link rel=stylesheet href=../../../../assets/highlight/styles/stackoverflow-light.min.css><link rel=stylesheet href=../../../../assets/stylesheets/custom.css><script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><link href=../../../../assets/stylesheets/glightbox.min.css rel=stylesheet><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style><script src=../../../../assets/javascripts/glightbox.min.js></script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary=white data-md-color-accent=red> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#_1 class=md-skip> 跳转至 </a> </div> <div data-md-component=announce> </div> <header class="md-header md-header--shadow md-header--lifted" data-md-component=header> <nav class="md-header__inner md-grid" aria-label=页眉> <a href=../../../.. title="raine's Blog" class="md-header__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> raine's Blog </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> 树上莫队 </span> </div> </div> </div> <div class=md-header__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> </nav> <nav class=md-tabs aria-label=标签 data-md-component=tabs> <div class=md-grid> <ul class=md-tabs__list> <li class=md-tabs__item> <a href=../../../.. class=md-tabs__link> 简介 </a> </li> <li class=md-tabs__item> <a href=../../../../contest/pre/ class=md-tabs__link> 比赛相关 </a> </li> <li class=md-tabs__item> <a href=../../../../basic/prefix/ class=md-tabs__link> 基础算法 </a> </li> <li class=md-tabs__item> <a href=../../../../dp/basic/ class=md-tabs__link> 动态规划 </a> </li> <li class="md-tabs__item md-tabs__item--active"> <a href=../../../ds/ class=md-tabs__link> 数据结构 </a> </li> <li class=md-tabs__item> <a href=../../../../math/linear-algebra/vector/ class=md-tabs__link> 数学 </a> </li> <li class=md-tabs__item> <a href=../../../../graph/shortest-path/ class=md-tabs__link> 图论 </a> </li> </ul> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--lifted" aria-label=导航栏 data-md-level=0> <label class=md-nav__title for=__drawer> <a href=../../../.. title="raine's Blog" class="md-nav__button md-logo" aria-label="raine's Blog" data-md-component=logo> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg> </a> raine's Blog </label> <div class=md-nav__source> <a href=https://github.com/raineblog/blog title=前往仓库 class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </div> <div class=md-source__repository> raineblog/blog </div> </a> </div> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../.. class=md-nav__link> <span class=md-ellipsis> 简介 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../../contest/pre/ class=md-nav__link> <span class=md-ellipsis> 比赛相关 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../../basic/prefix/ class=md-nav__link> <span class=md-ellipsis> 基础算法 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../../dp/basic/ class=md-nav__link> <span class=md-ellipsis> 动态规划 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_5 checked> <label class=md-nav__link for=__nav_5 id=__nav_5_label tabindex> <span class=md-ellipsis> 数据结构 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=1 aria-labelledby=__nav_5_label aria-expanded=true> <label class=md-nav__title for=__nav_5> <span class="md-nav__icon md-icon"></span> 数据结构 </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../../../ds/ class=md-nav__link> <span class=md-ellipsis> 数据结构 </span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../dsu/dsu1/ class=md-nav__link> <span class=md-ellipsis> 并查集 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../rmq/rmq/ class=md-nav__link> <span class=md-ellipsis> RMQ 问题 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../fenwick/fenwick1/ class=md-nav__link> <span class=md-ellipsis> 树状数组 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../seg/seg1/ class=md-nav__link> <span class=md-ellipsis> 线段树 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../odt/odt/ class=md-nav__link> <span class=md-ellipsis> 珂朵莉树 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class=md-nav__item> <a href=../../../sqrt/decomposition/ class=md-nav__link> <span class=md-ellipsis> 数列分块 </span> </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_5_8 checked> <label class=md-nav__link for=__nav_5_8 id=__nav_5_8_label tabindex=0> <span class=md-ellipsis> 离线算法 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=2 aria-labelledby=__nav_5_8_label aria-expanded=true> <label class=md-nav__title for=__nav_5_8> <span class="md-nav__icon md-icon"></span> 离线算法 </label> <ul class=md-nav__list data-md-scrollfix> <li class="md-nav__item md-nav__item--active md-nav__item--nested"> <input class="md-nav__toggle md-toggle " type=checkbox id=__nav_5_8_1 checked> <label class=md-nav__link for=__nav_5_8_1 id=__nav_5_8_1_label tabindex=0> <span class=md-ellipsis> 莫队 </span> <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav data-md-level=3 aria-labelledby=__nav_5_8_1_label aria-expanded=true> <label class=md-nav__title for=__nav_5_8_1> <span class="md-nav__icon md-icon"></span> 莫队 </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../mo_algo/ class=md-nav__link> <span class=md-ellipsis> 莫队算法 </span> </a> </li> <li class=md-nav__item> <a href=../mo/ class=md-nav__link> <span class=md-ellipsis> 普通莫队 </span> </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> <span class=md-ellipsis> 树上莫队 </span> <span class="md-nav__icon md-icon"></span> </label> <a href=./ class="md-nav__link md-nav__link--active"> <span class=md-ellipsis> 树上莫队 </span> </a> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 简述 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 括号序分块 </span> </a> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 实现 </span> </a> <nav class=md-nav aria-label=实现> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 点权 / 边权 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 路径的转化 </span> </a> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 莫队算法部分 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 例题 </span> </a> <nav class=md-nav aria-label=例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#sp10707-cot2-count-on-a-tree-ii class=md-nav__link> <span class=md-ellipsis> 例题一：SP10707 COT2 - Count on a tree II </span> </a> </li> <li class=md-nav__item> <a href=#qoj7245-frank-sinatra class=md-nav__link> <span class=md-ellipsis> 例题二：QOJ7245 Frank Sinatra </span> </a> </li> <li class=md-nav__item> <a href=#baekjoon13892-acm-tax class=md-nav__link> <span class=md-ellipsis> 例题三：Baekjoon13892 ACM Tax </span> </a> </li> </ul> </nav> </li> </ul> </nav> </li> </ul> </nav> </li> </ul> </nav> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../../math/linear-algebra/vector/ class=md-nav__link> <span class=md-ellipsis> 数学 </span> <span class="md-nav__icon md-icon"></span> </a> </li> <li class="md-nav__item md-nav__item--pruned md-nav__item--nested"> <a href=../../../../graph/shortest-path/ class=md-nav__link> <span class=md-ellipsis> 图论 </span> <span class="md-nav__icon md-icon"></span> </a> </li> </ul> </nav> </div> </div> </div> <div class="md-sidebar md-sidebar--secondary" data-md-component=sidebar data-md-type=toc> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--secondary" aria-label=目录> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> 目录 </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#_2 class=md-nav__link> <span class=md-ellipsis> 简述 </span> </a> </li> <li class=md-nav__item> <a href=#_3 class=md-nav__link> <span class=md-ellipsis> 括号序分块 </span> </a> </li> <li class=md-nav__item> <a href=#_4 class=md-nav__link> <span class=md-ellipsis> 实现 </span> </a> <nav class=md-nav aria-label=实现> <ul class=md-nav__list> <li class=md-nav__item> <a href=#_5 class=md-nav__link> <span class=md-ellipsis> 点权 / 边权 </span> </a> </li> <li class=md-nav__item> <a href=#_6 class=md-nav__link> <span class=md-ellipsis> 路径的转化 </span> </a> </li> <li class=md-nav__item> <a href=#_7 class=md-nav__link> <span class=md-ellipsis> 莫队算法部分 </span> </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#_8 class=md-nav__link> <span class=md-ellipsis> 例题 </span> </a> <nav class=md-nav aria-label=例题> <ul class=md-nav__list> <li class=md-nav__item> <a href=#sp10707-cot2-count-on-a-tree-ii class=md-nav__link> <span class=md-ellipsis> 例题一：SP10707 COT2 - Count on a tree II </span> </a> </li> <li class=md-nav__item> <a href=#qoj7245-frank-sinatra class=md-nav__link> <span class=md-ellipsis> 例题二：QOJ7245 Frank Sinatra </span> </a> </li> <li class=md-nav__item> <a href=#baekjoon13892-acm-tax class=md-nav__link> <span class=md-ellipsis> 例题三：Baekjoon13892 ACM Tax </span> </a> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <a href=https://github.com/raineblog/blog/edit/main/docs/ds/offline/mo/mo_tree.md title=编辑此页 class="md-content__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg> </a> <div id=m_edit_url style="display: none;">https://github.com/raineblog/blog/edit/main/docs/ds/offline/mo/mo_tree.md</div> <h1 id=_1>树上莫队<a class=headerlink href=#_1 title="Permanent link">&para;</a></h1> <h2 id=_2>简述<a class=headerlink href=#_2 title="Permanent link">&para;</a></h2> <p>分为，</p> <ul> <li>查询链信息；</li> <li>查询子树信息。</li> </ul> <p>如果是查询子树信息的理想莫队信息，</p> <p>那么可以启发式合并，是 polylog 的（例如普通莫队例题四）。</p> <p>下面直接讨论查询链信息。</p> <h2 id=_3>括号序分块<a class=headerlink href=#_3 title="Permanent link">&para;</a></h2> <p>一般的莫队只能处理线性问题，我们要把树强行压成序列。</p> <p>我们可以将树的括号序跑下来，把括号序分块，在括号序上跑莫队。</p> <p>我们 DFS 树的时候，</p> <ul> <li>进入 <span class=arithmatex>\(x\)</span> 点就 <span class=arithmatex>\(\text{push}(+x)\)</span>；</li> <li>走出 <span class=arithmatex>\(x\)</span> 点就 <span class=arithmatex>\(\text{push}(-x)\)</span>。</li> </ul> <p>然后在挪动指针（莫队转移）的时候，</p> <ul> <li>如果新加入的值是 <span class=arithmatex>\(+x\)</span>，就加入 <span class=arithmatex>\(x\)</span>，<code>add(x)</code>；</li> <li> <p>如果新加入的值是 <span class=arithmatex>\(-x\)</span>，就删除 <span class=arithmatex>\(x\)</span>，<code>del(x)</code>。</p> </li> <li> <p>如果新删除的值是 <span class=arithmatex>\(+x\)</span>，就删除 <span class=arithmatex>\(x\)</span>，<code>del(x)</code>；</p> </li> <li>如果新删除的值是 <span class=arithmatex>\(-x\)</span>，就加入 <span class=arithmatex>\(x\)</span>，<code>add(x)</code>。</li> </ul> <p>可以理解为，从根开始的路径，下去为正，上去为负，</p> <p>那么，一个多余子树的内容，就被抵消了（代码上容易被处理）。</p> <p>实现上，与我们上面的理论有很多不同的地方。</p> <h2 id=_4>实现<a class=headerlink href=#_4 title="Permanent link">&para;</a></h2> <h3 id=_5>点权 / 边权<a class=headerlink href=#_5 title="Permanent link">&para;</a></h3> <p>我们通常对点权离散化，</p> <pre class=highlight><code class=language-cpp>int n, m, c[N];
+cin &gt;&gt; n &gt;&gt; m;
+vector&lt;int&gt; s(n);
+for (int i = 1; i &lt;= n; ++i) {
+    cin &gt;&gt; c[i];
+    s[i - 1] = c[i];
+}
+sort(s.begin(), s.end());
+s.erase(unique(s.begin(), s.end()), s.end());
+for (int i = 1; i &lt;= n; ++i)
+    c[i] = lower_bound(s.begin(), s.end(), c[i]) - s.begin() + 1;</code></pre> <p>对于边权，通常下放到点权。</p> <h3 id=_6>路径的转化<a class=headerlink href=#_6 title="Permanent link">&para;</a></h3> <p>对于点权，</p> <p><a class=glightbox href=https://cdn.luogu.com.cn/upload/image_hosting/r3hjndvy.png data-type=image data-width=auto data-height=auto data-desc-position=bottom><img alt src=https://cdn.luogu.com.cn/upload/image_hosting/r3hjndvy.png></a></p> <p>我们发现，</p> <ul> <li> <p>对于一条直的路径 <span class=arithmatex>\((u,v)\)</span>，在括号序上面表示为 <span class=arithmatex>\(s(u)\sim s(v)\)</span></p> </li> <li> <p>而一条拐弯的路径表示为，<span class=arithmatex>\(e(u)\sim s(v)\)</span>，加上消失的 <span class=arithmatex>\(\text{LCA}\)</span>。</p> </li> </ul> <p>假设 <span class=arithmatex>\(s(u)&lt;s(v)\)</span>。</p> <p>于是，我们重链剖分求一下 LCA 顺便预处理括号序即可。</p> <details class=note> <summary>实现</summary> <pre class=highlight><code class=language-cpp>vector&lt;int&gt; g[N];
+
+int fa[N], son[N];
+int dep[N], siz[N];
+
+int tot, top[N];
+int dfs[2 * N], st[N], ed[N];
+
+void dfs1(int u, int ff) {
+    dfs[++tot] = u, st[u] = tot;
+    int mx = -1;
+    siz[u] = 1, son[u] = -1;
+    for (int v : g[u]) {
+        if (v == ff) continue;
+        fa[v] = u, dep[v] = dep[u] + 1;
+        dfs1(v, u), siz[u] += siz[v];
+        if (siz[v] &gt; mx) mx = siz[v], son[u] = v;
+    }
+    dfs[++tot] = u, ed[u] = tot;
+}
+
+void dfs2(int u, int _top) {
+    top[u] = _top;
+    if (son[u] == -1) return;
+    dfs2(son[u], _top);
+    for (int v : g[u]) {
+        if (v == fa[u]) continue;
+        if (v == son[u]) continue;
+        dfs2(v, v);
+    }
+}
+
+int lca(int u, int v) {
+    while (top[u] != top[v]) {
+        if (dep[top[u]] &gt; dep[top[v]])
+            u = fa[top[u]];
+        else
+            v = fa[top[v]];
+    }
+    return dep[u] &lt; dep[v] ? u : v;
+}
+
+// Main
+
+for (int i = 1; i &lt; n; ++i) {
+    int u, v;
+    cin &gt;&gt; u &gt;&gt; v;
+    g[u].push_back(v);
+    g[v].push_back(u);
+}
+
+dfs1(1, -1), dfs2(1, 1);
+
+for (int i = 1; i &lt;= m; ++i) {
+    int x, y; cin &gt;&gt; x &gt;&gt; y;
+    if (st[x] &gt; st[y]) swap(x, y);
+    int l = lca(x, y);
+    if (l == x) q[i] = {i, st[x], st[y], -1};
+    else q[i] = {i, ed[x], st[y], l};
+}</code></pre> </details> <p>对于边权，我们发现下放之后要反过来，</p> <pre class=highlight><code class=language-cpp>if (st[x] &gt; st[y]) swap(x, y);
+int l = lca(x, y);
+if (l == x) q[i] = {i, st[x], st[y], l};
+else q[i] = {i, ed[x], st[y], -1};</code></pre> <p>这很好理解。</p> <h3 id=_7>莫队算法部分<a class=headerlink href=#_7 title="Permanent link">&para;</a></h3> <p>我们发现，</p> <p>若一个点是第一次被计算，那么一定是加入，否则一定是删除。</p> <p>据此，我们可以不用管上面奇奇怪怪的理论部分，</p> <details class=note> <summary>实现</summary> <pre class=highlight><code class=language-cpp>int block, belong[2 * N];
+
+struct query {
+    int id, l, r, lca;
+    friend bool operator &lt;(const query &amp;a, const query &amp;b) {
+        if (belong[a.l] != belong[b.l]) return a.l &lt; b.l;
+        return belong[a.l] &amp; 1 ? a.r &lt; b.r : a.r &gt; b.r;
+    }
+} q[M];
+
+void add(int x) {
+    x = c[x];
+    // do something ...
+}
+
+void del(int x) {
+    x = c[x];
+    // do something ...
+}
+
+int get_ans() {
+    // do something ...
+}
+
+void calc(int x) {
+    vis[x] ? del(x) : add(x);
+    vis[x] ^= 1;
+}
+
+int ans[M];
+
+// Main
+
+block = max(1, int(tot / sqrt(m * 2 / 3.0)));
+for (int i = 1; i &lt;= tot; ++i) belong[i] = (i - 1) / block + 1;
+
+sort(q + 1, q + m + 1);
+
+int l = 1, r = 0;
+for (int i = 1; i &lt;= m; ++i) {
+    int x = q[i].l, y = q[i].r;
+    while (x &lt; l) calc(dfs[--l]);
+    while (y &gt; r) calc(dfs[++r]);
+    while (x &gt; l) calc(dfs[l++]);
+    while (y &lt; r) calc(dfs[r--]);
+    if (q[i].lca != -1) calc(q[i].lca);
+    ans[q[i].id] = get_ans();
+    if (q[i].lca != -1) calc(q[i].lca);
+}
+
+for (int i = 1; i &lt;= m; ++i) cout &lt;&lt; ans[i] &lt;&lt; endl;</code></pre> </details> <h2 id=_8>例题<a class=headerlink href=#_8 title="Permanent link">&para;</a></h2> <h3 id=sp10707-cot2-count-on-a-tree-ii>例题一：SP10707 COT2 - Count on a tree II<a class=headerlink href=#sp10707-cot2-count-on-a-tree-ii title="Permanent link">&para;</a></h3> <p>求树上两节点简单路径中的点的不同颜色数。</p> <p>经典例题，就是上面的代码。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+#define endl "\n"
+
+constexpr int N = 4e4 + 10;
+constexpr int M = 1e5 + 10;
+
+int n, m, c[N];
+
+int block, belong[2 * N];
+
+vector&lt;int&gt; g[N];
+
+struct query {
+    int id, l, r, lca;
+    friend bool operator &lt;(const query &amp;a, const query &amp;b) {
+        if (belong[a.l] != belong[b.l]) return a.l &lt; b.l;
+        return belong[a.l] &amp; 1 ? a.r &lt; b.r : a.r &gt; b.r;
+    }
+} q[M];
+
+// -----------------------------------------------------------------------------
+
+int fa[N], son[N];
+int dep[N], siz[N];
+
+int tot, top[N];
+int dfs[2 * N], st[N], ed[N];
+
+void dfs1(int u, int ff) {
+    dfs[++tot] = u, st[u] = tot;
+    int mx = -1;
+    siz[u] = 1, son[u] = -1;
+    for (int v : g[u]) {
+        if (v == ff) continue;
+        fa[v] = u, dep[v] = dep[u] + 1;
+        dfs1(v, u), siz[u] += siz[v];
+        if (siz[v] &gt; mx) mx = siz[v], son[u] = v;
+    }
+    dfs[++tot] = u, ed[u] = tot;
+}
+
+void dfs2(int u, int _top) {
+    top[u] = _top;
+    if (son[u] == -1) return;
+    dfs2(son[u], _top);
+    for (int v : g[u]) {
+        if (v == fa[u]) continue;
+        if (v == son[u]) continue;
+        dfs2(v, v);
+    }
+}
+
+int lca(int u, int v) {
+    while (top[u] != top[v]) {
+        if (dep[top[u]] &gt; dep[top[v]])
+            u = fa[top[u]];
+        else
+            v = fa[top[v]];
+    }
+    return dep[u] &lt; dep[v] ? u : v;
+}
+
+// -----------------------------------------------------------------------------
+
+bool vis[2 * N];
+
+int res, bucket[N];
+
+void add(int x) {
+    x = c[x];
+    if (++bucket[x] == 1) ++res;
+}
+
+void del(int x) {
+    x = c[x];
+    if (--bucket[x] == 0) --res;
+}
+
+void calc(int x) {
+    vis[x] ? del(x) : add(x);
+    vis[x] ^= 1;
+}
+
+int ans[M];
+
+int get_ans() {
+    return res;
+}
+
+// -----------------------------------------------------------------------------
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
+    cin &gt;&gt; n &gt;&gt; m;
+    vector&lt;int&gt; s(n);
+    for (int i = 1; i &lt;= n; ++i)
+        cin &gt;&gt; c[i], s[i - 1] = c[i];
+    sort(s.begin(), s.end());
+    s.erase(unique(s.begin(), s.end()), s.end());
+    for (int i = 1; i &lt;= n; ++i)
+        c[i] = lower_bound(s.begin(), s.end(), c[i]) - s.begin() + 1;
+    for (int i = 1; i &lt; n; ++i) {
+        int u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    dfs1(1, -1), dfs2(1, 1);
+    for (int i = 1; i &lt;= m; ++i) {
+        int x, y; cin &gt;&gt; x &gt;&gt; y;
+        if (st[x] &gt; st[y]) swap(x, y);
+        int l = lca(x, y);
+        if (l == x) q[i] = {i, st[x], st[y], -1};
+        else q[i] = {i, ed[x], st[y], l};
+    }
+    block = max(1, int(tot / sqrt(m * 2 / 3.0)));
+    for (int i = 1; i &lt;= tot; ++i)
+        belong[i] = (i - 1) / block + 1;
+    sort(q + 1, q + m + 1);
+    int l = 1, r = 0;
+    for (int i = 1; i &lt;= m; ++i) {
+        int x = q[i].l, y = q[i].r;
+        while (x &lt; l) calc(dfs[--l]);
+        while (y &gt; r) calc(dfs[++r]);
+        while (x &gt; l) calc(dfs[l++]);
+        while (y &lt; r) calc(dfs[r--]);
+        if (q[i].lca != -1) calc(q[i].lca);
+        ans[q[i].id] = get_ans();
+        if (q[i].lca != -1) calc(q[i].lca);
+    }
+    for (int i = 1; i &lt;= m; ++i)
+        cout &lt;&lt; ans[i] &lt;&lt; endl;
+    return 0;
+}</code></pre> </details> <h3 id=qoj7245-frank-sinatra>例题二：QOJ7245 Frank Sinatra<a class=headerlink href=#qoj7245-frank-sinatra title="Permanent link">&para;</a></h3> <p>求路径边权 <span class=arithmatex>\(\operatorname{mex}\)</span>。</p> <p>我们把点权下放，直接值域分块处理即可，类似 <a href=https://www.luogu.com.cn/problem/P4137>P4137 Rmq Problem / mex</a>。</p> <p>此处一个技巧就是，值域为 <span class=arithmatex>\([0,n]\)</span> 的序列 <span class=arithmatex>\(\operatorname{mex}\)</span> 一定在 <span class=arithmatex>\([0,n+1]\)</span> 中，也就是更大的没有意义了。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>#define NDEBUG 1
+
+#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+#define endl "\n"
+
+constexpr int N = 1e5 + 10;
+
+// -----------------------------------------------------------------------------
+
+int n, m;
+
+struct edge {
+    int v, w;
+    edge() = default;
+    edge(int v, int w): v(v), w(w) {}
+};
+
+vector&lt;edge&gt; g[N];
+
+int col[N];
+
+// -----------------------------------------------------------------------------
+
+int dfs[2 * N], tot;
+int st[N], ed[N];
+
+namespace hld {
+    int fa[N], son[N];
+    int dep[N], siz[N];
+    int top[N];
+
+    void dfs1(int u, int ff) {
+        dfs[++tot] = u, st[u] = tot;
+        siz[u] = 1, son[u] = -1;
+        int mx = -1;
+        for (auto t : g[u]) {
+            int v = t.v;
+            if (v == ff) continue;
+            col[v] = t.w;
+            fa[v] = u, dep[v] = dep[u] + 1;
+            dfs1(v, u), siz[u] += siz[v];
+            if (siz[v] &gt; mx) mx = siz[v], son[u] = v;
+        }
+        dfs[++tot] = u, ed[u] = tot;
+    }
+
+    void dfs2(int u, int tp) {
+        top[u] = tp;
+        if (son[u] == -1) return;
+        dfs2(son[u], tp);
+        for (auto t : g[u]) {
+            if (t.v == fa[u]) continue;
+            if (t.v == son[u]) continue;
+            dfs2(t.v, t.v);
+        }
+    }
+}
+
+int lca(int u, int v) {
+    while (hld::top[u] != hld::top[v]) {
+        if (hld::dep[hld::top[u]] &gt; hld::dep[hld::top[v]])
+            u = hld::fa[hld::top[u]];
+        else v = hld::fa[hld::top[v]];
+    }
+    return hld::dep[u] &lt; hld::dep[v] ? u : v;
+}
+
+// -----------------------------------------------------------------------------
+
+int block1, belong1[2 * N];
+
+struct query {
+    int id, l, r, lca;
+    friend bool operator &lt;(const query &amp;a, const query &amp;b) {
+        if (belong1[a.l] != belong1[b.l]) return a.l &lt; b.l;
+        return belong1[a.l] &amp; 1 ? a.r &lt; b.r : a.r &gt; b.r;
+    }
+} q[N];
+
+// -----------------------------------------------------------------------------
+
+bool vis[2 * N];
+
+int block, cnt;
+int belong[N], L[N], R[N];
+int bucket[N], appr[N];
+
+void add(int x) {
+    ++x;
+    if (x &gt; n) return;
+    if (!bucket[x]) ++appr[belong[x]];
+    ++bucket[x];
+}
+
+void del(int x) {
+    ++x;
+    if (x &gt; n) return;
+    --bucket[x];
+    if (!bucket[x]) --appr[belong[x]];
+}
+
+int get_ans() {
+    int inner = 1;
+    while (inner &lt;= cnt &amp;&amp; appr[inner] == R[inner] - L[inner] + 1) ++inner;
+    for (int i = L[inner]; i &lt;= R[inner]; ++i) if (!bucket[i]) return i - 1;
+    __builtin_unreachable();
+    return 0;
+}
+
+void calc(int x) {
+    if (vis[x]) del(col[x]);
+    else add(col[x]);
+    vis[x] ^= 1;
+}
+
+// -----------------------------------------------------------------------------
+
+int ans[N];
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
+    cin &gt;&gt; n &gt;&gt; m;
+    // ???????
+    block = sqrt(n), cnt = (n - 1) / block + 1;
+    for (int i = 1; i &lt;= n; ++i) belong[i] = (i - 1) / block + 1;
+    for (int i = 1; i &lt;= cnt; ++i) R[i] = i * block, L[i] = R[i] - block + 1;
+    R[cnt] = n;
+    // ????
+    for (int i = 2; i &lt;= n; ++i) {
+        int u, v, w;
+        cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+        g[u].emplace_back(v, w);
+        g[v].emplace_back(u, w);
+    }
+    // ?????
+    hld::dfs1(1, -1);
+    hld::dfs2(1, 1);
+    col[1] = 1;
+    for (int i = 1; i &lt;= m; ++i) {
+        int u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        if (st[u] &gt; st[v]) swap(u, v);
+        int l = lca(u, v);
+        if (l == u) q[i] = query{i, st[u], st[v], l};
+        else q[i] = query{i, ed[u], st[v], -1};
+    }
+    block1 = max(1, int(tot / sqrt(m * 2 / 3.0)));
+    for (int i = 1; i &lt;= tot; ++i) belong1[i] = (i - 1) / block1 + 1;
+    sort(q + 1, q + m + 1);
+    // ????
+    int l = 1, r = 0;
+    for (int i = 1; i &lt;= m; ++i) {
+        int x = q[i].l, y = q[i].r;
+        while (x &lt; l) calc(dfs[--l]);
+        while (y &gt; r) calc(dfs[++r]);
+        while (x &gt; l) calc(dfs[l++]);
+        while (y &lt; r) calc(dfs[r--]);
+        if (q[i].lca != -1) calc(q[i].lca);
+        ans[q[i].id] = get_ans();
+        if (q[i].lca != -1) calc(q[i].lca);
+    }
+    for (int i = 1; i &lt;= m; ++i)
+        cout &lt;&lt; ans[i] &lt;&lt; endl;
+    return 0;
+}</code></pre> </details> <h3 id=baekjoon13892-acm-tax>例题三：Baekjoon13892 ACM Tax<a class=headerlink href=#baekjoon13892-acm-tax title="Permanent link">&para;</a></h3> <p>同上。</p> <details class=note> <summary>点击查看代码</summary> <pre class=highlight><code class=language-cpp>#ifndef M_DEBUG
+#define NDEBUG 1
+#define FAST_IO 1
+#define D(x) ({ void(0); })
+#else
+#define D(x) ({ cerr &lt;&lt; "| DEBUG #" &lt;&lt; __LINE__ &lt;&lt; " IN " &lt;&lt; __FUNCTION__ &lt;&lt; "() \t| \t" &lt;&lt; #x &lt;&lt; " = \t[" &lt;&lt; (x) &lt;&lt; "]\n"; void(0); })
+#endif
+
+#include &lt;bits/stdc++.h&gt;
+
+#ifdef FAST_IO
+#define endl "\n"
+#endif
+
+using namespace std;
+
+// -----------------------------------------------------------------------------
+
+// constexpr int N = 5e4 + 10;
+constexpr int N = 1e5 + 10;
+constexpr int M = 1e5 + 10;
+
+// -----------------------------------------------------------------------------
+
+int n, m;
+int col[N];
+
+struct edge {
+    int v, w;
+    edge() = default;
+    edge(int v, int w): v(v), w(w) {}
+};
+
+vector&lt;edge&gt; g[N];
+
+// -----------------------------------------------------------------------------
+
+int fa[N], siz[N];
+int son[N], dep[N];
+
+int dfs[2 * N], tot;
+int st[N], ed[N];
+
+void dfs1(int u, int ff) {
+    dfs[++tot] = u;
+    st[u] = tot;
+    son[u] = -1;
+    siz[u] = 1;
+    int mx = -1;
+    for (auto t : g[u]) {
+        int v = t.v;
+        if (v == ff) continue;
+        col[v] = t.w;
+        fa[v] = u;
+        dep[v] = dep[u] + 1;
+        dfs1(v, u);
+        siz[u] += siz[v];
+        if (siz[v] &gt; mx) {
+            mx = siz[v];
+            son[u] = v;
+        }
+    }
+    dfs[++tot] = u, ed[u] = tot;
+}
+
+int top[N];
+
+void dfs2(int u, int to) {
+    top[u] = to;
+    if (son[u] == -1) return;
+    dfs2(son[u], to);
+    for (auto t : g[u]) {
+        int v = t.v;
+        if (v == fa[u]) continue;
+        if (v == son[u]) continue;
+        dfs2(v, v);
+    }
+}
+
+int lca(int x, int y) {
+    while (top[x] != top[y]) {
+        if (dep[top[x]] &gt; dep[top[y]]) x = fa[top[x]];
+        else y = fa[top[y]];
+    }
+    if (dep[x] &gt; dep[y]) return y;
+    return x;
+}
+
+// -----------------------------------------------------------------------------
+
+int block, belong[2 * N];
+
+struct query {
+    int id, l, r, lca;
+    friend bool operator &lt;(const query &amp;a, const query &amp;b) {
+        if (belong[a.l] != belong[b.l]) return a.l &lt; b.l;
+        return belong[a.l] &amp; 1 ? a.r &lt; b.r : a.r &gt; b.r;
+    }
+} Q[M];
+
+// -----------------------------------------------------------------------------
+
+struct ans {
+    int val;
+    bool ft;
+    ans(): val(0), ft(0) {}
+    ans(int val): val(val), ft(0) {}
+    ans(double val): val(int(val)), ft(val - int(val) != 0) {}
+    friend ostream&amp; operator &lt;&lt;(ostream &amp;out, const ans &amp;x) {
+        out &lt;&lt; x.val &lt;&lt; (x.ft ? ".5" : ".0");
+        return out;
+    }
+} Ans[M];
+
+constexpr int MAXV = 1e5;
+constexpr int V = MAXV + 10;
+
+int block2, belong2[V];
+int cnt2, L[V], R[V];
+
+void init2() {
+    block2 = sqrt(MAXV);
+    cnt2 = (MAXV - 1) / block2 + 1;
+    for (int i = 1; i &lt;= MAXV; ++i)
+        belong2[i] = (i - 1) / block2 + 1;
+    for (int i = 1; i &lt;= cnt2; ++i)
+        R[i] = i * block2, L[i] = R[i] - block2 + 1;
+    R[cnt2] = V;
+}
+
+int arr[V], sum[V];
+
+void modify(int x, int v) {
+    arr[x] += v;
+    sum[belong2[x]] += v;
+}
+
+int rnk(int k) {
+    int inner = 1;
+    while (sum[inner] &lt; k)
+        k -= sum[inner], ++inner;
+    for (int i = L[inner]; i &lt;= R[inner]; ++i) {
+        k -= arr[i];
+        if (k &lt;= 0) return i;
+    }
+    __builtin_unreachable();
+}
+
+int cnt;
+
+void add(int x) {
+    ++cnt;
+    modify(x, 1);
+}
+
+void del(int x) {
+    --cnt;
+    modify(x, -1);
+}
+
+ans get_ans() {
+    if (cnt &amp; 1)
+        return rnk((cnt + 1) &gt;&gt; 1);
+    return (rnk((cnt &gt;&gt; 1) + 1) + rnk(cnt &gt;&gt; 1)) / 2.0;
+}
+
+int vis[2 * N];
+
+void calc(int x) {
+    if (vis[x])
+        del(col[x]);
+    else
+        add(col[x]);
+    vis[x] ^= 1;
+}
+
+// -----------------------------------------------------------------------------
+
+void clear() {
+    memset(arr, 0, sizeof arr);
+    memset(sum, 0, sizeof sum);
+    for (int i = 1; i &lt;= n; ++i)
+        g[i].clear(), g[i].shrink_to_fit();
+    cnt = tot = dep[1] = 0;
+    memset(vis, 0, sizeof(int) * n * 2);
+}
+
+void Main() {
+    cin &gt;&gt; n;
+    clear();
+    for (int i = 2; i &lt;= n; ++i) {
+        int u, v, w;
+        cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+        g[u].emplace_back(v, w);
+        g[v].emplace_back(u, w);
+    }
+    dfs1(1, -1);
+    dfs2(1, 1);
+    col[1] = 1;
+    cin &gt;&gt; m;
+    for (int i = 1; i &lt;= m; ++i) {
+        int x, y;
+        cin &gt;&gt; x &gt;&gt; y;
+        if (st[x] &gt; st[y]) swap(x, y);
+        int l = lca(x, y);
+        if (x == l) Q[i] = {i, st[x], st[y], l};
+        else Q[i] = {i, ed[x], st[y], -1};
+    }
+    block = max(1, int(tot / sqrt(m * 2.0 / 3)));
+    for (int i = 1; i &lt;= tot; ++i)
+        belong[i] = (i - 1) / block + 1;
+    sort(Q + 1, Q + m + 1);
+    int l = 1, r = 0;
+    for (int i = 1; i &lt;= m; ++i) {
+        int x = Q[i].l, y = Q[i].r;
+        if (x == y) {
+            Ans[Q[i].id] = col[dfs[x]];
+            continue;
+        }
+        while (x &lt; l) calc(dfs[--l]);
+        while (y &gt; r) calc(dfs[++r]);
+        while (x &gt; l) calc(dfs[l++]);
+        while (y &lt; r) calc(dfs[r--]);
+        if (Q[i].lca != -1) calc(Q[i].lca);
+        Ans[Q[i].id] = get_ans();
+        if (Q[i].lca != -1) calc(Q[i].lca);
+    }
+    for (int i = 1; i &lt;= m; ++i) {
+        cout &lt;&lt; Ans[i] &lt;&lt; endl;
+    }
+}
+
+signed main() {
+    #ifdef FAST_IO
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
+    #endif
+    init2();
+    int T;
+    cin &gt;&gt; T;
+    while (T--)
+        Main();
+    return 0;
+}</code></pre> </details> <hr><blockquote class=page-copyright> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="m22.7 19-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4Z"/></svg></i>本页面最近更新：</span><span class=facts_modified>正在加载中</span>，<a class=edit_history>更新历史</a>。<br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg></i>编辑页面：<a href=https://github.com/raineblog/blog/edit/main/docs/ds/offline/mo/mo_tree.md title=edit.link.title class=page_edit_url>在 GitHub 上编辑此页</a>！</span><br> <span><i class=md-icon><svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M16 17v2H2v-2s0-4 7-4 7 4 7 4m-3.5-9.5A3.5 3.5 0 1 0 9 11a3.5 3.5 0 0 0 3.5-3.5m3.44 5.5A5.32 5.32 0 0 1 18 17v2h4v-2s0-3.63-6.06-4M15 4a3.39 3.39 0 0 0-1.93.59 5 5 0 0 1 0 5.82A3.39 3.39 0 0 0 15 11a3.5 3.5 0 0 0 0-7Z"/></svg></i>本页面贡献者：</span><span class=page_contributors>raine</span>。<br> </blockquote> <div id=__comments class="giscus no-print" data-no-instant></div> <script src=https://giscus.app/client.js data-repo=raineblog/blog-giscus data-repo-id=R_kgDOMhpKmw data-category=Announcements data-category-id=DIC_kwDOMhpKm84ChhZ7 data-mapping=pathname data-strict=1 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=preferred_color_scheme data-lang=zh-CN data-loading=lazy crossorigin=anonymous async>
+</script> </article> </div> <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script> </div> </main> <footer class=md-footer> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> by raineblog </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs <div id=miitbeian></div> </a> </div> <div style=float:right class=build_date_utc> <br> <a href=javascript:void(0); id=m_updtime> 最近更新：2025-02-02 d1e2f96 </a> </div> </div> </div> </footer> <div class=no-print id=scroll-page-top style="
+display: block;
+position: fixed;
+bottom: 20px;
+right: 20px;
+padding: 6px;
+color: #FFF;
+background-color: #AAA;
+opacity: 0.7;
+border-radius: 20px;
+cursor: pointer;
+z-index: 999;"> <i class="fa-solid fa-angle-up"></i> Page Top </div> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "../../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "navigation.prune", "navigation.path", "search.suggest", "search.highlight", "search.share", "announce.dismiss", "content.action.edit", "content.code.copy", "content.code.select", "content.footnote.tooltips"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script> <script src=../../../../assets/javascripts/bundle.fe8b6f2b.min.js></script> <script src=../../../../assets/javascripts/extra.js></script> <script src=../../../../assets/javascripts/jquery.min.js></script> <script src=../../../../assets/highlight/highlight.min.js></script> <script src=../../../../assets/katex/katex.min.js></script> <script src=../../../../assets/katex/contrib/mhchem.min.js></script> <script src=../../../../assets/katex/contrib/auto-render.min.js></script> <script src=../../../../assets/katex/contrib/copy-tex.min.js></script> <script src=../../../../assets/javascripts/custom.js></script> <script id=init-glightbox>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body> </html>
